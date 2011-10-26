@@ -1,0 +1,5 @@
+#
+#Wed Oct 26 20:14:52 EEST 2011
+adb.path=adb
+filter.text=
+device.auto.refresh=5000

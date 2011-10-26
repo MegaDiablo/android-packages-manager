@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exe4j version="4.4.2" transformSequenceNumber="1">
+  <directoryPresets config="D:/Projects/other/android-adb-manager/android-manager/builds" />
+  <application name="Android Package Manager" distributionSourceDir="D:/Projects/other/android-adb-manager/android-manager/builds/exe/current">
+    <languages>
+      <principalLanguage id="en" customLocalizationFile="" />
+    </languages>
+  </application>
+  <executable name="apm" type="2" iconSet="true" iconFile="D:/Projects/other/android-adb-manager/android-manager/img/apm.ico" executableDir="." redirectStderr="true" stderrFile="error.log" stderrMode="overwrite" redirectStdout="false" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false" amd64="false">
+    <messageSet />
+    <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" companyName="" productVersion="" />
+  </executable>
+  <splashScreen show="true" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="D:/Projects/other/android-adb-manager/android-manager/src-data/res/apm_big_256.png" java6SplashScreen="true">
+    <text>
+      <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+      <versionLine x="20" y="40" text="version %VERSION%" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+    </text>
+  </splashScreen>
+  <java mainClass="com.ucoz.megadiablo.android.apm.Runner" vmParameters="" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true" minVersion="1.6" maxVersion="" allowBetaVM="false" jdkOnly="false">
+    <searchSequence>
+      <registry />
+      <envVar name="JAVA_HOME" />
+      <envVar name="JDK_HOME" />
+    </searchSequence>
+    <classPath>
+      <archive location="../../apm-0.2.1-beta.jar" failOnError="false" />
+    </classPath>
+    <nativeLibraryDirectories />
+  </java>
+  <includedFiles />
+  <unextractableFiles />
+</exe4j>
+

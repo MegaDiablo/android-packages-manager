@@ -1,4 +1,4 @@
-package com.ucoz.megadiablo.android.apm.ui.keyboadr;
+package com.ucoz.megadiablo.android.apm.ui.keyboard;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -63,6 +63,10 @@ public class KeyBoard extends JDialog {
 		});
 
 		JButton mButtonMenu = new JButton("Menu");
+		mButtonMenu.setRequestFocusEnabled(false);
+		mButtonMenu.setFocusTraversalKeysEnabled(false);
+		mButtonMenu.setFocusable(false);
+		mButtonMenu.setFocusPainted(false);
 		mButtonMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sendKey(KeyEvent.VK_F2);
@@ -70,6 +74,10 @@ public class KeyBoard extends JDialog {
 		});
 
 		JButton mButtonHome = new JButton("Home");
+		mButtonHome.setRequestFocusEnabled(false);
+		mButtonHome.setFocusTraversalKeysEnabled(false);
+		mButtonHome.setFocusable(false);
+		mButtonHome.setFocusPainted(false);
 		mButtonHome.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sendKey(KeyEvent.VK_HOME);
@@ -87,6 +95,10 @@ public class KeyBoard extends JDialog {
 		panel.add(mButtonMenu, gbc_mButtonMenu);
 
 		JButton btnBack = new JButton("Back");
+		btnBack.setRequestFocusEnabled(false);
+		btnBack.setFocusTraversalKeysEnabled(false);
+		btnBack.setFocusable(false);
+		btnBack.setFocusPainted(false);
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sendKey(KeyEvent.VK_ESCAPE);
@@ -99,6 +111,10 @@ public class KeyBoard extends JDialog {
 		panel.add(btnBack, gbc_btnBack);
 
 		JButton btnSearch = new JButton("Search");
+		btnSearch.setRequestFocusEnabled(false);
+		btnSearch.setFocusTraversalKeysEnabled(false);
+		btnSearch.setFocusable(false);
+		btnSearch.setFocusPainted(false);
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sendKey(KeyEvent.VK_F5);

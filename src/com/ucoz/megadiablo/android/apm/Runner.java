@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.SwingUtilities;
@@ -25,6 +27,8 @@ public class Runner {
 	private static final String PROPERTY_PATH_ADB = "path.adb";
 
 	private static final String PROPERTY_AUTO_REFRESH_DEVICES = "device.auto.refresh";
+
+	public static int EVENT_UPDATER_REFRESH_DEVICES = 0;
 
 	/**
 	 * @param args
@@ -68,6 +72,7 @@ public class Runner {
 
 		final Core core = new Core(adb, events);
 
+		final List<EventUpdater> listEventUpdaters = new ArrayList<EventUpdater>();
 		final EventUpdater eventRefreshDevices;
 		{
 			eventRefreshDevices = new EventUpdater(new Runnable() {
@@ -76,9 +81,10 @@ public class Runner {
 					core.refreshDevices();
 				}
 			}, upDeviceTime, true);
+			listEventUpdaters.add(eventRefreshDevices);
 		}
 
-		final MainFrame frame = new MainFrame(core, events);
+		final MainFrame frame = new MainFrame(core, events, listEventUpdaters);
 		frame.setFilter(properties.getProperty(PROPERTY_FILTER_TEXT, ""));
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
@@ -94,7 +100,12 @@ public class Runner {
 
 				eventRefreshDevices.terminated();
 
-				events.terminated();
+				// events.terminated();
+				for (EventUpdater item : listEventUpdaters) {
+					if (item != null) {
+						item.terminated();
+					}
+				}
 				adb.finishAdb();
 			}
 		});

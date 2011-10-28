@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -50,7 +51,9 @@ public class MainFrame extends JFrame {
 	private StatusBar statusBar;
 	private JSeparator separator;
 
-	public MainFrame(final Core pCore, Events pEvents) {
+	public MainFrame(final Core pCore, Events pEvents,
+			List<EventUpdater> pListEventUpdaters) {
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				MainFrame.class.getResource("/res/apm64.png")));
 		mCore = pCore;
@@ -60,7 +63,7 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Android Package Manager");
 
-		mMainMenuBar = new MainMenuBar(pCore, this);
+		mMainMenuBar = new MainMenuBar(pCore, this, pListEventUpdaters);
 		setJMenuBar(mMainMenuBar);
 
 		mMainPanel = new JPanel();

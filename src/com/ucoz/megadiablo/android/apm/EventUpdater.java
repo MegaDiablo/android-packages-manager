@@ -5,6 +5,7 @@ public class EventUpdater extends Thread {
 	private Runnable mUpdater = null;
 
 	private boolean mTerminated = false;
+	private boolean mPause = false;
 	private int mDelay = 5000;
 	private boolean mCycle = false;
 
@@ -30,6 +31,8 @@ public class EventUpdater extends Thread {
 			return;
 		}
 
+		boolean prov;
+
 		while (!mTerminated) {
 
 			try {
@@ -42,12 +45,18 @@ public class EventUpdater extends Thread {
 				break;
 			}
 
-			synchronized (this) {
-				try {
-					wait(mDelay);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+			prov = true;
+			while (prov) {
+				syncWait(mDelay);
+				if (mPause) {
+					while (mPause && !mTerminated) {
+						syncWait(-1);
+					}
+					if (!mTerminated) {
+						continue;
+					}
 				}
+				prov = false;
 			}
 		}
 	}
@@ -60,6 +69,31 @@ public class EventUpdater extends Thread {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public synchronized void setPause(boolean pPause) {
+		try {
+			mPause = pPause;
+			synchronized (this) {
+				notifyAll();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void syncWait(int pDelay) {
+		synchronized (this) {
+			try {
+				if (pDelay <= 0) {
+					wait();
+				} else {
+					wait(mDelay);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

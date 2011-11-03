@@ -22,6 +22,9 @@ import com.ucoz.megadiablo.android.apm.Core;
 import com.ucoz.megadiablo.android.apm.Events;
 import com.ucoz.megadiablo.android.apm.IEvent;
 
+/**
+ * @author MegaDiablo
+ * */
 public class StatusBar extends JToolBar implements Events.IChangeStatus {
 
 	/**

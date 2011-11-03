@@ -1,5 +1,8 @@
 package com.ucoz.megadiablo.android.apm;
 
+/**
+ * @author MegaDiablo
+ * */
 public class EventUpdater extends Thread {
 
 	private Runnable mUpdater = null;

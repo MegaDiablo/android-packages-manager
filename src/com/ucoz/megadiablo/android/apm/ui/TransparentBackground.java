@@ -13,6 +13,9 @@ import java.awt.event.ComponentListener;
 
 import javax.swing.JComponent;
 
+/**
+ * @author MegaDiablo
+ * */
 public class TransparentBackground extends JComponent {
 	/**
 	 *

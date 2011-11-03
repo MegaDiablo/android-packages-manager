@@ -1,5 +1,6 @@
 package com.ucoz.megadiablo.android.apm.ui;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -9,6 +10,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 
 import com.ucoz.megadiablo.android.apm.AboutDialog;
 import com.ucoz.megadiablo.android.apm.Core;
@@ -18,7 +20,7 @@ import com.ucoz.megadiablo.android.apm.Runner;
 import com.ucoz.megadiablo.android.apm.ui.keyboard.KeyBoard;
 
 /**
- * @author ЬупфВшфидщ
+ * @author MegaDiablo
  * */
 public class MainMenuBar extends JMenuBar {
 	/**
@@ -31,6 +33,14 @@ public class MainMenuBar extends JMenuBar {
 	private KeyBoard mKeyBoard;
 
 	private JCheckBoxMenuItem mCheckBoxMenuItemKeyBoard;
+
+	private JMenu mMenuAdbConnect;
+
+	private JSeparator mSeparatorConnects;
+
+	private JMenuItem mMenuItemAddNetworkDevice;
+
+	private JMenuItem mMenuItemEmpty;
 
 	public MainMenuBar(final Core pCore, final MainFrame pFrame,
 			final List<EventUpdater> pListEventUpdaters) {
@@ -65,6 +75,7 @@ public class MainMenuBar extends JMenuBar {
 		add(mMenuDevices);
 
 		JMenuItem mMenuItemReboot = new JMenuItem("Перезагрузить");
+		mMenuItemReboot.setToolTipText("Перезагружает текущее устройство");
 		mMenuItemReboot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (showWarning("Вы точно хотите перезагрузить устройство?")) {
@@ -72,6 +83,35 @@ public class MainMenuBar extends JMenuBar {
 				}
 			}
 		});
+
+		mMenuAdbConnect = new JMenu("Подключить");
+		mMenuDevices.add(mMenuAdbConnect);
+
+		mMenuItemAddNetworkDevice = new JMenuItem("Новое соединение");
+		mMenuItemAddNetworkDevice.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddConnect connect = new AddConnect();
+				connect.setVisible(true);
+				if (connect.getResult() == JOptionPane.OK_OPTION) {
+					String name = mCore.getListConnects().addConnect(
+							connect.getAdress());
+					if (name != null) {
+						mCore.connectNetworkDevice(name);
+						refreshConnects();
+					}
+				}
+			}
+		});
+
+		mMenuItemEmpty = new JMenuItem("Нет соединений");
+		mMenuItemEmpty.setContentAreaFilled(false);
+		mMenuItemEmpty.setRequestFocusEnabled(false);
+		mMenuItemEmpty.setEnabled(false);
+		mMenuAdbConnect.add(mMenuItemEmpty);
+
+		mSeparatorConnects = new JSeparator();
+		mMenuAdbConnect.add(mSeparatorConnects);
+		mMenuAdbConnect.add(mMenuItemAddNetworkDevice);
 		mMenuDevices.add(mMenuItemReboot);
 
 		JMenu mMenuADB = new JMenu("ADB");
@@ -126,6 +166,8 @@ public class MainMenuBar extends JMenuBar {
 			}
 		});
 		mMenuHelp.add(mMenuItemAbout);
+
+		refreshConnects();
 	}
 
 	private boolean showWarning(String text) {
@@ -139,4 +181,53 @@ public class MainMenuBar extends JMenuBar {
 		return false;
 	}
 
+	private void refreshConnects() {
+		List<String> list = mCore.getListConnects().getConnects();
+
+		Component[] components = mMenuAdbConnect.getMenuComponents();
+		for (int i = 0; i < components.length; i++) {
+			Component component = components[i];
+			if (component != mMenuItemAddNetworkDevice
+					&& component != mSeparatorConnects
+					&& component != mMenuItemEmpty) {
+
+				mMenuAdbConnect.remove(component);
+			}
+		}
+
+		if (list.size() > 0) {
+			mMenuItemEmpty.setVisible(false);
+		} else {
+			mMenuItemEmpty.setVisible(true);
+		}
+
+		for (int i = list.size() - 1; i >= 0; i--) {
+
+			final String connect = list.get(i);
+			String value = connect;
+			if ("".equals(value)) {
+				value = null;
+			}
+
+			if (value == null) {
+
+				JMenuItem item = new JMenuItem("< Пусто >");
+				item.setEnabled(false);
+				mMenuAdbConnect.add(item);
+
+			} else {
+
+				JMenuItem item = new JMenuItem(connect);
+				item.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						mCore.connectNetworkDevice(connect);
+						mCore.getListConnects().connectTo(connect);
+						refreshConnects();
+					}
+				});
+				mMenuAdbConnect.add(item, 0);
+
+			}
+		}
+	}
 }

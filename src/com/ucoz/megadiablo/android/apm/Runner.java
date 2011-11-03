@@ -13,6 +13,7 @@ import java.util.Properties;
 import javax.swing.SwingUtilities;
 
 import com.adbhelper.adb.AdbModule;
+import com.ucoz.megadiablo.android.apm.ui.Consts;
 import com.ucoz.megadiablo.android.apm.ui.ListProcess;
 
 /**
@@ -23,10 +24,10 @@ public class Runner {
 	private static final String PROP = "apm.prop";
 	private static final String PROP_APP = "app.prop";
 	private static final String PROP_FILTER = "filter.prop";
-	private static final String PROPERTY_FILTER_TEXT = "filter.text";
-	private static final String PROPERTY_PATH_ADB = "path.adb";
+	private static final String PROPERTY_FILTER_TEXT = Consts.settings.FILTER_TEXT;
+	private static final String PROPERTY_PATH_ADB = Consts.settings.PATH_ADB;
 
-	private static final String PROPERTY_AUTO_REFRESH_DEVICES = "device.auto.refresh";
+	private static final String PROPERTY_AUTO_REFRESH_DEVICES = Consts.settings.DEVICE_AUTO_REFRESH;
 
 	public static int EVENT_UPDATER_REFRESH_DEVICES = 0;
 
@@ -70,7 +71,7 @@ public class Runner {
 				PROPERTY_PATH_ADB, "adb"), PROP_APP);
 		adb.loadFilterActivities(PROP_FILTER);
 
-		final Core core = new Core(adb, events);
+		final Core core = new Core(adb, events, properties);
 
 		final List<EventUpdater> listEventUpdaters = new ArrayList<EventUpdater>();
 		final EventUpdater eventRefreshDevices;

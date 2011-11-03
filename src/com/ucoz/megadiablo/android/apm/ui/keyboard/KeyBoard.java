@@ -24,6 +24,9 @@ import javax.swing.border.LineBorder;
 import com.adbhelper.adb.IKeyCode;
 import com.ucoz.megadiablo.android.apm.Core;
 
+/**
+ * @author MegaDiablo
+ * */
 public class KeyBoard extends JDialog {
 
 	/**

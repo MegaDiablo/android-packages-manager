@@ -17,6 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * @author MegaDiablo
+ * */
 public class AboutDialog extends JDialog {
 
 	public AboutDialog(JFrame pFrame) {

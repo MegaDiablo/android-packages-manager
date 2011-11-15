@@ -131,10 +131,14 @@ public class Runner {
 	}
 
 	private static void initLookAndFeel(final String pName) {
-		if (pName == null) {
-			LOOK_AND_FEEL = EnumPLAF.AERO;
-		} else {
+		LOOK_AND_FEEL = null;
+
+		if (pName != null) {
 			LOOK_AND_FEEL = EnumPLAF.findByName(pName);
+		}
+
+		if (LOOK_AND_FEEL == null) {
+			LOOK_AND_FEEL = EnumPLAF.AERO;
 		}
 	}
 }

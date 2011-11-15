@@ -64,7 +64,7 @@ public class AboutDialog extends JDialog {
 		gbc_mLabelAppName.gridy = 0;
 		mInfoPanel.add(mLabelAppName, gbc_mLabelAppName);
 
-		JLabel mLabelVersion = new JLabel("Версия: 0.2.5 beta");
+		JLabel mLabelVersion = new JLabel("Версия: %%VERSION%%"); // 0.2.5 beta
 		mLabelVersion.setFont(new Font("Tahoma", Font.ITALIC, 11));
 		GridBagConstraints gbc_mLabelVersion = new GridBagConstraints();
 		gbc_mLabelVersion.anchor = GridBagConstraints.EAST;
@@ -124,16 +124,16 @@ public class AboutDialog extends JDialog {
 		gbc_panel.gridx = 1;
 		gbc_panel.gridy = 7;
 		mInfoPanel.add(panel, gbc_panel);
-				panel.setLayout(new BorderLayout(0, 0));
+		panel.setLayout(new BorderLayout(0, 0));
 
-				JButton mButtonOk = new JButton("Ok");
-				panel.add(mButtonOk);
-				mButtonOk.setMaximumSize(new Dimension(150, 23));
-				mButtonOk.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						AboutDialog.this.dispose();
-					}
-				});
+		JButton mButtonOk = new JButton("Ok");
+		panel.add(mButtonOk);
+		mButtonOk.setMaximumSize(new Dimension(150, 23));
+		mButtonOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AboutDialog.this.dispose();
+			}
+		});
 
 		// TransparentBackground background = new TransparentBackground(this);
 		// background.setBounds(0, 0, 320, 256);

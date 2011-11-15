@@ -1,0 +1,86 @@
+<project name="Jimm" default="release">
+
+	<property name="app.short-name" value="apm" />
+	<property name="version" value="0.3.0" />
+	<property name="version/apm" value="${version}-beta" />
+
+	<property name="name.src" value="src" />
+	<property name="name.dest" value="dest" />
+	<property name="name.bin" value="bin" />
+	<property name="name.build" value="build" />
+
+	<property name="app.base" value="${basedir}" />
+
+	<property name="app.java.main-class" value="ru.ucoz.megadiablo.android.apm.Runner" />
+
+	<property name="app.build.jar" value="${app.base}/builds" />
+	<property name="app.build.jar.name" value="${app.build.jar}/${app.short-name}-${version/apm}.jar" />
+
+	<property name="app.lib" value="${basedir}/libs" />
+
+	<property name="app.lib.adb-helper" value="${app.lib}/adb-helper.jar" />
+	<property name="app.libs" value="${app.lib.adb-helper}" />
+
+	<property name="app.src" value="${app.base}/${name.src}" />
+	<property name="app.src-jtatoo" value="${app.base}/${name.src}-jtatoo" />
+	<property name="app.src-data" value="${app.base}/${name.src}-data" />
+
+	<property name="app.build" value="${app.base}/${name.bin}/${name.build}" />
+	<property name="app.build.src" value="${app.build}/${name.src}" />
+	<property name="app.build.bin" value="${app.build}/${name.bin}" />
+
+
+	<target name="release" depends="compile,build-jar,clean">
+		<echo>Finished</echo>
+	</target>
+
+	<target name="clean">
+		<delete dir="${app.build}" />
+	</target>
+
+	<target name="create-dir">
+		<mkdir dir="${app.build}" />
+		<mkdir dir="${app.build.src}" />
+		<mkdir dir="${app.build.bin}" />
+	</target>
+
+	<target name="copy">
+		<copy todir="${app.build.src}" overwrite="true">
+			<fileset dir="${app.src}" includes="**/*" />
+			<fileset dir="${app.src-jtatoo}" includes="**/*" />
+			<fileset dir="${app.src-data}" includes="**/*" />
+		</copy>
+	</target>
+
+	<target name="precompile" depends="clean,create-dir,copy">
+		<replace dir="${app.build.src}" encoding="UTF-8">
+			<replacefilter token="%%VERSION%%" value="${version/apm}" />
+		</replace>
+
+		<echo>Finished</echo>
+	</target>
+
+	<target name="compile" depends="precompile">
+		<javac srcdir="${app.build.src}" destdir="${app.build.bin}" classpath="${app.libs}" debug="off" encoding="UTF-8">
+		</javac>
+	</target>
+
+	<target name="build-jar" depends="">
+		<delete file="${app.build.jar.name}" />
+
+		<jar destfile="${app.build.jar.name}">
+
+			<fileset dir="${app.build.bin}" includes="**/*.class" />
+			<fileset dir="${app.build.src}" includes="**/*" excludes="**/*.java" />
+
+			<zipfileset includes="**/*" src="${app.lib.adb-helper}" />
+
+			<manifest>
+				<attribute name="Manifest-Version" value="1.0" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Main-Class" value="${app.java.main-class}" />
+			</manifest>
+		</jar>
+	</target>
+
+</project>

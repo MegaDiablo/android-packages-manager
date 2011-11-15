@@ -16,6 +16,9 @@
 	<property name="app.build.jar" value="${app.base}/builds" />
 	<property name="app.build.jar.name" value="${app.build.jar}/${app.short-name}-${version/apm}.jar" />
 
+	<property name="app.build.zip" value="${app.base}/builds" />
+	<property name="app.build.zip.name" value="${app.build.zip}/${app.short-name}-${version/apm}.zip" />
+
 	<property name="app.lib" value="${basedir}/libs" />
 
 	<property name="app.lib.adb-helper" value="${app.lib}/adb-helper.jar" />
@@ -30,7 +33,7 @@
 	<property name="app.build.bin" value="${app.build}/${name.bin}" />
 
 
-	<target name="release" depends="compile,build-jar,clean">
+	<target name="release" depends="compile,build-jar,build-zip,clean">
 		<echo>Finished</echo>
 	</target>
 
@@ -81,6 +84,15 @@
 				<attribute name="Main-Class" value="${app.java.main-class}" />
 			</manifest>
 		</jar>
+	</target>
+
+	<target name="build-zip" depends="">
+		<delete file="${app.build.zip.name}" />
+
+		<zip destfile="${app.build.zip.name}">
+			<fileset file="${app.build.jar.name}" />
+			<fileset dir="${app.base}" includes="*.prop" />
+		</zip>
 	</target>
 
 </project>

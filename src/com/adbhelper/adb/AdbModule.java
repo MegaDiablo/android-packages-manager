@@ -389,6 +389,7 @@ public class AdbModule implements AdbConsts {
 			consoleThread.start();
 
 			currentProcess.waitFor();
+			Thread.sleep(10);
 			// LogAdb.info("end process");
 			// currentProcess.destroy();
 			currentProcess = null;

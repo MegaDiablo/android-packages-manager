@@ -32,7 +32,7 @@ public class TestMain {
 
 
 	
-	String fileAdb = AdbModule.DEFAULT_PATH_ABD;
+	String fileAdb = "/home/vbaraznovsky/android/android-sdk-linux/platform-tools/adb";
 	AdbCommand cmd = null;
 	// String fileApk = args[0] + File.separator + "bin" + File.separator+
 	// args[1] + ".apk";
@@ -67,10 +67,10 @@ public class TestMain {
 
 	}
 	AdbModule adb = new AdbModule(fileAdb);
-	adb.connet("192.168.1.29:5555");
+	//adb.connet("192.168.1.29:5555");
 //	adb.restart();
 System.out.println("endddd");
-	adb.waitDevice();
+	//adb.waitDevice();
 	final List<AdbDevice> devices = adb.devices();
 	if (devices.isEmpty()) {
 	    LogAdb.error("Not found devices");
@@ -110,7 +110,7 @@ try {
 	
 	adb.stopCurrentProcess();
 	LogAdb.debug("end Main");
-	adb.finishAdb();
+	//adb.finishAdb();
 	// devices.get(0).reboot();
 	// adb.uninstall(null, "com.ximad.testtv");
 	// adb.uninstall(null, "com.ximad.dropletstv");

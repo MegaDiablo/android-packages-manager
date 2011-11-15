@@ -64,7 +64,7 @@ public class AboutDialog extends JDialog {
 		gbc_mLabelAppName.gridy = 0;
 		mInfoPanel.add(mLabelAppName, gbc_mLabelAppName);
 
-		JLabel mLabelVersion = new JLabel("Версия: 0.2.4 beta");
+		JLabel mLabelVersion = new JLabel("Версия: 0.2.5 beta");
 		mLabelVersion.setFont(new Font("Tahoma", Font.ITALIC, 11));
 		GridBagConstraints gbc_mLabelVersion = new GridBagConstraints();
 		gbc_mLabelVersion.anchor = GridBagConstraints.EAST;

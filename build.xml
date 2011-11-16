@@ -1,7 +1,7 @@
 <project name="Jimm" default="release">
 
 	<property name="app.short-name" value="apm" />
-	<property name="version" value="0.3.0" />
+	<property name="version" value="0.3.1" />
 	<property name="version/apm" value="${version}-beta" />
 
 	<property name="name.src" value="src" />
@@ -93,6 +93,41 @@
 			<fileset file="${app.build.jar.name}" />
 			<fileset dir="${app.base}" includes="*.prop" />
 		</zip>
+	</target>
+
+	<target name="obfuscate">
+		<taskdef resource="proguard/ant/task.properties" classpath="${basedir}/proguard/proguard.jar" />
+		<proguard configuration="${app.base}/proguard.cfg" printseeds="on" printmapping="out.map" renamesourcefileattribute="SourceFile">
+			<injar file="${app.build.jar.name}" />
+			<outjar file="${app.base}/out.jar" />
+
+			<libraryjar file="${java.home}/lib/rt.jar" />
+
+			<keepattribute name="LineNumberTable" />
+			<keepattribute name="SourceFile" />
+			<keepattribute name="*Annotation*" />
+			<keepclasseswithmembers access="public">
+				<method access="public static" type="void" name="main" parameters="java.lang.String[]" />
+			</keepclasseswithmembers>
+
+			<keepclasseswithmembernames>
+				<method access="native" />
+			</keepclasseswithmembernames>
+
+			<keepclassmembers extends="java.lang.Enum">
+				<method access="public static" type="**[]" name="values" parameters="" />
+				<method access="public static" type="**" name="valueOf" parameters="java.lang.String" />
+			</keepclassmembers>
+
+			<keepclassmembers implements="java.io.Serializable">
+				<field access="static final" type="long" name="serialVersionUID" />
+				<field access="static final" type="java.io.ObjectStreamField[]" name="serialPersistentFields" />
+				<method access="private" type="void" name="writeObject" parameters="java.io.ObjectOutputStream" />
+				<method access="private" type="void" name="readObject" parameters="java.io.ObjectInputStream" />
+				<method type="java.lang.Object" name="writeReplace" parameters="" />
+				<method type="java.lang.Object" name="readResolve" parameters="" />
+			</keepclassmembers>
+		</proguard>
 	</target>
 
 </project>

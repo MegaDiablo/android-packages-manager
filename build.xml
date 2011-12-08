@@ -10,6 +10,7 @@
 	<property name="name.build" value="build" />
 
 	<property name="app.base" value="${basedir}" />
+	<property name="app.prop-default" value="${app.base}/prop-default" />
 
 	<property name="app.java.main-class" value="ru.ucoz.megadiablo.android.apm.Runner" />
 
@@ -91,7 +92,7 @@
 
 		<zip destfile="${app.build.zip.name}">
 			<fileset file="${app.build.jar.name}" />
-			<fileset dir="${app.base}" includes="*.prop" />
+			<fileset dir="${app.prop-default}" includes="*.prop" />
 		</zip>
 	</target>
 

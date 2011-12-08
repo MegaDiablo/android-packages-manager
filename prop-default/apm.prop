@@ -4,4 +4,4 @@ plaf=AERO
 connect.device.max.count=5
 filter.text=sgt
 device.auto.refresh=15000
-path.adb=/media/data/software/android-sdk-linux/platform-tools/adb
+path.adb=adb

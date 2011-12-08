@@ -1,7 +1,7 @@
 #
-#Wed Nov 16 13:50:18 GMT+03:00 2011
-connect.device.max.count=5
+#Thu Dec 01 12:26:33 GMT+03:00 2011
 plaf=AERO
+connect.device.max.count=5
 filter.text=sgt
-path.adb=adb
 device.auto.refresh=15000
+path.adb=adb

@@ -299,8 +299,8 @@ public class ListPackages extends JPanel {
 	}
 
 	public void downloadPackages(String to) {
-		if (to != null && to.length() > 1 && !to.endsWith("\\")) {
-			to += "\\";
+		if (to != null && to.length() > 1 && !to.endsWith(File.separator)) {
+			to += File.separator;
 		}
 		int[] selected = table.getSelectedRows();
 		for (int index : selected) {

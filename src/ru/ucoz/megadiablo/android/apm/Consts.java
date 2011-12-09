@@ -1,4 +1,4 @@
-package ru.ucoz.megadiablo.android.apm.ui;
+package ru.ucoz.megadiablo.android.apm;
 
 /**
  * @author MegaDiablo
@@ -13,5 +13,9 @@ public final class Consts {
 		public static final String CONNECT_DEVICE_NUMBER = "connect.device.";// 5=
 		public static final String CONNECT_DEVICE_MAX_COUNT = "connect.device.max.count";// =5
 		public static final String LOOK_AND_FEEL = "plaf";//
+
+		public static final String FILE_PROP = "apm.prop";
+		public static final String FILE_PROP_APP = "app.prop";
+		public static final String FILE_PROP_FILTER = "filter.prop";
 	}
 }

@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 
 import ru.ucoz.megadiablo.android.apm.Core;
-import ru.ucoz.megadiablo.android.apm.Runner;
+import ru.ucoz.megadiablo.android.apm.Settings;
 
 /**
  * @author MegaDiablo
@@ -57,7 +57,9 @@ public class JMenuLookAndFeel extends JMenu {
 								"Предупреждение", JOptionPane.WARNING_MESSAGE);
 			}
 		});
-		mMenuItemAero.setSelected(Runner.LOOK_AND_FEEL == pEnumPLAF);
+
+		EnumPLAF selectPLAF = Settings.getInstance().getPLookAndFeel();
+		mMenuItemAero.setSelected(selectPLAF == pEnumPLAF);
 		mGroup.add(mMenuItemAero);
 		add(mMenuItemAero);
 	}

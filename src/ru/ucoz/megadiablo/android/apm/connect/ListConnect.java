@@ -2,21 +2,19 @@ package ru.ucoz.megadiablo.android.apm.connect;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import ru.ucoz.megadiablo.android.apm.Core;
-import ru.ucoz.megadiablo.android.apm.ui.Consts;
-
+import ru.ucoz.megadiablo.android.apm.Settings;
 
 /**
  * @author MegaDiablo
  * */
 public class ListConnect {
 
-	private Properties mSettings;
+	private Settings mSettings;
 
-	public ListConnect(Core pCore, Properties pSettings) {
-		mSettings = pSettings;
+	public ListConnect(Core pCore) {
+		mSettings = Settings.getInstance();
 	}
 
 	public String addConnect(String name) {
@@ -29,7 +27,7 @@ public class ListConnect {
 			return null;
 		}
 
-		int maxConnect = getMaxConnects();
+		int maxConnect = mSettings.getConnectDeviceMaxCount();
 		List<String> list = getConnects();
 
 		while (list.remove(name)) {
@@ -45,31 +43,13 @@ public class ListConnect {
 		addConnect(name);
 	}
 
-	private int getMaxConnects() {
-		String strMaxConnect = mSettings.getProperty(
-				Consts.settings.CONNECT_DEVICE_MAX_COUNT, "5");
-
-		int maxConnect = 5;
-		try {
-			maxConnect = Integer.valueOf(strMaxConnect);
-		} catch (Exception e) {
-			mSettings
-					.setProperty(Consts.settings.CONNECT_DEVICE_MAX_COUNT, "5");
-		}
-
-		return maxConnect;
-	}
-
 	public List<String> getConnects() {
 		ArrayList<String> list = new ArrayList<String>();
 
-		int maxConnect = getMaxConnects();
+		int maxConnect = mSettings.getConnectDeviceMaxCount();
 		for (int i = 0; i < maxConnect; i++) {
 
-			String key = Consts.settings.CONNECT_DEVICE_NUMBER
-					+ String.valueOf(i);
-
-			String value = mSettings.getProperty(key, "");
+			String value = mSettings.getConnectDeviceByNumber(i);
 			if (value != null) {
 				value = value.trim();
 			} else {
@@ -88,15 +68,12 @@ public class ListConnect {
 	private void setListConnects(List<String> list, int count) {
 		for (int i = 0; i < count; i++) {
 
-			String key = Consts.settings.CONNECT_DEVICE_NUMBER
-					+ String.valueOf(i);
-
 			String value = "";
 			if (i < list.size()) {
 				value = list.get(i);
 			}
 
-			mSettings.setProperty(key, value);
+			mSettings.setConnectDeviceByNumber(i, value);
 		}
 	}
 }

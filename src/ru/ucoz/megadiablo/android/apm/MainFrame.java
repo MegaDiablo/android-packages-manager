@@ -31,7 +31,8 @@ import ru.ucoz.megadiablo.android.apm.ui.UserInterfaceUtils;
 public class MainFrame extends JFrame {
 
 	static {
-		UserInterfaceUtils.setLookAndFeel(Runner.LOOK_AND_FEEL);
+		UserInterfaceUtils.setLookAndFeel(Settings.getInstance()
+				.getPLookAndFeel());
 	}
 
 	/**

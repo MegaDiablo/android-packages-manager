@@ -71,6 +71,16 @@ public class MainMenuBar extends JMenuBar {
 		});
 		mMenuView.add(mCheckBoxMenuItemKeyBoard);
 
+		JCheckBoxMenuItem checkBoxMenuItemSystemPackages = new JCheckBoxMenuItem(
+				"Системыне пакеты");
+		checkBoxMenuItemSystemPackages.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO realisation
+//				d
+			}
+		});
+		mMenuView.add(checkBoxMenuItemSystemPackages);
+
 		JMenuLookAndFeel mMenuLookAndFeel = new JMenuLookAndFeel(pCore);
 		mMenuView.add(mMenuLookAndFeel);
 

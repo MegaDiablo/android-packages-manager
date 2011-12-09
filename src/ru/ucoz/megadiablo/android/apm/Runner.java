@@ -25,38 +25,14 @@ public class Runner {
 	 */
 	public static void main(String[] args) throws IOException {
 
-		// {
-		// Enumeration<Object> k = System.getProperties().keys();
-		// while (k.hasMoreElements()) {
-		// String o = (String) k.nextElement();
-		// System.out.println(o + " = "
-		// + System.getProperties().getProperty(o));
-		// }
-		// }
-
 		final Events events = new Events();
-		{
-			ListProcess process = new ListProcess();
-			events.addChangeStatusListener(process);
-		}
+
+		ListProcess process = new ListProcess();
+		events.addChangeStatusListener(process);
+
 		events.start();
 
-		// final Properties properties = new Properties();
-		// try {
-		// properties.load(new FileInputStream(PROP));
-		// } catch (FileNotFoundException e) {
-		// e.printStackTrace();
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-
-		// initLookAndFeel(properties.getProperty(Consts.settings.LOOK_AND_FEEL,
-		// null));
 		final Settings settings = Settings.getInstance();
-
-		// initLookAndFeel(settings.getLookAndFeel());
-
-		// final int upDeviceTime = settings.getTimeAutoRefreshDevices();
 
 		final AdbModule adb = new AdbModule(settings.getAdbPath(),
 				Consts.settings.FILE_PROP_APP);
@@ -65,16 +41,15 @@ public class Runner {
 		final Core core = new Core(adb, events);
 
 		final List<EventUpdater> listEventUpdaters = new ArrayList<EventUpdater>();
-		final EventUpdater eventRefreshDevices;
-		{
-			eventRefreshDevices = new EventUpdater(new Runnable() {
-				@Override
-				public void run() {
-					core.refreshDevices();
-				}
-			}, settings.getTimeAutoRefreshDevices(), true);
-			listEventUpdaters.add(eventRefreshDevices);
-		}
+
+		final EventUpdater eventRefreshDevices = new EventUpdater(
+				new Runnable() {
+					@Override
+					public void run() {
+						core.refreshDevices();
+					}
+				}, settings.getTimeAutoRefreshDevices(), true);
+		listEventUpdaters.add(eventRefreshDevices);
 
 		final MainFrame frame = new MainFrame(core, events, listEventUpdaters);
 		frame.setFilter(settings.getPackageFilterName());
@@ -86,19 +61,17 @@ public class Runner {
 
 				eventRefreshDevices.terminated();
 
-				// events.terminated();
 				for (EventUpdater item : listEventUpdaters) {
 					if (item != null) {
 						item.terminated();
 					}
 				}
 				adb.finishAdb();
+				events.terminated();
 			}
 		});
 
-		{
-			eventRefreshDevices.start();
-		}
+		eventRefreshDevices.start();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

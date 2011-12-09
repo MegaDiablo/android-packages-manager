@@ -1,7 +1,8 @@
 #
 #Thu Dec 01 12:26:33 GMT+03:00 2011
+system.packages.visible=false
 plaf=AERO
 connect.device.max.count=5
-filter.text=sgt
+filter.text=
 device.auto.refresh=15000
 path.adb=adb

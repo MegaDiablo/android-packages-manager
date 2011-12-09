@@ -28,7 +28,8 @@ public class AdbModule implements AdbConsts {
 	private File fileActivities;
 	private Process currentProcess;
 
-	public static final String DEFAULT_PATH_ABD = "d:\\androidSDK\\platform-tools\\adb";
+	//public static final String DEFAULT_PATH_ABD = "d:\\androidSDK\\platform-tools\\adb";
+	public static final String DEFAULT_PATH_ABD = "adb";
 	private static final String CMD_UNINSTALL = "uninstall ";
 	private static final String CMD_INSTALL = "install %file%";
 	private static final String CMD_DEVICES = "devices";
@@ -210,7 +211,7 @@ public class AdbModule implements AdbConsts {
 			LogAdb.error(LOG_INSTALL_FAIL.replace(MASK_FILE, pathApp));
 			return FAILTURE;
 		}
-		if (res[res.length - 1].equals(STR_FAILTURE)) {
+		if (res[res.length - 1].startsWith(STR_FAILTURE)) {
 			LogAdb.error(LOG_INSTALL_FAIL.replace(MASK_FILE, pathApp));
 			return FAILTURE;
 		}

@@ -17,6 +17,7 @@ import ru.ucoz.megadiablo.android.apm.Core;
 import ru.ucoz.megadiablo.android.apm.EventUpdater;
 import ru.ucoz.megadiablo.android.apm.MainFrame;
 import ru.ucoz.megadiablo.android.apm.Runner;
+import ru.ucoz.megadiablo.android.apm.Settings;
 import ru.ucoz.megadiablo.android.apm.ui.keyboard.KeyBoard;
 
 /**
@@ -41,6 +42,8 @@ public class MainMenuBar extends JMenuBar {
 	private JMenuItem mMenuItemAddNetworkDevice;
 
 	private JMenuItem mMenuItemEmpty;
+
+	private final Settings mSettings = Settings.getInstance();
 
 	public MainMenuBar(final Core pCore,
 			final List<EventUpdater> pListEventUpdaters, final MainFrame pFrame) {
@@ -75,10 +78,13 @@ public class MainMenuBar extends JMenuBar {
 				"Системыне пакеты");
 		checkBoxMenuItemSystemPackages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO realisation
-//				d
+				JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0.getSource());
+				mSettings.setVisibleSystemPackages(item.isSelected());
+				mCore.refreshPackages();
 			}
 		});
+		checkBoxMenuItemSystemPackages.setSelected(mSettings
+				.isVisibleSystemPackages());
 		mMenuView.add(checkBoxMenuItemSystemPackages);
 
 		JMenuLookAndFeel mMenuLookAndFeel = new JMenuLookAndFeel(pCore);

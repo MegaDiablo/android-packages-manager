@@ -1,7 +1,8 @@
 #
-#Fri Dec 09 17:34:51 EET 2011
+#Fri Dec 09 18:37:35 EET 2011
+system.packages.visible=false
 connect.device.max.count=5
 plaf=AERO
-filter.text=sgt
+filter.text=
 path.adb=/media/data/software/android-sdk-linux/platform-tools/adb
 device.auto.refresh=15000

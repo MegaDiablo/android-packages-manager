@@ -12,6 +12,7 @@ public final class Consts {
 		public static final String CONNECT_DEVICE_COUNT = "connect.device.count";// =0
 		public static final String CONNECT_DEVICE_NUMBER = "connect.device.";// 5=
 		public static final String CONNECT_DEVICE_MAX_COUNT = "connect.device.max.count";// =5
+		public static final String SYSTEM_PACKAGES_VISIBLE = "system.packages.visible";// false
 		public static final String LOOK_AND_FEEL = "plaf";//
 
 		public static final String FILE_PROP = "apm.prop";

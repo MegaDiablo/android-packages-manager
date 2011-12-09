@@ -26,7 +26,7 @@ public final class Settings {
 		return mSettings;
 	}
 
-	private boolean mShowSystemPackages = false;
+	private boolean mVisibleSystemPackages = false;
 	private int mTimeAutoRefreshDevices = 5000;
 	private int mConnectDeviceMaxCount = 5;
 
@@ -43,16 +43,20 @@ public final class Settings {
 				Consts.settings.DEVICE_AUTO_REFRESH, 5000);
 		mSettings.mConnectDeviceMaxCount = parsePropToInt(
 				Consts.settings.CONNECT_DEVICE_MAX_COUNT, 5);
+		mSettings.mVisibleSystemPackages = parsePropToBoolean(
+				Consts.settings.SYSTEM_PACKAGES_VISIBLE, false);
 
 		initLookAndFeel(mSettings.getLookAndFeel());
 	}
 
 	public boolean isVisibleSystemPackages() {
-		return mShowSystemPackages;
+		return mVisibleSystemPackages;
 	}
 
 	public void setVisibleSystemPackages(final boolean pVisible) {
-		mShowSystemPackages = pVisible;
+		mVisibleSystemPackages = pVisible;
+		mProperties.setProperty(Consts.settings.SYSTEM_PACKAGES_VISIBLE,
+				String.valueOf(pVisible));
 	}
 
 	public String getLookAndFeel() {
@@ -144,6 +148,11 @@ public final class Settings {
 		return parseStringToInt(mSettings.mProperties.getProperty(pProp), pDef);
 	}
 
+	private static boolean parsePropToBoolean(String pProp, boolean pDef) {
+		return parseStringToBoolean(mSettings.mProperties.getProperty(pProp),
+				pDef);
+	}
+
 	private static int parseStringToInt(String pValue, int pDef) {
 		if (pValue == null) {
 			return pDef;
@@ -154,6 +163,18 @@ public final class Settings {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		return pDef;
+	}
+
+	private static boolean parseStringToBoolean(String pValue, boolean pDef) {
+		if (pValue == null) {
+			return pDef;
+		}
+		try {
+			return Boolean.parseBoolean(pValue);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return pDef;
 	}

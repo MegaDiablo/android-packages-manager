@@ -8,6 +8,7 @@ import com.adbhelper.adb.exseptions.NotAccessPackageManager;
 public class AdbDevice {
 
     private static final String EMULATOR_NAME = "emulator\\-[0-9]*";
+	private static final boolean DEFAULT_OPTIONS_WITH_SYSTEM = false;
     private String name;
     private String type;
     private AdbModule adb;
@@ -102,7 +103,7 @@ public class AdbDevice {
     }
 
     public List<AdbPackage> getPackages() throws NotAccessPackageManager {
-	return getPackages(false);
+	return getPackages(DEFAULT_OPTIONS_WITH_SYSTEM);
     }
 
     public List<AdbPackage> getPackages(boolean withSystem)

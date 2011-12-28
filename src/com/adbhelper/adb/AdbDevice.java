@@ -2,8 +2,9 @@ package com.adbhelper.adb;
 
 import java.util.List;
 
-import com.adbhelper.adb.exseptions.DeviceIsEmulatorRebootException;
-import com.adbhelper.adb.exseptions.NotAccessPackageManager;
+import com.adbhelper.adb.exceptions.DeviceIsEmulatorRebootException;
+import com.adbhelper.adb.exceptions.NotAccessPackageManager;
+import com.adbhelper.adb.exceptions.install.InstallException;
 
 public class AdbDevice {
 
@@ -55,11 +56,11 @@ public class AdbDevice {
 	return adb.uninstall(name, app);
     }
 
-    public int install(String pathApp) {
+    public int install(String pathApp) throws InstallException {
 	return adb.install(name, pathApp);
     }
 
-    public void reinstall(String app, String activity, String pathApp) {
+    public void reinstall(String app, String activity, String pathApp) throws InstallException {
 	adb.reinstall(name, app, activity, pathApp);
     }
 

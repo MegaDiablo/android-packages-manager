@@ -5,7 +5,8 @@ package com.adbhelper.adb;
 
 import java.io.IOException;
 
-import com.adbhelper.adb.exseptions.NotFoundActivityException;
+import com.adbhelper.adb.exceptions.NotFoundActivityException;
+import com.adbhelper.adb.exceptions.install.InstallException;
 
 /**
  * @author Uladzimir Baraznouski
@@ -68,11 +69,11 @@ public class AdbPackage {
 	adb.uninstall(device, name);
     }
 
-    public void reinstall(String activity, String pathApp) {
+    public void reinstall(String activity, String pathApp) throws InstallException {
 	adb.reinstall(device, name, activity, pathApp);
     }
 
-    public void reinstall(String pathApp) {
+    public void reinstall(String pathApp) throws InstallException {
 	adb.reinstall(device, name, defaultActivity, pathApp);
     }
 

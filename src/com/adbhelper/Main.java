@@ -2,6 +2,7 @@ package com.adbhelper;
 
 import com.adbhelper.adb.AdbModule;
 import com.adbhelper.adb.LogAdb;
+import com.adbhelper.adb.exceptions.install.InstallException;
 
 public class Main {
 
@@ -57,10 +58,12 @@ public class Main {
 	    {
 	    LogAdb.error("Not found devices");
 	    return;}
+    try {
 	switch (cmd) {
 	case REINSTALL:
-	    adb.reinstall(divice, app, activity, file);
-	    break;
+	
+			adb.reinstall(divice, app, activity, file);
+		break;
 	case INSTALL:
 	    adb.install(divice, file);
 	    break;
@@ -70,6 +73,11 @@ public class Main {
 	default:
 	    break;
 	}
+    } catch (InstallException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
 	// adb.uninstall(null, "com.ximad.testtv");
 	// adb.uninstall(null, "com.ximad.dropletstv");
 	// adb.install(null,

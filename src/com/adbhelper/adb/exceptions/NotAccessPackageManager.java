@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.adbhelper.adb.exseptions;
+package com.adbhelper.adb.exceptions;
 
 import com.adbhelper.adb.AdbConsts;
 

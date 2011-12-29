@@ -19,6 +19,8 @@ public class AdbConsoleThread extends Thread {
 	}
 
 	private BufferedReader bufferedReader;
+
+	@Deprecated
 	public static String execNew(String cmd, FormatLog formatLog) {
 		Runtime run = Runtime.getRuntime();
 		StringBuffer res = new StringBuffer();
@@ -47,14 +49,15 @@ public class AdbConsoleThread extends Thread {
 
 			pr.waitFor();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		return res.toString();
 	}
+
+	@Deprecated
 	public void newRun() {
 		bufferedReader = new BufferedReader(new InputStreamReader(
 				currentProcess.getInputStream()));
@@ -69,9 +72,7 @@ public class AdbConsoleThread extends Thread {
 				}
 
 			} while ((isLive()) && (bufferedReader.ready()));
-			// LogAdb.info("!!!!!!!!!endConsole");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -94,10 +95,9 @@ public class AdbConsoleThread extends Thread {
 
 			// LogAdb.info("endConsole");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		endConsole();
 	}
 
 	private boolean isLive() {
@@ -106,6 +106,9 @@ public class AdbConsoleThread extends Thread {
 
 	public void endConsole() {
 		live = false;
+		synchronized (this) {
+			this.notifyAll();
+		}
 	}
 
 	public String getStringConsole() {

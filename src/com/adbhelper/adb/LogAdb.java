@@ -6,6 +6,7 @@ public class LogAdb {
 
 	private static boolean debugMode = false;
 
+	@SuppressWarnings("deprecation")
 	public static void debug(String log) {
 		if (!debugMode) {
 			return;
@@ -20,6 +21,10 @@ public class LogAdb {
 		System.out.println();
 	}
 
+	public static void info(String log,Object...args) {
+		info(String.format(log, args));
+	}
+	@SuppressWarnings("deprecation")
 	public static void info(String log) {
 		if (log == null)
 			return;
@@ -30,6 +35,7 @@ public class LogAdb {
 		System.out.println(log);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void error(String log) {
 		if (log == null)
 			return;
@@ -42,7 +48,6 @@ public class LogAdb {
 		try {
 			Thread.sleep(10);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.err.println(log);
@@ -51,7 +56,6 @@ public class LogAdb {
 		try {
 			Thread.sleep(10);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

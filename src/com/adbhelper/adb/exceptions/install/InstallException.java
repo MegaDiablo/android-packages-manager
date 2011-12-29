@@ -1,11 +1,6 @@
 package com.adbhelper.adb.exceptions.install;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-
-import javax.swing.text.Utilities;
 
 import com.adbhelper.adb.AdbConsts;
 import com.adbhelper.adb.exceptions.AdbError;
@@ -21,15 +16,12 @@ public class InstallException extends AdbException {
 	public InstallException(String labelError) {
 		this(String.format(AdbConsts.STR_ERROR_MESSAGE_INSTALL, labelError),
 				labelError);
-		// TODO Auto-generated constructor stub
 		mLabelError = labelError;
 
 	}
 
 	public InstallException(String message, String labelError) {
 		super(message);
-		// TODO Auto-generated constructor stub
-
 		mLabelError = labelError;
 	}
 

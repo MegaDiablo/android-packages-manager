@@ -1,6 +1,5 @@
 package com.adbhelper.adb.exceptions.install;
 
-import com.adbhelper.adb.AdbConsts;
 
 public class InstallExceptionNotFoundFile extends InstallException{
 

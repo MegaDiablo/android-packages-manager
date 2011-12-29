@@ -2,6 +2,11 @@ package com.adbhelper.adb.exceptions;
 
 public class AdbError extends Error {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4974005004014091801L;
+
 	public AdbError() {
 		// TODO Auto-generated constructor stub
 	}

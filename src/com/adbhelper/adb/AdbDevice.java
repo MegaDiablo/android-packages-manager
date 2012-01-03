@@ -71,6 +71,12 @@ public class AdbDevice {
 		adb.reinstall(name,  pathApp);
 	}
 	
+	public void reinstall(String pathApp, boolean autoStart)
+			throws InstallException {
+		adb.reinstall(name,  pathApp,autoStart);
+	}
+	
+	
 	@Deprecated
 	public void reinstall(String app, String activity, String pathApp)
 			throws InstallException {

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="build-jar">
+
+
+	<target name="build-jar" depends="">
+		<tstamp>
+			<format property="TODAY_UK" pattern="yyyy_MM_dd" locale="en,UK" />
+		</tstamp>
+
+		<property file="build.properties" />
+		<property name="path_libs" value="bin_libs" />
+		<property name="app.build.jar.path"
+		          value="${path_libs}/beta/${app.build.jar.name}.jar" />
+		<property name="app.build.currentversion.path"
+		          value="${path_libs}/beta/${app.build.jar.name}.jar" />
+
+		<property name="app.build.bin" value="bin" />
+		<property name="app.build.src" value="src" />
+
+		<delete file="${app.build.jar.path}" />
+		<jar destfile="${app.build.jar.path}">
+
+			<fileset dir="${app.build.bin}"
+			         includes="**/*.class"
+			         excludes="com/adbhelper/*.class" />
+
+
+
+			<manifest>
+				<attribute name="Manifest-Version" value="1.0" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Built-By" value="Vladimir Baraznovsky" />
+				<section name="common">
+					<!--     
+					  <attribute name="Specification-Title" value="Example"/>
+				      <attribute name="Specification-Vendor" value="Example Organization"/>
+				      <attribute name="Implementation-Title" value="common"/>
+				 	  <attribute name="Implementation-Vendor" value="Example Corp."/>-->
+					<attribute name="Specification-Version"
+					           value="${app.build.verision}" />
+					<attribute name="Implementation-Version"
+					           value="${app.build.verision} Build ${app.build.number} ${TODAY}" />
+
+
+				</section>
+			</manifest>
+		</jar>
+	</target>
+
+</project>

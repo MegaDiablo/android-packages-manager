@@ -11,8 +11,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
-import javax.jws.soap.SOAPBinding.Use;
-
 import com.adbhelper.adb.exceptions.AdbError;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
 import com.adbhelper.adb.exceptions.NotFoundActivityException;
@@ -249,8 +247,7 @@ public class AdbModule implements AdbConsts {
 
 	/**
 	 * Install package into device.<br/>
-	 * Recommend for use
-	 * {@link AdbModule#install(String, String, boolean)}
+	 * Recommend for use {@link AdbModule#install(String, String, boolean)}
 	 * 
 	 * @param device
 	 *            - target device

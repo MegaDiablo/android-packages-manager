@@ -27,6 +27,7 @@ public final class Settings {
 	}
 
 	private boolean mVisibleSystemPackages = false;
+	private boolean mAutostartPackage = false;
 	private int mTimeAutoRefreshDevices = 5000;
 	private int mConnectDeviceMaxCount = 5;
 
@@ -41,10 +42,15 @@ public final class Settings {
 
 		mSettings.mTimeAutoRefreshDevices = parsePropToInt(
 				Consts.settings.DEVICE_AUTO_REFRESH, 5000);
+
 		mSettings.mConnectDeviceMaxCount = parsePropToInt(
 				Consts.settings.CONNECT_DEVICE_MAX_COUNT, 5);
+
 		mSettings.mVisibleSystemPackages = parsePropToBoolean(
 				Consts.settings.SYSTEM_PACKAGES_VISIBLE, false);
+
+		mSettings.mAutostartPackage = parsePropToBoolean(
+				Consts.settings.SETTINGS_PACKAGE_AUTOSTART, false);
 
 		initLookAndFeel(mSettings.getLookAndFeel());
 	}
@@ -56,6 +62,16 @@ public final class Settings {
 	public void setVisibleSystemPackages(final boolean pVisible) {
 		mVisibleSystemPackages = pVisible;
 		mProperties.setProperty(Consts.settings.SYSTEM_PACKAGES_VISIBLE,
+				String.valueOf(pVisible));
+	}
+
+	public boolean isAutostartPackage() {
+		return mAutostartPackage;
+	}
+
+	public void setAutostartPackage(final boolean pVisible) {
+		mAutostartPackage = pVisible;
+		mProperties.setProperty(Consts.settings.SETTINGS_PACKAGE_AUTOSTART,
 				String.valueOf(pVisible));
 	}
 

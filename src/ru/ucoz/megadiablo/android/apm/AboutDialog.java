@@ -110,7 +110,7 @@ public class AboutDialog extends JDialog {
 				gbc_mYear.gridy = 6;
 				mInfoPanel.add(mYear, gbc_mYear);
 		
-				JLabel mYearValue = new JLabel("2011");
+				JLabel mYearValue = new JLabel("2011-2012");
 				GridBagConstraints gbc_mYearValue = new GridBagConstraints();
 				gbc_mYearValue.gridwidth = 2;
 				gbc_mYearValue.insets = new Insets(0, 0, 5, 0);

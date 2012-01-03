@@ -1,8 +1,9 @@
 #
-#Fri Dec 09 18:59:12 EET 2011
+#Tue Jan 03 20:03:57 EET 2012
 system.packages.visible=false
-connect.device.max.count=5
 plaf=AERO
+connect.device.max.count=5
 filter.text=
-path.adb=/media/data/software/android-sdk-linux/platform-tools/adb
 device.auto.refresh=15000
+path.adb=/media/data/software/android-sdk-linux/platform-tools/adb
+settings.package.autostart=false

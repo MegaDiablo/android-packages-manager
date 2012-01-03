@@ -74,18 +74,18 @@ public class MainMenuBar extends JMenuBar {
 		});
 		mMenuView.add(mCheckBoxMenuItemKeyBoard);
 
-		JCheckBoxMenuItem checkBoxMenuItemSystemPackages = new JCheckBoxMenuItem(
+		JCheckBoxMenuItem mCheckBoxMenuItemSystemPackages = new JCheckBoxMenuItem(
 				"Системыне пакеты");
-		checkBoxMenuItemSystemPackages.addActionListener(new ActionListener() {
+		mCheckBoxMenuItemSystemPackages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0.getSource());
 				mSettings.setVisibleSystemPackages(item.isSelected());
 				mCore.refreshPackages();
 			}
 		});
-		checkBoxMenuItemSystemPackages.setSelected(mSettings
+		mCheckBoxMenuItemSystemPackages.setSelected(mSettings
 				.isVisibleSystemPackages());
-		mMenuView.add(checkBoxMenuItemSystemPackages);
+		mMenuView.add(mCheckBoxMenuItemSystemPackages);
 
 		JMenuLookAndFeel mMenuLookAndFeel = new JMenuLookAndFeel(pCore);
 		mMenuView.add(mMenuLookAndFeel);
@@ -174,6 +174,21 @@ public class MainMenuBar extends JMenuBar {
 			}
 		});
 		mMenuADB.add(mMenuItemAdbStop);
+
+		JMenu mMenuSettings = new JMenu("Настройки");
+		add(mMenuSettings);
+
+		JCheckBoxMenuItem mCheckBoxMenuItemAutostartPackage = new JCheckBoxMenuItem(
+				"Автозапуск пакета");
+		mCheckBoxMenuItemAutostartPackage.setToolTipText("Запускает пакет после установки");
+		mCheckBoxMenuItemAutostartPackage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0.getSource());
+				mSettings.setAutostartPackage(item.isSelected());
+			}
+		});
+		mCheckBoxMenuItemAutostartPackage.setSelected(mSettings.isAutostartPackage());
+		mMenuSettings.add(mCheckBoxMenuItemAutostartPackage);
 
 		JMenu mMenuHelp = new JMenu("Помощь");
 		add(mMenuHelp);

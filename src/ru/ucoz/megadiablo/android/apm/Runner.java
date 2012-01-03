@@ -34,6 +34,7 @@ public class Runner {
 
 		final Settings settings = Settings.getInstance();
 
+		@SuppressWarnings("deprecation")
 		final AdbModule adb = new AdbModule(settings.getAdbPath(),
 				Consts.settings.FILE_PROP_APP);
 		adb.loadFilterActivities(Consts.settings.FILE_PROP_FILTER);

@@ -28,6 +28,7 @@ public final class Settings {
 
 	private boolean mVisibleSystemPackages = false;
 	private boolean mAutostartPackage = false;
+	private boolean mUseReinstall = false;
 	private int mTimeAutoRefreshDevices = 5000;
 	private int mConnectDeviceMaxCount = 5;
 
@@ -52,6 +53,9 @@ public final class Settings {
 		mSettings.mAutostartPackage = parsePropToBoolean(
 				Consts.settings.SETTINGS_PACKAGE_AUTOSTART, false);
 
+		mSettings.mUseReinstall = parsePropToBoolean(
+				Consts.settings.SETTINGS_PACKAGE_USE_REINSTALL, false);
+
 		initLookAndFeel(mSettings.getLookAndFeel());
 	}
 
@@ -72,6 +76,16 @@ public final class Settings {
 	public void setAutostartPackage(final boolean pVisible) {
 		mAutostartPackage = pVisible;
 		mProperties.setProperty(Consts.settings.SETTINGS_PACKAGE_AUTOSTART,
+				String.valueOf(pVisible));
+	}
+
+	public boolean isUseReinstall() {
+		return mUseReinstall;
+	}
+
+	public void setUseReinstall(final boolean pVisible) {
+		mUseReinstall = pVisible;
+		mProperties.setProperty(Consts.settings.SETTINGS_PACKAGE_USE_REINSTALL,
 				String.valueOf(pVisible));
 	}
 

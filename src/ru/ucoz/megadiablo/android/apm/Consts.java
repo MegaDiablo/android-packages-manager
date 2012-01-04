@@ -19,6 +19,7 @@ public final class Consts {
 		public static final String SYSTEM_PACKAGES_VISIBLE = "system.packages.visible";// false
 
 		public static final String SETTINGS_PACKAGE_AUTOSTART = "settings.package.autostart";// false
+		public static final String SETTINGS_PACKAGE_USE_REINSTALL = "settings.package.use.reinstall";// false
 
 		public static final String FILE_PROP = "apm.prop";
 		public static final String FILE_PROP_APP = "app.prop";

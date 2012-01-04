@@ -37,9 +37,9 @@
 				      <attribute name="Implementation-Title" value="common"/>
 				 	  <attribute name="Implementation-Vendor" value="Example Corp."/>-->
 					<attribute name="Specification-Version"
-					           value="${app.build.verision}" />
+					           value="${app.build.verision}-beta" />
 					<attribute name="Implementation-Version"
-					           value="${app.build.verision} Build ${app.build.number} ${TODAY}" />
+					           value="${app.build.verision} Build ${app.build.number}(beta) ${TODAY}" />
 
 
 				</section>

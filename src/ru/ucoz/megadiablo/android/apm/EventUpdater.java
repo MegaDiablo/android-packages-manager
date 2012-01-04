@@ -9,18 +9,20 @@ public class EventUpdater extends Thread {
 
 	private boolean mTerminated = false;
 	private boolean mPause = false;
-	private int mDelay = 5000;
+	private int mDelay = Consts.Default.DELAY_EVENT_UPDATER;
 	private boolean mCycle = false;
 
-	public EventUpdater(Runnable updater) {
-		this(updater, 5000, false);
+	public EventUpdater(final Runnable updater) {
+		this(updater, Consts.Default.DELAY_EVENT_UPDATER, false);
 	}
 
-	public EventUpdater(Runnable updater, int delay) {
+	public EventUpdater(final Runnable updater, final int delay) {
 		this(updater, delay, false);
 	}
 
-	public EventUpdater(Runnable updater, int delay, boolean cycle) {
+	public EventUpdater(final Runnable updater,
+			final int delay,
+			final boolean cycle) {
 		super("EventUpdater");
 
 		mUpdater = updater;
@@ -75,7 +77,7 @@ public class EventUpdater extends Thread {
 		}
 	}
 
-	public synchronized void setPause(boolean pPause) {
+	public synchronized void setPause(final boolean pPause) {
 		try {
 			mPause = pPause;
 			synchronized (this) {
@@ -86,7 +88,7 @@ public class EventUpdater extends Thread {
 		}
 	}
 
-	private void syncWait(int pDelay) {
+	private void syncWait(final int pDelay) {
 		synchronized (this) {
 			try {
 				if (pDelay <= 0) {

@@ -12,7 +12,7 @@ import com.adbhelper.adb.AdbPackage;
 public class PackagesListenerDefault implements PackagesListener {
 
 	@Override
-	public void updatePackages(List<AdbPackage> pAdbPackages) {
+	public void updatePackages(final List<AdbPackage> pAdbPackages) {
 	}
 
 }

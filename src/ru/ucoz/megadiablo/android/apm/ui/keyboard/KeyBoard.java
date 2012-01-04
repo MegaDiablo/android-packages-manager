@@ -52,8 +52,8 @@ public class KeyBoard extends JDialog {
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 0, 0, 0, 0, 0 };
 		gbl_panel.rowHeights = new int[] { 0, 0, 0 };
-		gbl_panel.columnWeights = new double[] { 1.0, 1.0, 1.0, 1.0,
-				Double.MIN_VALUE };
+		gbl_panel.columnWeights =
+				new double[] { 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
@@ -150,7 +150,8 @@ public class KeyBoard extends JDialog {
 		}
 	}
 
-	private static final Map<Integer, Integer> mMapKey = new HashMap<Integer, Integer>();
+	private static final Map<Integer, Integer> mMapKey =
+			new HashMap<Integer, Integer>();
 	static {
 		mMapKey.put(KeyEvent.VK_0, IKeyCode.KEYCODE_0);
 		mMapKey.put(KeyEvent.VK_1, IKeyCode.KEYCODE_1);

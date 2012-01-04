@@ -79,8 +79,11 @@ public class JFolderChoose extends JDialog {
 		super(owner, title);
 		setSize(400, 300);
 
-		DefaultMutableTreeNode top = new DefaultMutableTreeNode(new IconData(
-				ICON_COMPUTER, null, "Компьютер"));
+		DefaultMutableTreeNode top =
+				new DefaultMutableTreeNode(new IconData(
+						ICON_COMPUTER,
+						null,
+						"Компьютер"));
 
 		DefaultMutableTreeNode node;
 		File[] roots = File.listRoots();
@@ -88,8 +91,11 @@ public class JFolderChoose extends JDialog {
 
 			FileNode fileNode = new FileNode(roots[k], true);
 
-			node = new DefaultMutableTreeNode(new IconData(fileNode.getIcon(),
-					null, fileNode));
+			node =
+					new DefaultMutableTreeNode(new IconData(
+							fileNode.getIcon(),
+							null,
+							fileNode));
 			top.add(node);
 			node.add(new DefaultMutableTreeNode(new Boolean(true)));
 		}
@@ -139,8 +145,8 @@ public class JFolderChoose extends JDialog {
 		GridBagLayout gbl_mPanelButtons = new GridBagLayout();
 		gbl_mPanelButtons.columnWidths = new int[] { 150, 78, 0, 0 };
 		gbl_mPanelButtons.rowHeights = new int[] { 23, 0 };
-		gbl_mPanelButtons.columnWeights = new double[] { 1.0, 0.0, 0.0,
-				Double.MIN_VALUE };
+		gbl_mPanelButtons.columnWeights =
+				new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		gbl_mPanelButtons.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		mPanelButtons.setLayout(gbl_mPanelButtons);
 
@@ -278,8 +284,12 @@ class IconCellRenderer extends JLabel implements TreeCellRenderer {
 		setOpaque(false);
 	}
 
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean sel, boolean expanded, boolean leaf, int row,
+	public Component getTreeCellRendererComponent(JTree tree,
+			Object value,
+			boolean sel,
+			boolean expanded,
+			boolean leaf,
+			int row,
 			boolean hasFocus)
 
 	{
@@ -388,8 +398,8 @@ class FileNode {
 	public Icon getIcon(boolean open) {
 		if (mIconOpen == null) {
 			if (mRoot) {
-				mIconOpen = FileSystemView.getFileSystemView().getSystemIcon(
-						mFile);
+				mIconOpen =
+						FileSystemView.getFileSystemView().getSystemIcon(mFile);
 				mIconClose = mIconOpen;
 			}
 
@@ -398,10 +408,12 @@ class FileNode {
 					mIconOpen = JFolderChoose.ICON_TREE_OPEN;
 					mIconClose = JFolderChoose.ICON_TREE_CLOSED;
 				} else {
-					mIconOpen = FileSystemView.getFileSystemView()
-							.getSystemIcon(mFile);
-					mIconClose = FileSystemView.getFileSystemView()
-							.getSystemIcon(mFile);
+					mIconOpen =
+							FileSystemView.getFileSystemView().getSystemIcon(
+									mFile);
+					mIconClose =
+							FileSystemView.getFileSystemView().getSystemIcon(
+									mFile);
 				}
 			}
 		}
@@ -410,8 +422,8 @@ class FileNode {
 	}
 
 	public boolean expand(DefaultMutableTreeNode parent) {
-		DefaultMutableTreeNode flag = (DefaultMutableTreeNode) parent
-				.getFirstChild();
+		DefaultMutableTreeNode flag =
+				(DefaultMutableTreeNode) parent.getFirstChild();
 		if (flag == null) { // No flag
 			return false;
 		}
@@ -454,8 +466,8 @@ class FileNode {
 
 		for (int i = 0; i < v.size(); i++) {
 			FileNode nd = v.get(i);
-			IconData idata = new IconData(nd.getIcon(false), nd.getIcon(true),
-					nd);
+			IconData idata =
+					new IconData(nd.getIcon(false), nd.getIcon(true), nd);
 			DefaultMutableTreeNode node = new DefaultMutableTreeNode(idata);
 			parent.add(node);
 
@@ -488,8 +500,10 @@ class FileNode {
 		try {
 			return mFile.listFiles();
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Ошибка чтания директории "
-					+ mFile.getAbsolutePath(), "Предупреждение",
+			JOptionPane.showMessageDialog(
+					null,
+					"Ошибка чтания директории " + mFile.getAbsolutePath(),
+					"Предупреждение",
 					JOptionPane.WARNING_MESSAGE);
 			return null;
 		}

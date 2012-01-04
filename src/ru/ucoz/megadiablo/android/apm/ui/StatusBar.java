@@ -22,7 +22,6 @@ import ru.ucoz.megadiablo.android.apm.Core;
 import ru.ucoz.megadiablo.android.apm.Events;
 import ru.ucoz.megadiablo.android.apm.IEvent;
 
-
 /**
  * @author MegaDiablo
  * */
@@ -51,8 +50,8 @@ public class StatusBar extends JToolBar implements Events.IChangeStatus {
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 0, 0, 0, 0, 0 };
 		gbl_panel.rowHeights = new int[] { 0, 0 };
-		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0,
-				Double.MIN_VALUE };
+		gbl_panel.columnWeights =
+				new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_panel.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
@@ -78,7 +77,8 @@ public class StatusBar extends JToolBar implements Events.IChangeStatus {
 		mLabelLastTaskDescription.setString("");
 		mLabelLastTaskDescription.setMaximum(0);
 		mLabelLastTaskDescription.setToolTipText("");
-		GridBagConstraints gbc_mLabelLastTaskDescription = new GridBagConstraints();
+		GridBagConstraints gbc_mLabelLastTaskDescription =
+				new GridBagConstraints();
 		gbc_mLabelLastTaskDescription.insets = new Insets(0, 0, 0, 5);
 		gbc_mLabelLastTaskDescription.fill = GridBagConstraints.HORIZONTAL;
 		gbc_mLabelLastTaskDescription.gridx = 2;
@@ -122,7 +122,8 @@ public class StatusBar extends JToolBar implements Events.IChangeStatus {
 		String textQueue = "Сейчас : %s";
 
 		if (pEvents == null) {
-			mLabelLastTaskDescription.setString(String.format(textQueue,
+			mLabelLastTaskDescription.setString(String.format(
+					textQueue,
 					"- none -"));
 			mLabelLastTaskDescription.setIndeterminate(false);
 			return;
@@ -133,11 +134,13 @@ public class StatusBar extends JToolBar implements Events.IChangeStatus {
 		//
 		if (pEvents.size() > 0) {
 			IEvent event = pEvents.get(0);
-			mLabelLastTaskDescription.setString(String.format(textQueue,
+			mLabelLastTaskDescription.setString(String.format(
+					textQueue,
 					event.getDescription()));
 			mLabelLastTaskDescription.setIndeterminate(true);
 		} else {
-			mLabelLastTaskDescription.setString(String.format(textQueue,
+			mLabelLastTaskDescription.setString(String.format(
+					textQueue,
 					"- none -"));
 			mLabelLastTaskDescription.setIndeterminate(false);
 		}

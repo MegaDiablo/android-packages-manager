@@ -90,11 +90,13 @@ public class ListPackages extends JPanel {
 			mMenuItemDelete = new JMenuItem("Удалить");
 			mMenuItemDelete.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int result = JOptionPane.showConfirmDialog(
-							ListPackages.this,
-							"Точно хотите удалить приложение(я)?",
-							"Предупреждение", JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE);
+					int result =
+							JOptionPane.showConfirmDialog(
+									ListPackages.this,
+									"Точно хотите удалить приложение(я)?",
+									"Предупреждение",
+									JOptionPane.YES_NO_OPTION,
+									JOptionPane.WARNING_MESSAGE);
 					if (result == JOptionPane.YES_OPTION) {
 						removePackages();
 					}
@@ -236,8 +238,7 @@ public class ListPackages extends JPanel {
 		String text;
 
 		@Override
-		public boolean include(
-				javax.swing.RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
+		public boolean include(javax.swing.RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
 
 			if (text == null) {
 				return true;

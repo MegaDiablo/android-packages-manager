@@ -12,15 +12,15 @@ import com.adbhelper.adb.AdbDevice;
 public class DevicesListenerDefault implements DevicesListener {
 
 	@Override
-	public void changeSelectDevice(AdbDevice pAdbDevice) {
+	public void changeSelectDevice(final AdbDevice pAdbDevice) {
 	}
 
 	@Override
-	public void lostSelectDevice(AdbDevice pAdbDevice) {
+	public void lostSelectDevice(final AdbDevice pAdbDevice) {
 	}
 
 	@Override
-	public void updateListDevices(List<AdbDevice> pAdbDevices) {
+	public void updateListDevices(final List<AdbDevice> pAdbDevices) {
 	}
 
 }

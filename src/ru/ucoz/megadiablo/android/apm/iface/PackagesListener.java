@@ -9,5 +9,5 @@ import com.adbhelper.adb.AdbPackage;
  * */
 public interface PackagesListener {
 
-	public void updatePackages(List<AdbPackage> pAdbPackages);
+	void updatePackages(List<AdbPackage> pAdbPackages);
 }

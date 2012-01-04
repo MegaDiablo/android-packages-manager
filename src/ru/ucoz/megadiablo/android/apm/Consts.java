@@ -5,24 +5,48 @@ package ru.ucoz.megadiablo.android.apm;
  * */
 public final class Consts {
 
-	public final class settings {
-		public static final String PATH_ADB = "path.adb"; // =adb
-		public static final String FILTER_TEXT = "filter.text";// =sgt
-		public static final String DEVICE_AUTO_REFRESH = "device.auto.refresh";// =15000
+	/**
+	 * Класс с константами настроек.
+	 * */
+	public final class Settings {
+		public static final String PATH_ADB = "path.adb";
+		public static final String FILTER_TEXT = "filter.text";
+		public static final String DEVICE_AUTO_REFRESH = "device.auto.refresh";
 
-		public static final String CONNECT_DEVICE_COUNT = "connect.device.count";// =0
-		public static final String CONNECT_DEVICE_NUMBER = "connect.device.";// 5=
-		public static final String CONNECT_DEVICE_MAX_COUNT = "connect.device.max.count";// =5
+		public static final String CONNECT_DEVICE_COUNT =
+				"connect.device.count";
+		public static final String CONNECT_DEVICE_NUMBER = "connect.device.";
+		public static final String CONNECT_DEVICE_MAX_COUNT =
+				"connect.device.max.count";
 
-		public static final String LOOK_AND_FEEL = "plaf";//
+		public static final String LOOK_AND_FEEL = "plaf";
 
-		public static final String SYSTEM_PACKAGES_VISIBLE = "system.packages.visible";// false
+		public static final String SYSTEM_PACKAGES_VISIBLE =
+				"system.packages.visible";
 
-		public static final String SETTINGS_PACKAGE_AUTOSTART = "settings.package.autostart";// false
-		public static final String SETTINGS_PACKAGE_USE_REINSTALL = "settings.package.use.reinstall";// false
+		public static final String SETTINGS_PACKAGE_AUTOSTART =
+				"settings.package.autostart";
+		public static final String SETTINGS_PACKAGE_USE_REINSTALL =
+				"settings.package.use.reinstall";
 
 		public static final String FILE_PROP = "apm.prop";
 		public static final String FILE_PROP_APP = "app.prop";
 		public static final String FILE_PROP_FILTER = "filter.prop";
+
+		private Settings() {
+		}
+	}
+
+	/**
+	 * Класс со значениями по умолчанию.
+	 * */
+	public final class Default {
+
+		public static final int DELAY_EVENT_UPDATER = 5000;
+		public static final int AUTO_REFRESH_DEVICES = 5000;
+		public static final int CONNECT_DEVICE_MAX_COUNT = 5;
+
+		private Default() {
+		}
 	}
 }

@@ -11,7 +11,7 @@ public class DeviceConnect {
 	public DeviceConnect() {
 	}
 
-	public DeviceConnect(String pAdress) {
+	public DeviceConnect(final String pAdress) {
 		setAdress(pAdress);
 	}
 
@@ -19,7 +19,7 @@ public class DeviceConnect {
 		return mPriority;
 	}
 
-	public void setPriority(int pPriority) {
+	public void setPriority(final int pPriority) {
 		this.mPriority = pPriority;
 	}
 
@@ -27,11 +27,12 @@ public class DeviceConnect {
 		return mAdress;
 	}
 
-	public void setAdress(String pAdress) {
-		if (pAdress == null) {
-			pAdress = "";
+	public void setAdress(final String pAdress) {
+		if (pAdress != null) {
+			this.mAdress = pAdress;
+		} else {
+			this.mAdress = "";
 		}
-		this.mAdress = pAdress;
 	}
 
 	@Override

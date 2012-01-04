@@ -29,8 +29,9 @@ public final class Settings {
 	private boolean mVisibleSystemPackages = false;
 	private boolean mAutostartPackage = false;
 	private boolean mUseReinstall = false;
-	private int mTimeAutoRefreshDevices = 5000;
-	private int mConnectDeviceMaxCount = 5;
+	private int mTimeAutoRefreshDevices = Consts.Default.AUTO_REFRESH_DEVICES;
+	private int mConnectDeviceMaxCount =
+			Consts.Default.CONNECT_DEVICE_MAX_COUNT;
 
 	// CONNECT_DEVICE_MAX_COUNT
 	private EnumPLAF mLookAndFeel;
@@ -41,20 +42,30 @@ public final class Settings {
 		mSettings = new Settings();
 		mSettings.load();
 
-		mSettings.mTimeAutoRefreshDevices = parsePropToInt(
-				Consts.settings.DEVICE_AUTO_REFRESH, 5000);
+		mSettings.mTimeAutoRefreshDevices =
+				parsePropToInt(
+						Consts.Settings.DEVICE_AUTO_REFRESH,
+						Consts.Default.AUTO_REFRESH_DEVICES);
 
-		mSettings.mConnectDeviceMaxCount = parsePropToInt(
-				Consts.settings.CONNECT_DEVICE_MAX_COUNT, 5);
+		mSettings.mConnectDeviceMaxCount =
+				parsePropToInt(
+						Consts.Settings.CONNECT_DEVICE_MAX_COUNT,
+						Consts.Default.CONNECT_DEVICE_MAX_COUNT);
 
-		mSettings.mVisibleSystemPackages = parsePropToBoolean(
-				Consts.settings.SYSTEM_PACKAGES_VISIBLE, false);
+		mSettings.mVisibleSystemPackages =
+				parsePropToBoolean(
+						Consts.Settings.SYSTEM_PACKAGES_VISIBLE,
+						false);
 
-		mSettings.mAutostartPackage = parsePropToBoolean(
-				Consts.settings.SETTINGS_PACKAGE_AUTOSTART, false);
+		mSettings.mAutostartPackage =
+				parsePropToBoolean(
+						Consts.Settings.SETTINGS_PACKAGE_AUTOSTART,
+						false);
 
-		mSettings.mUseReinstall = parsePropToBoolean(
-				Consts.settings.SETTINGS_PACKAGE_USE_REINSTALL, false);
+		mSettings.mUseReinstall =
+				parsePropToBoolean(
+						Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL,
+						false);
 
 		initLookAndFeel(mSettings.getLookAndFeel());
 	}
@@ -65,7 +76,8 @@ public final class Settings {
 
 	public void setVisibleSystemPackages(final boolean pVisible) {
 		mVisibleSystemPackages = pVisible;
-		mProperties.setProperty(Consts.settings.SYSTEM_PACKAGES_VISIBLE,
+		mProperties.setProperty(
+				Consts.Settings.SYSTEM_PACKAGES_VISIBLE,
 				String.valueOf(pVisible));
 	}
 
@@ -75,7 +87,8 @@ public final class Settings {
 
 	public void setAutostartPackage(final boolean pVisible) {
 		mAutostartPackage = pVisible;
-		mProperties.setProperty(Consts.settings.SETTINGS_PACKAGE_AUTOSTART,
+		mProperties.setProperty(
+				Consts.Settings.SETTINGS_PACKAGE_AUTOSTART,
 				String.valueOf(pVisible));
 	}
 
@@ -85,42 +98,44 @@ public final class Settings {
 
 	public void setUseReinstall(final boolean pVisible) {
 		mUseReinstall = pVisible;
-		mProperties.setProperty(Consts.settings.SETTINGS_PACKAGE_USE_REINSTALL,
+		mProperties.setProperty(
+				Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL,
 				String.valueOf(pVisible));
 	}
 
 	public String getLookAndFeel() {
-		return mProperties.getProperty(Consts.settings.LOOK_AND_FEEL, null);
+		return mProperties.getProperty(Consts.Settings.LOOK_AND_FEEL, null);
 	}
 
-	public void setLookAndFeel(String pLookAndFeel) {
-		mProperties.setProperty(Consts.settings.LOOK_AND_FEEL, pLookAndFeel);
+	public void setLookAndFeel(final String pLookAndFeel) {
+		mProperties.setProperty(Consts.Settings.LOOK_AND_FEEL, pLookAndFeel);
 	}
 
 	public String getAdbPath() {
-		return mProperties.getProperty(Consts.settings.PATH_ADB, "adb");
+		return mProperties.getProperty(Consts.Settings.PATH_ADB, "adb");
 	}
 
-	public void setAdbPath(String pAdbPath) {
-		mProperties.setProperty(Consts.settings.PATH_ADB, pAdbPath);
+	public void setAdbPath(final String pAdbPath) {
+		mProperties.setProperty(Consts.Settings.PATH_ADB, pAdbPath);
 	}
 
 	public String getPackageFilterName() {
-		return mProperties.getProperty(Consts.settings.FILTER_TEXT, "");
+		return mProperties.getProperty(Consts.Settings.FILTER_TEXT, "");
 	}
 
-	public void setPackageFilterName(String pPackageFilterName) {
+	public void setPackageFilterName(final String pPackageFilterName) {
 		mProperties
-				.setProperty(Consts.settings.FILTER_TEXT, pPackageFilterName);
+				.setProperty(Consts.Settings.FILTER_TEXT, pPackageFilterName);
 	}
 
 	public int getTimeAutoRefreshDevices() {
 		return mTimeAutoRefreshDevices;
 	}
 
-	public void setTimeAutoRefreshDevices(int pTimeAutoRefreshDevices) {
+	public void setTimeAutoRefreshDevices(final int pTimeAutoRefreshDevices) {
 		mTimeAutoRefreshDevices = pTimeAutoRefreshDevices;
-		mProperties.setProperty(Consts.settings.DEVICE_AUTO_REFRESH,
+		mProperties.setProperty(
+				Consts.Settings.DEVICE_AUTO_REFRESH,
 				String.valueOf(pTimeAutoRefreshDevices));
 	}
 
@@ -128,21 +143,22 @@ public final class Settings {
 		return mConnectDeviceMaxCount;
 	}
 
-	public void setConnectDeviceMaxCount(int pConnectDeviceMaxCount) {
+	public void setConnectDeviceMaxCount(final int pConnectDeviceMaxCount) {
 		mConnectDeviceMaxCount = pConnectDeviceMaxCount;
-		mProperties.setProperty(Consts.settings.CONNECT_DEVICE_MAX_COUNT,
+		mProperties.setProperty(
+				Consts.Settings.CONNECT_DEVICE_MAX_COUNT,
 				String.valueOf(pConnectDeviceMaxCount));
 	}
 
-	public String getConnectDeviceByNumber(int pNum) {
-		String key = Consts.settings.CONNECT_DEVICE_NUMBER
-				+ String.valueOf(pNum);
+	public String getConnectDeviceByNumber(final int pNum) {
+		String key =
+				Consts.Settings.CONNECT_DEVICE_NUMBER + String.valueOf(pNum);
 		return mProperties.getProperty(key, "");
 	}
 
-	public void setConnectDeviceByNumber(int pNum, String pConnect) {
-		String key = Consts.settings.CONNECT_DEVICE_NUMBER
-				+ String.valueOf(pNum);
+	public void setConnectDeviceByNumber(final int pNum, final String pConnect) {
+		String key =
+				Consts.Settings.CONNECT_DEVICE_NUMBER + String.valueOf(pNum);
 		mProperties.setProperty(key, pConnect);
 	}
 
@@ -155,7 +171,7 @@ public final class Settings {
 
 	public void load() {
 		try {
-			mProperties.load(new FileInputStream(Consts.settings.FILE_PROP));
+			mProperties.load(new FileInputStream(Consts.Settings.FILE_PROP));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -165,7 +181,8 @@ public final class Settings {
 
 	public void save() {
 		try {
-			mProperties.store(new FileOutputStream(Consts.settings.FILE_PROP),
+			mProperties.store(
+					new FileOutputStream(Consts.Settings.FILE_PROP),
 					"");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -174,16 +191,19 @@ public final class Settings {
 		}
 	}
 
-	private static int parsePropToInt(String pProp, int pDef) {
+	private static int parsePropToInt(final String pProp, final int pDef) {
 		return parseStringToInt(mSettings.mProperties.getProperty(pProp), pDef);
 	}
 
-	private static boolean parsePropToBoolean(String pProp, boolean pDef) {
-		return parseStringToBoolean(mSettings.mProperties.getProperty(pProp),
+	private static boolean parsePropToBoolean(final String pProp,
+			final boolean pDef) {
+
+		return parseStringToBoolean(
+				mSettings.mProperties.getProperty(pProp),
 				pDef);
 	}
 
-	private static int parseStringToInt(String pValue, int pDef) {
+	private static int parseStringToInt(final String pValue, final int pDef) {
 		if (pValue == null) {
 			return pDef;
 		}
@@ -197,7 +217,9 @@ public final class Settings {
 		return pDef;
 	}
 
-	private static boolean parseStringToBoolean(String pValue, boolean pDef) {
+	private static boolean parseStringToBoolean(final String pValue,
+			final boolean pDef) {
+
 		if (pValue == null) {
 			return pDef;
 		}

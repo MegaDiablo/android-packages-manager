@@ -22,7 +22,6 @@ import javax.swing.border.LineBorder;
 import ru.ucoz.megadiablo.android.apm.Events;
 import ru.ucoz.megadiablo.android.apm.IEvent;
 
-
 /**
  * @author MegaDiablo
  * */
@@ -65,8 +64,8 @@ public class ListProcess extends JDialog implements Events.IChangeStatus {
 		gbl_mMainPanel.columnWidths = new int[] { 312, 0 };
 		gbl_mMainPanel.rowHeights = new int[] { 0, 70, 0, 0, 0 };
 		gbl_mMainPanel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_mMainPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0,
-				Double.MIN_VALUE };
+		gbl_mMainPanel.rowWeights =
+				new double[] { 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		mMainPanel.setLayout(gbl_mMainPanel);
 
 		GridBagConstraints gbc_mLabelName = new GridBagConstraints();

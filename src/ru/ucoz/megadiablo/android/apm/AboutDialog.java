@@ -22,7 +22,7 @@ import javax.swing.border.EmptyBorder;
  * */
 public class AboutDialog extends JDialog {
 
-	public AboutDialog(JFrame pFrame) {
+	public AboutDialog(final JFrame pFrame) {
 		super(pFrame);
 		setTitle("О программе...");
 		setModalityType(ModalityType.APPLICATION_MODAL);
@@ -48,11 +48,23 @@ public class AboutDialog extends JDialog {
 		mIconPanel.add(mInfoPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_mInfoPanel = new GridBagLayout();
 		gbl_mInfoPanel.columnWidths = new int[] { 0, 0, 0 };
-		gbl_mInfoPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 122, 0, 0 };
-		gbl_mInfoPanel.columnWeights = new double[] { 0.0, 1.0,
-				Double.MIN_VALUE };
-		gbl_mInfoPanel.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_mInfoPanel.rowHeights =
+				new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 122, 0, 0 };
+		gbl_mInfoPanel.columnWeights =
+				new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_mInfoPanel.rowWeights =
+				new double[] {
+						0.0,
+						0.0,
+						1.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						0.0,
+						1.0,
+						0.0,
+						Double.MIN_VALUE };
 		mInfoPanel.setLayout(gbl_mInfoPanel);
 
 		JLabel mLabelAppName = new JLabel("Android Package Manager");
@@ -82,42 +94,42 @@ public class AboutDialog extends JDialog {
 		gbc_mWordAutors.gridx = 0;
 		gbc_mWordAutors.gridy = 3;
 		mInfoPanel.add(mWordAutors, gbc_mWordAutors);
-				
-						JLabel mLabelAutorGUI = new JLabel("Громыко Александр");
-						GridBagConstraints gbc_mLabelAutorGUI = new GridBagConstraints();
-						gbc_mLabelAutorGUI.gridwidth = 2;
-						gbc_mLabelAutorGUI.insets = new Insets(0, 0, 5, 0);
-						gbc_mLabelAutorGUI.anchor = GridBagConstraints.WEST;
-						gbc_mLabelAutorGUI.gridx = 1;
-						gbc_mLabelAutorGUI.gridy = 3;
-						mInfoPanel.add(mLabelAutorGUI, gbc_mLabelAutorGUI);
-				
-						JLabel mLabelAutorCore = new JLabel("Баразновский Владимир");
-						GridBagConstraints gbc_mLabelAutorCore = new GridBagConstraints();
-						gbc_mLabelAutorCore.gridwidth = 2;
-						gbc_mLabelAutorCore.anchor = GridBagConstraints.WEST;
-						gbc_mLabelAutorCore.insets = new Insets(0, 0, 5, 0);
-						gbc_mLabelAutorCore.gridx = 1;
-						gbc_mLabelAutorCore.gridy = 4;
-						mInfoPanel.add(mLabelAutorCore, gbc_mLabelAutorCore);
-		
-				JLabel mYear = new JLabel("Год :");
-				mYear.setFont(new Font("Tahoma", Font.BOLD, 11));
-				GridBagConstraints gbc_mYear = new GridBagConstraints();
-				gbc_mYear.anchor = GridBagConstraints.EAST;
-				gbc_mYear.insets = new Insets(0, 0, 5, 5);
-				gbc_mYear.gridx = 0;
-				gbc_mYear.gridy = 6;
-				mInfoPanel.add(mYear, gbc_mYear);
-		
-				JLabel mYearValue = new JLabel("2011-2012");
-				GridBagConstraints gbc_mYearValue = new GridBagConstraints();
-				gbc_mYearValue.gridwidth = 2;
-				gbc_mYearValue.insets = new Insets(0, 0, 5, 0);
-				gbc_mYearValue.anchor = GridBagConstraints.WEST;
-				gbc_mYearValue.gridx = 1;
-				gbc_mYearValue.gridy = 6;
-				mInfoPanel.add(mYearValue, gbc_mYearValue);
+
+		JLabel mLabelAutorGUI = new JLabel("Громыко Александр");
+		GridBagConstraints gbc_mLabelAutorGUI = new GridBagConstraints();
+		gbc_mLabelAutorGUI.gridwidth = 2;
+		gbc_mLabelAutorGUI.insets = new Insets(0, 0, 5, 0);
+		gbc_mLabelAutorGUI.anchor = GridBagConstraints.WEST;
+		gbc_mLabelAutorGUI.gridx = 1;
+		gbc_mLabelAutorGUI.gridy = 3;
+		mInfoPanel.add(mLabelAutorGUI, gbc_mLabelAutorGUI);
+
+		JLabel mLabelAutorCore = new JLabel("Баразновский Владимир");
+		GridBagConstraints gbc_mLabelAutorCore = new GridBagConstraints();
+		gbc_mLabelAutorCore.gridwidth = 2;
+		gbc_mLabelAutorCore.anchor = GridBagConstraints.WEST;
+		gbc_mLabelAutorCore.insets = new Insets(0, 0, 5, 0);
+		gbc_mLabelAutorCore.gridx = 1;
+		gbc_mLabelAutorCore.gridy = 4;
+		mInfoPanel.add(mLabelAutorCore, gbc_mLabelAutorCore);
+
+		JLabel mYear = new JLabel("Год :");
+		mYear.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_mYear = new GridBagConstraints();
+		gbc_mYear.anchor = GridBagConstraints.EAST;
+		gbc_mYear.insets = new Insets(0, 0, 5, 5);
+		gbc_mYear.gridx = 0;
+		gbc_mYear.gridy = 6;
+		mInfoPanel.add(mYear, gbc_mYear);
+
+		JLabel mYearValue = new JLabel("2011-2012");
+		GridBagConstraints gbc_mYearValue = new GridBagConstraints();
+		gbc_mYearValue.gridwidth = 2;
+		gbc_mYearValue.insets = new Insets(0, 0, 5, 0);
+		gbc_mYearValue.anchor = GridBagConstraints.WEST;
+		gbc_mYearValue.gridx = 1;
+		gbc_mYearValue.gridy = 6;
+		mInfoPanel.add(mYearValue, gbc_mYearValue);
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(5, 5, 5, 5));

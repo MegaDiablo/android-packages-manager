@@ -8,7 +8,8 @@ import javax.swing.LookAndFeel;
 public enum EnumPLAF {
 
 	AERO {
-		private final LookAndFeel LOOK_AND_FEEL = new com.jtattoo.plaf.aero.AeroLookAndFeel();
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.jtattoo.plaf.aero.AeroLookAndFeel();
 
 		@Override
 		protected LookAndFeel getPLookAndFeel() {
@@ -26,7 +27,8 @@ public enum EnumPLAF {
 		}
 	},
 	HIFI {
-		private final LookAndFeel LOOK_AND_FEEL = new com.jtattoo.plaf.hifi.HiFiLookAndFeel();
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.jtattoo.plaf.hifi.HiFiLookAndFeel();
 
 		@Override
 		protected LookAndFeel getPLookAndFeel() {
@@ -44,7 +46,8 @@ public enum EnumPLAF {
 		}
 	},
 	ALUMINIUM {
-		private final LookAndFeel LOOK_AND_FEEL = new com.jtattoo.plaf.aluminium.AluminiumLookAndFeel();
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.jtattoo.plaf.aluminium.AluminiumLookAndFeel();
 
 		@Override
 		protected LookAndFeel getPLookAndFeel() {
@@ -62,7 +65,8 @@ public enum EnumPLAF {
 		}
 	},
 	FAST {
-		private final LookAndFeel LOOK_AND_FEEL = new com.jtattoo.plaf.fast.FastLookAndFeel();
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.jtattoo.plaf.fast.FastLookAndFeel();
 
 		@Override
 		protected LookAndFeel getPLookAndFeel() {
@@ -80,7 +84,8 @@ public enum EnumPLAF {
 		}
 	},
 	MCWIN {
-		private final LookAndFeel LOOK_AND_FEEL = new com.jtattoo.plaf.mcwin.McWinLookAndFeel();
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.jtattoo.plaf.mcwin.McWinLookAndFeel();
 
 		@Override
 		protected LookAndFeel getPLookAndFeel() {
@@ -98,7 +103,8 @@ public enum EnumPLAF {
 		}
 	},
 	MINT {
-		private final LookAndFeel LOOK_AND_FEEL = new com.jtattoo.plaf.mint.MintLookAndFeel();
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.jtattoo.plaf.mint.MintLookAndFeel();
 
 		@Override
 		protected LookAndFeel getPLookAndFeel() {
@@ -116,7 +122,8 @@ public enum EnumPLAF {
 		}
 	},
 	NOIRE {
-		private final LookAndFeel LOOK_AND_FEEL = new com.jtattoo.plaf.noire.NoireLookAndFeel();
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.jtattoo.plaf.noire.NoireLookAndFeel();
 
 		@Override
 		protected LookAndFeel getPLookAndFeel() {
@@ -134,7 +141,8 @@ public enum EnumPLAF {
 		}
 	},
 	SMART {
-		private final LookAndFeel LOOK_AND_FEEL = new com.jtattoo.plaf.smart.SmartLookAndFeel();
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.jtattoo.plaf.smart.SmartLookAndFeel();
 
 		@Override
 		protected LookAndFeel getPLookAndFeel() {
@@ -152,7 +160,8 @@ public enum EnumPLAF {
 		}
 	},
 	ACRY {
-		private final LookAndFeel LOOK_AND_FEEL = new com.jtattoo.plaf.acryl.AcrylLookAndFeel();
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.jtattoo.plaf.acryl.AcrylLookAndFeel();
 
 		@Override
 		protected LookAndFeel getPLookAndFeel() {

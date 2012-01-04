@@ -46,7 +46,8 @@ public class MainMenuBar extends JMenuBar {
 	private final Settings mSettings = Settings.getInstance();
 
 	public MainMenuBar(final Core pCore,
-			final List<EventUpdater> pListEventUpdaters, final MainFrame pFrame) {
+			final List<EventUpdater> pListEventUpdaters,
+			final MainFrame pFrame) {
 
 		mCore = pCore;
 
@@ -74,8 +75,8 @@ public class MainMenuBar extends JMenuBar {
 		});
 		mMenuView.add(mCheckBoxMenuItemKeyBoard);
 
-		JCheckBoxMenuItem mCheckBoxMenuItemSystemPackages = new JCheckBoxMenuItem(
-				"Системыне пакеты");
+		JCheckBoxMenuItem mCheckBoxMenuItemSystemPackages =
+				new JCheckBoxMenuItem("Системыне пакеты");
 		mCheckBoxMenuItemSystemPackages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0.getSource());
@@ -112,8 +113,9 @@ public class MainMenuBar extends JMenuBar {
 				AddConnect connect = new AddConnect();
 				connect.setVisible(true);
 				if (connect.getResult() == JOptionPane.OK_OPTION) {
-					String name = mCore.getListConnects().addConnect(
-							connect.getAdress());
+					String name =
+							mCore.getListConnects().addConnect(
+									connect.getAdress());
 					if (name != null) {
 						mCore.connectNetworkDevice(name);
 						refreshConnects();
@@ -178,15 +180,15 @@ public class MainMenuBar extends JMenuBar {
 		JMenu mMenuSettings = new JMenu("Настройки");
 		add(mMenuSettings);
 
-		JCheckBoxMenuItem mCheckBoxMenuItemAutostartPackage = new JCheckBoxMenuItem(
-				"Автозапуск пакета");
+		JCheckBoxMenuItem mCheckBoxMenuItemAutostartPackage =
+				new JCheckBoxMenuItem("Автозапуск пакета");
 		mCheckBoxMenuItemAutostartPackage
 				.setToolTipText("Запускает пакет после установки");
 		mCheckBoxMenuItemAutostartPackage
 				.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0
-								.getSource());
+						JCheckBoxMenuItem item =
+								(JCheckBoxMenuItem) (arg0.getSource());
 						mSettings.setAutostartPackage(item.isSelected());
 					}
 				});
@@ -194,8 +196,8 @@ public class MainMenuBar extends JMenuBar {
 				.isAutostartPackage());
 		mMenuSettings.add(mCheckBoxMenuItemAutostartPackage);
 
-		JCheckBoxMenuItem mCheckBoxMenuItemUseReinstall = new JCheckBoxMenuItem(
-				"Переустановка пакета");
+		JCheckBoxMenuItem mCheckBoxMenuItemUseReinstall =
+				new JCheckBoxMenuItem("Переустановка пакета");
 		mCheckBoxMenuItemUseReinstall
 				.setToolTipText("Установка происходит с ключем переустановки");
 		mCheckBoxMenuItemUseReinstall.addActionListener(new ActionListener() {
@@ -222,9 +224,13 @@ public class MainMenuBar extends JMenuBar {
 	}
 
 	private boolean showWarning(String text) {
-		int result = JOptionPane.showConfirmDialog(MainMenuBar.this, text,
-				"Предупреждение", JOptionPane.YES_NO_OPTION,
-				JOptionPane.WARNING_MESSAGE);
+		int result =
+				JOptionPane.showConfirmDialog(
+						MainMenuBar.this,
+						text,
+						"Предупреждение",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE);
 
 		if (result == JOptionPane.YES_OPTION) {
 			return true;

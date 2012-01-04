@@ -10,7 +10,8 @@ import java.util.List;
  * */
 public class Events extends Thread {
 
-	private ArrayList<IChangeStatus> mListChangeStatus = new ArrayList<Events.IChangeStatus>();
+	private ArrayList<IChangeStatus> mListChangeStatus =
+			new ArrayList<Events.IChangeStatus>();
 
 	private LinkedList<IEvent> mList = new LinkedList<IEvent>();
 	private boolean mTerminate = false;
@@ -54,16 +55,18 @@ public class Events extends Thread {
 		mTerminate = true;
 	}
 
-	public void add(String pName, Runnable pRunnable) {
+	public void add(final String pName, final Runnable pRunnable) {
 		add(pName, "", pRunnable);
 	}
 
-	public void add(String pName, String pDescription, Runnable pRunnable) {
+	public void add(final String pName,
+			final String pDescription,
+			final Runnable pRunnable) {
 
 		add(ImplEvent.createEvent(pName, pDescription, pRunnable));
 	}
 
-	public synchronized void add(IEvent pEvent) {
+	public synchronized void add(final IEvent pEvent) {
 		if (pEvent != null) {
 			mList.addLast(pEvent);
 			wake();
@@ -71,8 +74,7 @@ public class Events extends Thread {
 		}
 	}
 
-	public synchronized void addChangeStatusListener(
-			IChangeStatus pChangeStatusListener) {
+	public synchronized void addChangeStatusListener(final IChangeStatus pChangeStatusListener) {
 		if (pChangeStatusListener != null) {
 			mListChangeStatus.add(pChangeStatusListener);
 		}
@@ -84,14 +86,14 @@ public class Events extends Thread {
 		fireUpdateStatus(mList);
 	}
 
-	private void logEvent(IEvent pEvent) {
+	private void logEvent(final IEvent pEvent) {
 		if (mLog) {
 			sysLog(String.format("Name : %s", pEvent.getName()));
 			sysLog(String.format("Description : %s", pEvent.getDescription()));
 		}
 	}
 
-	private void sysLog(String text) {
+	private void sysLog(final String text) {
 		// System.out.println(text);
 		String enc = System.getProperty("console.encoding");
 		String enc2 = System.getProperty("file.encoding");
@@ -138,14 +140,14 @@ public class Events extends Thread {
 	 * */
 	public interface IChangeStatus {
 
-		public static final int START = 0;
-		public static final int WAKE = 1;
-		public static final int WAIT = 2;
-		public static final int STOP = 3;
+		int START = 0;
+		int WAKE = 1;
+		int WAIT = 2;
+		int STOP = 3;
 
-		public void changeStatus(int pStatus);
+		void changeStatus(int pStatus);
 
-		public void updateList(List<IEvent> pEvents);
+		void updateList(List<IEvent> pEvents);
 	}
 
 }

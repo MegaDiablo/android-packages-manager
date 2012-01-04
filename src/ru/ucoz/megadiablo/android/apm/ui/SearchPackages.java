@@ -51,13 +51,14 @@ public class SearchPackages extends JPanel {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 1.0, 1.0, 0.0,
-				Double.MIN_VALUE };
+		gridBagLayout.columnWeights =
+				new double[] { 0.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		setLayout(gridBagLayout);
 
-		JLabel mLabelFilter = new JLabel(
-				"\u0424\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u043E : ");
+		JLabel mLabelFilter =
+				new JLabel(
+						"\u0424\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u043E : ");
 		GridBagConstraints gbc_mLabelFilter = new GridBagConstraints();
 		gbc_mLabelFilter.anchor = GridBagConstraints.EAST;
 		gbc_mLabelFilter.insets = new Insets(0, 0, 0, 5);
@@ -145,8 +146,9 @@ public class SearchPackages extends JPanel {
 		if (pDevices != null) {
 			model = new DefaultComboBoxModel(pDevices.toArray());
 		} else {
-			model = new DefaultComboBoxModel(
-					new String[] { "- Нет устройства-" });
+			model =
+					new DefaultComboBoxModel(
+							new String[] { "- Нет устройства-" });
 		}
 
 		Object object = mComboBoxDevices.getSelectedItem();

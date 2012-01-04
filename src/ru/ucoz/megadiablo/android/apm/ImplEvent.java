@@ -26,8 +26,9 @@ public class ImplEvent implements IEvent {
 		return mDecription;
 	}
 
-	public static ImplEvent createEvent(String pName, String pDescription,
-			Runnable pRunnable) {
+	public static ImplEvent createEvent(final String pName,
+			final String pDescription,
+			final Runnable pRunnable) {
 
 		ImplEvent event = new ImplEvent();
 

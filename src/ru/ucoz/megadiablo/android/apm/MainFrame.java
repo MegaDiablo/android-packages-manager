@@ -48,7 +48,8 @@ public class MainFrame extends JFrame {
 	private StatusBar statusBar;
 	private JSeparator separator;
 
-	public MainFrame(final Core pCore, final Events pEvents,
+	public MainFrame(final Core pCore,
+			final Events pEvents,
 			final List<EventUpdater> pListEventUpdaters) {
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
@@ -69,8 +70,8 @@ public class MainFrame extends JFrame {
 		gbl_mMainPanel.columnWidths = new int[] { 0, 0 };
 		gbl_mMainPanel.rowHeights = new int[] { 357, 7, 0, 0 };
 		gbl_mMainPanel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_mMainPanel.rowWeights = new double[] { 1.0, 0.0, 0.0,
-				Double.MIN_VALUE };
+		gbl_mMainPanel.rowWeights =
+				new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		mMainPanel.setLayout(gbl_mMainPanel);
 
 		JPanel panel = new JPanel();
@@ -87,8 +88,9 @@ public class MainFrame extends JFrame {
 		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
-		JLabel mLabelListPackages = new JLabel(
-				"\u0421\u043F\u0438\u0441\u043E\u043A \u043F\u0430\u043A\u0435\u0442\u043E\u0432");
+		JLabel mLabelListPackages =
+				new JLabel(
+						"\u0421\u043F\u0438\u0441\u043E\u043A \u043F\u0430\u043A\u0435\u0442\u043E\u0432");
 		mLabelListPackages.setFont(new Font("Tahoma", Font.BOLD, 11));
 		mLabelListPackages.addMouseListener(new MouseAdapter() {
 			@Override
@@ -152,7 +154,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public void close() {
-		this.processWindowEvent(new WindowEvent(this,
+		this.processWindowEvent(new WindowEvent(
+				this,
 				WindowEvent.WINDOW_CLOSING));
 	}
 

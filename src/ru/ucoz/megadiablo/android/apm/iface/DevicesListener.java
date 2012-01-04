@@ -9,10 +9,10 @@ import com.adbhelper.adb.AdbDevice;
  * */
 public interface DevicesListener {
 
-	public void changeSelectDevice(AdbDevice pAdbDevice);
+	void changeSelectDevice(AdbDevice pAdbDevice);
 
-	public void lostSelectDevice(AdbDevice pAdbDevice);
+	void lostSelectDevice(AdbDevice pAdbDevice);
 
-	public void updateListDevices(List<AdbDevice> pAdbDevices);
+	void updateListDevices(List<AdbDevice> pAdbDevices);
 
 }

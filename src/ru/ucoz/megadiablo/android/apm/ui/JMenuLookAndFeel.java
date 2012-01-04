@@ -54,7 +54,8 @@ public class JMenuLookAndFeel extends JMenu {
 						.showMessageDialog(
 								JMenuLookAndFeel.this,
 								"Изменения вступят в силу после перезагрузки приложенияю.",
-								"Предупреждение", JOptionPane.WARNING_MESSAGE);
+								"Предупреждение",
+								JOptionPane.WARNING_MESSAGE);
 			}
 		});
 

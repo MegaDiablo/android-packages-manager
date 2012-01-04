@@ -5,8 +5,8 @@ package ru.ucoz.megadiablo.android.apm;
  * */
 public interface IEvent extends Runnable {
 
-	public String getName();
+	String getName();
 
-	public String getDescription();
+	String getDescription();
 
 }

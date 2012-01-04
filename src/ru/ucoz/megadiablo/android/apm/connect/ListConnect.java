@@ -13,14 +13,15 @@ public class ListConnect {
 
 	private Settings mSettings;
 
-	public ListConnect(Core pCore) {
+	public ListConnect(final Core pCore) {
 		mSettings = Settings.getInstance();
 	}
 
-	public String addConnect(String name) {
+	public String addConnect(final String pName) {
 
-		if (name != null) {
-			name = name.trim();
+		String name = pName;
+		if (pName != null) {
+			name = pName.trim();
 		}
 
 		if (name == null || name.length() == 0) {
@@ -30,8 +31,13 @@ public class ListConnect {
 		int maxConnect = mSettings.getConnectDeviceMaxCount();
 		List<String> list = getConnects();
 
-		while (list.remove(name)) {
+		List<String> remote = new ArrayList<String>();
+		for (String item : list) {
+			if (name.equals(item)) {
+				remote.add(item);
+			}
 		}
+		list.removeAll(remote);
 
 		list.add(0, name);
 		setListConnects(list, maxConnect);
@@ -39,7 +45,7 @@ public class ListConnect {
 		return name;
 	}
 
-	public void connectTo(String name) {
+	public void connectTo(final String name) {
 		addConnect(name);
 	}
 
@@ -65,7 +71,7 @@ public class ListConnect {
 		return list;
 	}
 
-	private void setListConnects(List<String> list, int count) {
+	private void setListConnects(final List<String> list, final int count) {
 		for (int i = 0; i < count; i++) {
 
 			String value = "";

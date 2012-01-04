@@ -180,15 +180,32 @@ public class MainMenuBar extends JMenuBar {
 
 		JCheckBoxMenuItem mCheckBoxMenuItemAutostartPackage = new JCheckBoxMenuItem(
 				"Автозапуск пакета");
-		mCheckBoxMenuItemAutostartPackage.setToolTipText("Запускает пакет после установки");
-		mCheckBoxMenuItemAutostartPackage.addActionListener(new ActionListener() {
+		mCheckBoxMenuItemAutostartPackage
+				.setToolTipText("Запускает пакет после установки");
+		mCheckBoxMenuItemAutostartPackage
+				.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0
+								.getSource());
+						mSettings.setAutostartPackage(item.isSelected());
+					}
+				});
+		mCheckBoxMenuItemAutostartPackage.setSelected(mSettings
+				.isAutostartPackage());
+		mMenuSettings.add(mCheckBoxMenuItemAutostartPackage);
+
+		JCheckBoxMenuItem mCheckBoxMenuItemUseReinstall = new JCheckBoxMenuItem(
+				"Переустановка пакета");
+		mCheckBoxMenuItemUseReinstall
+				.setToolTipText("Установка происходит с ключем переустановки");
+		mCheckBoxMenuItemUseReinstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0.getSource());
-				mSettings.setAutostartPackage(item.isSelected());
+				mSettings.setUseReinstall(item.isSelected());
 			}
 		});
-		mCheckBoxMenuItemAutostartPackage.setSelected(mSettings.isAutostartPackage());
-		mMenuSettings.add(mCheckBoxMenuItemAutostartPackage);
+		mCheckBoxMenuItemUseReinstall.setSelected(mSettings.isUseReinstall());
+		mMenuSettings.add(mCheckBoxMenuItemUseReinstall);
 
 		JMenu mMenuHelp = new JMenu("Помощь");
 		add(mMenuHelp);

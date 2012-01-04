@@ -6,3 +6,5 @@ connect.device.max.count=5
 filter.text=
 device.auto.refresh=15000
 path.adb=adb
+settings.package.autostart=false
+settings.package.use.reinstall=false

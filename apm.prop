@@ -1,9 +1,10 @@
 #
-#Wed Jan 04 17:51:07 EET 2012
+#Wed Jan 04 18:12:47 EET 2012
 system.packages.visible=false
-plaf=AERO
 connect.device.max.count=5
+plaf=AERO
 filter.text=sgt
-device.auto.refresh=15000
 path.adb=/media/data/software/android-sdk-linux/platform-tools/adb
+device.auto.refresh=15000
 settings.package.autostart=true
+settings.package.use.reinstall=true

@@ -1,15 +1,15 @@
 #
-#Tue Jan 03 21:16:45 EET 2012
+#Wed Jan 04 18:12:02 EET 2012
 com.ximad.sgtPackager.full.ConstitutionCE=.SplashScreen
 org.inodes.gus.scummvm.plugin.kyra=org.inodes.gus.scummvm.PluginProvider
 com.ximad.sgtPackager.nook.ConstitutionCE=com.ximad.sgtPackager.nook.ConstitutionCE.SplashScreen
 com.ximad.dropletstv=.SplashActivity
-com.ximad.CellPhoneTrackerLite=.Tracker
 com.ximad.sgtPackager.full.ThreeLittlePigs=.SplashScreen
+com.ximad.CellPhoneTrackerLite=.Tracker
 com.test=.TestInfoActivity
 com.ximad.sgtPackager.adv.ConstitutionCE=.SplashScreen
 com.example.dungeons=.Dungeons
-com.ximad.blackjack=.MenuScreen
-com.netmite.andme=.MIDletExplorer
 com.ximad.sgtPackager.full.TheWolfAndTheSevenLittleKids=.SplashScreen
+com.netmite.andme=.MIDletExplorer
+com.ximad.blackjack=.MenuScreen
 com.ximad.ct_mx=.mainScreen

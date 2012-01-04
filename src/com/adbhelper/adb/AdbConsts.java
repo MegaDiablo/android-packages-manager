@@ -17,6 +17,7 @@ public interface AdbConsts {
     
     public static final String STR_ERROR_MESSAGE_INSTALL = "Error: Install failed! %s";
     public static final String STR_ERROR_MESSAGE_INSTALL_ALREADY_EXITS = "Error: Aplication alredy exists! Remove current version!";
+    public static final String STR_ERROR_MESSAGE_INSTALL_INCONSISTENT_CERTIFICATES = "Error:Inconsistrent certificates! Remove current version!";
 
     public static final String STR_SUCCESS = "Success";
     public static final String STR_FAILTURE = "Failure";

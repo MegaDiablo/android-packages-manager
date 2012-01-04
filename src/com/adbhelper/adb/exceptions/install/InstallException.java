@@ -40,6 +40,10 @@ public class InstallException extends AdbException {
 			installException = new InstallExceptionNotFoundFile(labelError, InstallErrorMessages.INSTALL_FAILED_NOT_FOUND_FILE);
 		}
 		else if (labelError
+				.matches(InstallErrorMessages.INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES)) {
+			installException = new InstallExceptionInconsistrentCertificates(labelError);
+		}
+		else if (labelError
 				.equals(InstallErrorMessages.INSTALL_FAILED_ALREADY_EXISTS)) {
 			installException = new InstallExceptionAlreadyExists(labelError);
 		} else {

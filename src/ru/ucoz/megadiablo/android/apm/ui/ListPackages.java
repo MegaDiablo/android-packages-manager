@@ -58,7 +58,7 @@ public class ListPackages extends JPanel {
 	private JMenuItem mMenuItemRefresh;
 	private JSeparator separator;
 
-	public ListPackages(Core pCore) {
+	public ListPackages(final Core pCore) {
 		mCore = pCore;
 
 		setLayout(new BorderLayout(0, 0));
@@ -145,7 +145,6 @@ public class ListPackages extends JPanel {
 		MouseListener popupListener = new PopupListener();
 		scrollPane.addMouseListener(popupListener);
 		table.addMouseListener(popupListener);
-
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -157,6 +156,7 @@ public class ListPackages extends JPanel {
 						model.setSelectionInterval(rowNumber, rowNumber);
 						// model.addSelectionInterval(rowNumber, rowNumber);
 					}
+					checkButtonEnabled();
 				}
 			}
 		});
@@ -233,6 +233,15 @@ public class ListPackages extends JPanel {
 		sorter.setModel(model);
 	}
 
+	private void checkButtonEnabled() {
+		int sel = table.getSelectedRowCount();
+		boolean enabled = (sel > 0);
+
+		mMenuItemRun.setEnabled(enabled);
+		mMenuItemDelete.setEnabled(enabled);
+		mMenuItemDownload.setEnabled(enabled);
+	}
+
 	class FilterByText extends RowFilter<TableModel, Integer> {
 
 		String text;
@@ -254,7 +263,7 @@ public class ListPackages extends JPanel {
 
 			return false;
 		}
-	};
+	}
 
 	class PopupListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
@@ -267,18 +276,9 @@ public class ListPackages extends JPanel {
 
 		private void showPopup(MouseEvent e) {
 			if (e.isPopupTrigger()) {
+				checkButtonEnabled();
 				popupMenu.show(e.getComponent(), e.getX(), e.getY());
-				setButtonEnabled();
 			}
-		}
-
-		private void setButtonEnabled() {
-			int sel = table.getSelectedRowCount();
-			boolean enabled = (sel > 0 ? true : false);
-
-			mMenuItemRun.setEnabled(enabled);
-			mMenuItemDelete.setEnabled(enabled);
-			mMenuItemDownload.setEnabled(enabled);
 		}
 
 	}

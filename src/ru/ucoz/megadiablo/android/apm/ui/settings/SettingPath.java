@@ -1,7 +1,13 @@
 package ru.ucoz.megadiablo.android.apm.ui.settings;
 
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.Dialog.ModalityType;
 import java.awt.GridBagLayout;
+import java.awt.Window;
+
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
@@ -12,13 +18,15 @@ import ru.ucoz.megadiablo.android.apm.ui.JFolderChoose;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.EmptyBorder;
 
 /**
  * The Class SettingPath.
  */
 public class SettingPath extends JPanel {
-	
-	public SettingPath() {
+
+	public SettingPath(final Window pOwner) {
+		setBorder(new EmptyBorder(3, 3, 3, 3));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0 };
@@ -46,8 +54,18 @@ public class SettingPath extends JPanel {
 
 		mButtonBrowse = new JButton("...");
 		mButtonBrowse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed(final ActionEvent e) {
+				if (mFolderChoose == null) {
+					mFolderChoose = new JFolderChoose(pOwner);
+					mFolderChoose.setModalityType(ModalityType.DOCUMENT_MODAL);
+					mFolderChoose.setModal(true);
+				}
+
+				int result = mFolderChoose.open();
+
+				if (result == JFileChooser.APPROVE_OPTION) {
+					mTextFieldValue.setText(mFolderChoose.getSelectedFolder());
+				}
 			}
 		});
 		GridBagConstraints gbcButtonBrowse = new GridBagConstraints();
@@ -55,25 +73,21 @@ public class SettingPath extends JPanel {
 		gbcButtonBrowse.gridy = 0;
 		add(mButtonBrowse, gbcButtonBrowse);
 	}
-	
+
 	public void setLabel(final String pValue) {
 		mLabelName.setText(pValue);
 	}
-	
+
 	public String getLabel() {
 		return mLabelName.getText();
 	}
-	
-	public void setText(final String pValue) {
+
+	public void setPath(final String pValue) {
 		mTextFieldValue.setText(pValue);
 	}
-	
-	public String getText() {
+
+	public String getPath() {
 		return mTextFieldValue.getText();
-	}
-	
-	public void setPath() {
-//		mFolderChoose.get
 	}
 
 	/**

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 
 import javax.swing.JDialog;
 import java.awt.BorderLayout;
+import javax.swing.JPanel;
 
 /**
  * @author MegaDiablo
@@ -17,17 +18,18 @@ public class SettingsUI extends JDialog {
 
 	public SettingsUI() {
 		setTitle("Настройки");
-		setModalityType(ModalityType.APPLICATION_MODAL);
-		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+		setModalityType(ModalityType.DOCUMENT_MODAL);
 		setModal(true);
 
 		setMinimumSize(new Dimension(530, 320));
 		setResizable(false);
-		setAlwaysOnTop(true);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
-		GeneralSetting generalSetting = new GeneralSetting();
+		GeneralSetting generalSetting = new GeneralSetting(this);
 		getContentPane().add(generalSetting, BorderLayout.CENTER);
+		
+		JPanel panel = new JPanel();
+		getContentPane().add(panel, BorderLayout.SOUTH);
 
 		setLocationRelativeTo(null);
 	}

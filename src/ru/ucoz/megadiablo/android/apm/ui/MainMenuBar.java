@@ -19,6 +19,7 @@ import ru.ucoz.megadiablo.android.apm.MainFrame;
 import ru.ucoz.megadiablo.android.apm.Runner;
 import ru.ucoz.megadiablo.android.apm.Settings;
 import ru.ucoz.megadiablo.android.apm.ui.keyboard.KeyBoard;
+import ru.ucoz.megadiablo.android.apm.ui.settings.SettingsUI;
 
 /**
  * @author MegaDiablo
@@ -208,6 +209,17 @@ public class MainMenuBar extends JMenuBar {
 		});
 		mCheckBoxMenuItemUseReinstall.setSelected(mSettings.isUseReinstall());
 		mMenuSettings.add(mCheckBoxMenuItemUseReinstall);
+		
+		JSeparator mSeparatorSettings = new JSeparator();
+		mMenuSettings.add(mSeparatorSettings);
+		
+		JMenuItem mMenuItemSettingsAdvanced = new JMenuItem("Подробно...");
+		mMenuItemSettingsAdvanced.addActionListener(new ActionListener() {
+			public void actionPerformed(final ActionEvent arg0) {
+				(new SettingsUI()).setVisible(true);
+			}
+		});
+		mMenuSettings.add(mMenuItemSettingsAdvanced);
 
 		JMenu mMenuHelp = new JMenu("Помощь");
 		add(mMenuHelp);

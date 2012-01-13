@@ -44,6 +44,11 @@ public class InstallException extends AdbException {
 			installException = new InstallExceptionInconsistrentCertificates(labelError);
 		}
 		else if (labelError
+				.equals(InstallErrorMessages.INSTALL_FAILED_INVALID_INSTALL_LOCATION)) {
+			installException = new InstallExceptionInvalidInstallLocation(labelError);
+		}
+
+		else if (labelError
 				.equals(InstallErrorMessages.INSTALL_FAILED_ALREADY_EXISTS)) {
 			installException = new InstallExceptionAlreadyExists(labelError);
 		} else {

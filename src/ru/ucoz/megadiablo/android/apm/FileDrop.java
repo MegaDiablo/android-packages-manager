@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Reader;
 
-import ru.ucoz.megadiablo.android.apm.FileDrop.TransferableObject;
-
 /**
  * This class makes it easy to drag and drop files from the operating system to
  * a Java program. Any <tt>java.awt.Component</tt> can be dropped onto, but only

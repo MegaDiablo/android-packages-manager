@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
@@ -24,13 +25,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import com.adbhelper.adb.AdbPackage;
-import javax.swing.JSeparator;
-
 import ru.ucoz.megadiablo.android.apm.Core;
 import ru.ucoz.megadiablo.android.apm.FileDrop;
 import ru.ucoz.megadiablo.android.apm.iface.PackagesListener;
 import ru.ucoz.megadiablo.android.apm.impl.PackagesListenerDefault;
+
+import com.adbhelper.adb.AdbPackage;
 
 /**
  * @author MegaDiablo

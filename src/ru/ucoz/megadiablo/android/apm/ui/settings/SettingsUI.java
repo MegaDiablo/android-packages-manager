@@ -1,9 +1,9 @@
 package ru.ucoz.megadiablo.android.apm.ui.settings;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JDialog;
-import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 /**
@@ -27,7 +27,7 @@ public class SettingsUI extends JDialog {
 
 		GeneralSetting generalSetting = new GeneralSetting(this);
 		getContentPane().add(generalSetting, BorderLayout.CENTER);
-		
+
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.SOUTH);
 

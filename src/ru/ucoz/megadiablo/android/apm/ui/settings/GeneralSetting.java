@@ -8,7 +8,6 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import javax.swing.border.EmptyBorder;
 
-import ru.ucoz.megadiablo.android.apm.Settings;
 import java.awt.Insets;
 import java.awt.Font;
 import java.awt.Window;

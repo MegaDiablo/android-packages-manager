@@ -1,4 +1,4 @@
-package ru.ucoz.megadiablo.android.apm;
+package ru.ucoz.megadiablo.android.apm.ui.settings;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import ru.ucoz.megadiablo.android.apm.Consts;
 import ru.ucoz.megadiablo.android.apm.ui.EnumPLAF;
 
 /**

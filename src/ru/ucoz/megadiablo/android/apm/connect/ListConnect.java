@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.ucoz.megadiablo.android.apm.Core;
-import ru.ucoz.megadiablo.android.apm.Settings;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 /**
  * @author MegaDiablo

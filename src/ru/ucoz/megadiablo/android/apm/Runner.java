@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 
 import ru.ucoz.megadiablo.android.apm.ui.ListProcess;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 import com.adbhelper.adb.AdbModule;
 

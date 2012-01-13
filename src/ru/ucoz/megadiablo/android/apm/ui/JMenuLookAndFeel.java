@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 
 import ru.ucoz.megadiablo.android.apm.Core;
-import ru.ucoz.megadiablo.android.apm.Settings;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 /**
  * @author MegaDiablo

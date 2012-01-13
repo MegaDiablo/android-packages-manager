@@ -24,6 +24,7 @@ import ru.ucoz.megadiablo.android.apm.ui.MainMenuBar;
 import ru.ucoz.megadiablo.android.apm.ui.SearchPackages;
 import ru.ucoz.megadiablo.android.apm.ui.StatusBar;
 import ru.ucoz.megadiablo.android.apm.ui.UserInterfaceUtils;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 /**
  * @author MegaDiablo

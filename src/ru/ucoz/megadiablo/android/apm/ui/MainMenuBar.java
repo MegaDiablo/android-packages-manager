@@ -17,8 +17,8 @@ import ru.ucoz.megadiablo.android.apm.Core;
 import ru.ucoz.megadiablo.android.apm.EventUpdater;
 import ru.ucoz.megadiablo.android.apm.MainFrame;
 import ru.ucoz.megadiablo.android.apm.Runner;
-import ru.ucoz.megadiablo.android.apm.Settings;
 import ru.ucoz.megadiablo.android.apm.ui.keyboard.KeyBoard;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 import ru.ucoz.megadiablo.android.apm.ui.settings.SettingsUI;
 
 /**

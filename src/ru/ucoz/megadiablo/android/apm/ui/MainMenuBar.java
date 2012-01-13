@@ -11,14 +11,17 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 
 import ru.ucoz.megadiablo.android.apm.AboutDialog;
+import ru.ucoz.megadiablo.android.apm.Consts;
 import ru.ucoz.megadiablo.android.apm.Core;
 import ru.ucoz.megadiablo.android.apm.EventUpdater;
 import ru.ucoz.megadiablo.android.apm.MainFrame;
 import ru.ucoz.megadiablo.android.apm.Runner;
 import ru.ucoz.megadiablo.android.apm.ui.keyboard.KeyBoard;
 import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
+import ru.ucoz.megadiablo.android.apm.ui.settings.SettingsChangedListener;
 import ru.ucoz.megadiablo.android.apm.ui.settings.SettingsUI;
 
 /**
@@ -59,7 +62,7 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemExit = new JMenuItem("Выход");
 		mMenuItemExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				pFrame.close();
 			}
 		});
@@ -70,7 +73,7 @@ public class MainMenuBar extends JMenuBar {
 
 		mCheckBoxMenuItemKeyBoard = new JCheckBoxMenuItem("Клавиатура");
 		mCheckBoxMenuItemKeyBoard.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				mKeyBoard.setVisible(mCheckBoxMenuItemKeyBoard.isSelected());
 			}
 		});
@@ -79,7 +82,7 @@ public class MainMenuBar extends JMenuBar {
 		JCheckBoxMenuItem mCheckBoxMenuItemSystemPackages =
 				new JCheckBoxMenuItem("Системыне пакеты");
 		mCheckBoxMenuItemSystemPackages.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(final ActionEvent arg0) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0.getSource());
 				mSettings.setVisibleSystemPackages(item.isSelected());
 				mCore.refreshPackages();
@@ -98,7 +101,7 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mMenuItemReboot = new JMenuItem("Перезагрузить");
 		mMenuItemReboot.setToolTipText("Перезагружает текущее устройство");
 		mMenuItemReboot.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				if (showWarning("Вы точно хотите перезагрузить устройство?")) {
 					mCore.rebootDevice();
 				}
@@ -110,7 +113,7 @@ public class MainMenuBar extends JMenuBar {
 
 		mMenuItemAddNetworkDevice = new JMenuItem("Новое соединение");
 		mMenuItemAddNetworkDevice.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				AddConnect connect = new AddConnect();
 				connect.setVisible(true);
 				if (connect.getResult() == JOptionPane.OK_OPTION) {
@@ -141,7 +144,7 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemAdbStart = new JMenuItem("Запустить");
 		mMenuItemAdbStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				if (showWarning("Вы точно хотите запустить ADB?")) {
 					pListEventUpdaters
 							.get(Runner.EVENT_UPDATER_REFRESH_DEVICES)
@@ -154,7 +157,7 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemAdbReboot = new JMenuItem("Перезагрузить");
 		mMenuItemAdbReboot.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				if (showWarning("Вы точно хотите перезапустить ADB?")) {
 					pListEventUpdaters
 							.get(Runner.EVENT_UPDATER_REFRESH_DEVICES)
@@ -167,7 +170,7 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemAdbStop = new JMenuItem("Остановить");
 		mMenuItemAdbStop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				if (showWarning("Вы точно хотите остановить ADB?")) {
 					pListEventUpdaters
 							.get(Runner.EVENT_UPDATER_REFRESH_DEVICES)
@@ -181,38 +184,35 @@ public class MainMenuBar extends JMenuBar {
 		JMenu mMenuSettings = new JMenu("Настройки");
 		add(mMenuSettings);
 
-		JCheckBoxMenuItem mCheckBoxMenuItemAutostartPackage =
+		mCheckBoxMenuItemAutostartPackage =
 				new JCheckBoxMenuItem("Автозапуск пакета");
 		mCheckBoxMenuItemAutostartPackage
 				.setToolTipText("Запускает пакет после установки");
 		mCheckBoxMenuItemAutostartPackage
 				.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
+					public void actionPerformed(final ActionEvent arg0) {
 						JCheckBoxMenuItem item =
 								(JCheckBoxMenuItem) (arg0.getSource());
 						mSettings.setAutostartPackage(item.isSelected());
 					}
 				});
-		mCheckBoxMenuItemAutostartPackage.setSelected(mSettings
-				.isAutostartPackage());
 		mMenuSettings.add(mCheckBoxMenuItemAutostartPackage);
 
-		JCheckBoxMenuItem mCheckBoxMenuItemUseReinstall =
+		mCheckBoxMenuItemUseReinstall =
 				new JCheckBoxMenuItem("Переустановка пакета");
 		mCheckBoxMenuItemUseReinstall
 				.setToolTipText("Установка происходит с ключем переустановки");
 		mCheckBoxMenuItemUseReinstall.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(final ActionEvent arg0) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0.getSource());
 				mSettings.setUseReinstall(item.isSelected());
 			}
 		});
-		mCheckBoxMenuItemUseReinstall.setSelected(mSettings.isUseReinstall());
 		mMenuSettings.add(mCheckBoxMenuItemUseReinstall);
-		
+
 		JSeparator mSeparatorSettings = new JSeparator();
 		mMenuSettings.add(mSeparatorSettings);
-		
+
 		JMenuItem mMenuItemSettingsAdvanced = new JMenuItem("Подробно...");
 		mMenuItemSettingsAdvanced.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent arg0) {
@@ -226,16 +226,19 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemAbout = new JMenuItem("О программе...");
 		mMenuItemAbout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				(new AboutDialog(null)).setVisible(true);
 			}
 		});
 		mMenuHelp.add(mMenuItemAbout);
 
+		mSettings.addChangedListener(mSettingsChangedListener);
+		loadSettings();
+
 		refreshConnects();
 	}
 
-	private boolean showWarning(String text) {
+	private boolean showWarning(final String text) {
 		int result =
 				JOptionPane.showConfirmDialog(
 						MainMenuBar.this,
@@ -292,7 +295,7 @@ public class MainMenuBar extends JMenuBar {
 
 				JMenuItem item = new JMenuItem(connect);
 				item.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
+					public void actionPerformed(final ActionEvent e) {
 						mCore.connectNetworkDevice(connect);
 						mCore.getListConnects().connectTo(connect);
 						refreshConnects();
@@ -303,4 +306,32 @@ public class MainMenuBar extends JMenuBar {
 			}
 		}
 	}
+
+	private void loadSettings() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				mCheckBoxMenuItemUseReinstall.setSelected(mSettings
+						.isUseReinstall());
+				mCheckBoxMenuItemAutostartPackage.setSelected(mSettings
+						.isAutostartPackage());
+			}
+		});
+	}
+
+	private final SettingsChangedListener mSettingsChangedListener =
+			new SettingsChangedListener() {
+				@Override
+				public void changedSettings(final String pName) {
+					if (Consts.Settings.SETTINGS_PACKAGE_AUTOSTART == pName
+							|| Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL == pName) {
+
+						loadSettings();
+					}
+				}
+			};
+
+	private JCheckBoxMenuItem mCheckBoxMenuItemAutostartPackage;
+
+	private JCheckBoxMenuItem mCheckBoxMenuItemUseReinstall;
 }

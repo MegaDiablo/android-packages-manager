@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import ru.ucoz.megadiablo.android.apm.Consts;
@@ -27,6 +29,8 @@ public final class Settings {
 		return mSettings;
 	}
 
+	private List<SettingsChangedListener> mSettingsChangedListeners;
+
 	private boolean mVisibleSystemPackages = false;
 	private boolean mAutostartPackage = false;
 	private boolean mUseReinstall = false;
@@ -42,6 +46,9 @@ public final class Settings {
 	private static void init() {
 		mSettings = new Settings();
 		mSettings.load();
+
+		mSettings.mSettingsChangedListeners =
+				new ArrayList<SettingsChangedListener>();
 
 		mSettings.mTimeAutoRefreshDevices =
 				parsePropToInt(
@@ -80,6 +87,8 @@ public final class Settings {
 		mProperties.setProperty(
 				Consts.Settings.SYSTEM_PACKAGES_VISIBLE,
 				String.valueOf(pVisible));
+
+		fireChangedListener(Consts.Settings.SYSTEM_PACKAGES_VISIBLE);
 	}
 
 	public boolean isAutostartPackage() {
@@ -91,6 +100,8 @@ public final class Settings {
 		mProperties.setProperty(
 				Consts.Settings.SETTINGS_PACKAGE_AUTOSTART,
 				String.valueOf(pVisible));
+
+		fireChangedListener(Consts.Settings.SETTINGS_PACKAGE_AUTOSTART);
 	}
 
 	public boolean isUseReinstall() {
@@ -102,6 +113,8 @@ public final class Settings {
 		mProperties.setProperty(
 				Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL,
 				String.valueOf(pVisible));
+
+		fireChangedListener(Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL);
 	}
 
 	public String getLookAndFeel() {
@@ -110,6 +123,8 @@ public final class Settings {
 
 	public void setLookAndFeel(final String pLookAndFeel) {
 		mProperties.setProperty(Consts.Settings.LOOK_AND_FEEL, pLookAndFeel);
+
+		fireChangedListener(Consts.Settings.LOOK_AND_FEEL);
 	}
 
 	public String getAdbPath() {
@@ -118,14 +133,18 @@ public final class Settings {
 
 	public void setAdbPath(final String pAdbPath) {
 		mProperties.setProperty(Consts.Settings.PATH_ADB, pAdbPath);
+
+		fireChangedListener(Consts.Settings.PATH_ADB);
 	}
-	
+
 	public String getAAPTPath() {
 		return mProperties.getProperty(Consts.Settings.PATH_AAPT, "aapt");
 	}
-	
+
 	public void setAAPTPath(final String pAAPTPath) {
 		mProperties.setProperty(Consts.Settings.PATH_AAPT, pAAPTPath);
+
+		fireChangedListener(Consts.Settings.PATH_AAPT);
 	}
 
 	public String getPackageFilterName() {
@@ -135,6 +154,8 @@ public final class Settings {
 	public void setPackageFilterName(final String pPackageFilterName) {
 		mProperties
 				.setProperty(Consts.Settings.FILTER_TEXT, pPackageFilterName);
+
+		fireChangedListener(Consts.Settings.FILTER_TEXT);
 	}
 
 	public int getTimeAutoRefreshDevices() {
@@ -146,6 +167,8 @@ public final class Settings {
 		mProperties.setProperty(
 				Consts.Settings.DEVICE_AUTO_REFRESH,
 				String.valueOf(pTimeAutoRefreshDevices));
+
+		fireChangedListener(Consts.Settings.DEVICE_AUTO_REFRESH);
 	}
 
 	public int getConnectDeviceMaxCount() {
@@ -157,6 +180,8 @@ public final class Settings {
 		mProperties.setProperty(
 				Consts.Settings.CONNECT_DEVICE_MAX_COUNT,
 				String.valueOf(pConnectDeviceMaxCount));
+
+		fireChangedListener(Consts.Settings.CONNECT_DEVICE_MAX_COUNT);
 	}
 
 	public String getConnectDeviceByNumber(final int pNum) {
@@ -169,6 +194,8 @@ public final class Settings {
 		String key =
 				Consts.Settings.CONNECT_DEVICE_NUMBER + String.valueOf(pNum);
 		mProperties.setProperty(key, pConnect);
+
+		fireChangedListener(Consts.Settings.CONNECT_DEVICE_NUMBER);
 	}
 
 	public EnumPLAF getPLookAndFeel() {
@@ -198,6 +225,23 @@ public final class Settings {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void fireChangedListener(final String pName) {
+		for (int i = 0; i < mSettingsChangedListeners.size(); i++) {
+			SettingsChangedListener item = mSettingsChangedListeners.get(i);
+			item.changedSettings(pName);
+		}
+	}
+
+	public void addChangedListener(final SettingsChangedListener pListener) {
+		if (!mSettingsChangedListeners.contains(pListener)) {
+			mSettingsChangedListeners.add(pListener);
+		}
+	}
+
+	public void removeChangedListener(final SettingsChangedListener pListener) {
+		mSettingsChangedListeners.remove(pListener);
 	}
 
 	private static int parsePropToInt(final String pProp, final int pDef) {

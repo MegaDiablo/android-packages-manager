@@ -89,35 +89,52 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_GET_INFO_APK = "GETTING INFORMATION about %file% ...";
 	private static final String LOG_GET_INFO_APK_END = "READ INFORMATION COMPLITE";
 
-	public AdbModule(String fileAdb, Properties listActivities) {
+	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
 		super();
 		this.fileAdb = fileAdb;
+		if ((fileAapt == null) || ("".equals(fileAapt))) {
 
-		int index = fileAdb.lastIndexOf(File.separator);
-		String path = "";
-		if (index > 0) {
-			path = fileAdb.substring(0, index + 1);
+			int index = fileAdb.lastIndexOf(File.separator);
+			String path = "";
+			if (index > 0) {
+				path = fileAdb.substring(0, index + 1);
+			}
+			fileAapt = path + DEFAULT_PATH_AAPT;
 		}
-		this.fileAapt = path + DEFAULT_PATH_AAPT;
+
+		this.fileAapt = fileAapt;
 		this.propertiesActivities = listActivities;
 
 	}
 
 	public AdbModule(String fileAdb) {
-		this(fileAdb, (Properties) null);
+		this(fileAdb, null, (Properties) null);
+	}
+
+	public AdbModule(String fileAdb, String fileAapt,
+			String fileNameListActivities) throws IOException {
+		this(fileAdb, fileAapt, new File(fileNameListActivities));
+
+	}
+
+	public AdbModule(String fileAdb, String fileAapt, File fileListActivities)
+			throws IOException {
+		this(fileAdb, fileAapt, new Properties());
+		loadListActivities(fileListActivities);
+
 	}
 
 	@Deprecated
 	public AdbModule(String fileAdb, String fileNameListActivities)
 			throws IOException {
-		this(fileAdb, new File(fileNameListActivities));
+		this(fileAdb, null, new File(fileNameListActivities));
 
 	}
 
+	@Deprecated
 	public AdbModule(String fileAdb, File fileListActivities)
 			throws IOException {
-		this(fileAdb, new Properties());
-		loadListActivities(fileListActivities);
+		this(fileAdb, null, fileListActivities);
 
 	}
 

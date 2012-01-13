@@ -1,24 +1,21 @@
 package ru.ucoz.megadiablo.android.apm.ui.settings;
 
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-
-import java.awt.Dialog.ModalExclusionType;
 import java.awt.Dialog.ModalityType;
-import java.awt.GridBagLayout;
-import java.awt.Window;
-
-import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
-import javax.swing.JTextField;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import ru.ucoz.megadiablo.android.apm.ui.JFolderChoose;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.border.EmptyBorder;
 
 /**
  * The Class SettingPath.
@@ -63,7 +60,30 @@ public class SettingPath extends JPanel {
 				int result = mFolderChoose.open();
 
 				if (result == JFileChooser.APPROVE_OPTION) {
-					mTextFieldValue.setText(mFolderChoose.getSelectedFolder());
+
+					String folder = mFolderChoose.getSelectedFolder();
+
+					StringBuilder template = new StringBuilder();
+
+					template.append("%s");
+
+					if (!folder.startsWith(File.separator)) {
+						template.append(File.separator);
+					}
+
+					template.append("%s");
+
+					if (!folder.endsWith(File.separator)) {
+						template.append(File.separator);
+					}
+
+					template.append("%s");
+
+					mTextFieldValue.setText(String.format(
+							template.toString(),
+							mPrefixPath,
+							folder,
+							mPostfixPath));
 				}
 			}
 		});
@@ -89,6 +109,30 @@ public class SettingPath extends JPanel {
 		return mTextFieldValue.getText();
 	}
 
+	public String getPrefixPath() {
+		return mPrefixPath;
+	}
+
+	public void setPrefixPath(final String pPrefixPath) {
+		if (pPrefixPath != null && !pPrefixPath.trim().isEmpty()) {
+			this.mPrefixPath = pPrefixPath.trim();
+		} else {
+			this.mPrefixPath = "";
+		}
+	}
+
+	public String getPostfixPath() {
+		return mPostfixPath;
+	}
+
+	public void setPostfixPath(final String pPostfixPath) {
+		if (pPostfixPath != null && !pPostfixPath.trim().isEmpty()) {
+			this.mPostfixPath = pPostfixPath.trim();
+		} else {
+			this.mPostfixPath = "";
+		}
+	}
+
 	/**
 	 * 
 	 */
@@ -97,5 +141,8 @@ public class SettingPath extends JPanel {
 	private JLabel mLabelName;
 	private JButton mButtonBrowse;
 	private JFolderChoose mFolderChoose;
+
+	private String mPrefixPath = "";
+	private String mPostfixPath = "";
 
 }

@@ -1,20 +1,19 @@
 package ru.ucoz.megadiablo.android.apm.ui.settings;
 
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
 import javax.swing.border.EmptyBorder;
-
-import java.awt.Insets;
-import java.awt.Font;
-import java.awt.Window;
-import javax.swing.JCheckBox;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 /**
  * The Class SettingsPanel.
@@ -64,6 +63,7 @@ public class GeneralSetting extends JPanel {
 		add(mLabelGeneralSettings, gbcLabelGeneralSettings);
 
 		mSettingPathADB = new SettingPath(pOwner);
+		mSettingPathADB.setPostfixPath("adb");
 		mSettingPathADB.setLabel("Путь к adb :");
 		GridBagConstraints gbcSettingPathADB = new GridBagConstraints();
 		gbcSettingPathADB.gridwidth = 3;
@@ -74,6 +74,7 @@ public class GeneralSetting extends JPanel {
 		add(mSettingPathADB, gbcSettingPathADB);
 
 		mSettingPathAAPT = new SettingPath((Window) null);
+		mSettingPathAAPT.setPostfixPath("aapt");
 		mSettingPathAAPT.setLabel("Путь к aapt :");
 		GridBagConstraints gbcSettingPathAAPT = new GridBagConstraints();
 		gbcSettingPathAAPT.gridwidth = 3;

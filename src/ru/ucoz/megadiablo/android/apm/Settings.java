@@ -118,6 +118,14 @@ public final class Settings {
 	public void setAdbPath(final String pAdbPath) {
 		mProperties.setProperty(Consts.Settings.PATH_ADB, pAdbPath);
 	}
+	
+	public String getAAPTPath() {
+		return mProperties.getProperty(Consts.Settings.PATH_AAPT, "aapt");
+	}
+	
+	public void setAAPTPath(final String pAAPTPath) {
+		mProperties.setProperty(Consts.Settings.PATH_AAPT, pAAPTPath);
+	}
 
 	public String getPackageFilterName() {
 		return mProperties.getProperty(Consts.Settings.FILTER_TEXT, "");

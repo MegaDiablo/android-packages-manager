@@ -10,6 +10,7 @@ public final class Consts {
 	 * */
 	public final class Settings {
 		public static final String PATH_ADB = "path.adb";
+		public static final String PATH_AAPT = "path.aapt";
 		public static final String FILTER_TEXT = "filter.text";
 		public static final String DEVICE_AUTO_REFRESH = "device.auto.refresh";
 

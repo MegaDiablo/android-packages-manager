@@ -56,18 +56,73 @@ public class Events extends Thread {
 	}
 
 	public void add(final String pName, final Runnable pRunnable) {
-		add(pName, "", pRunnable);
+		add(EnumEvents.NONE, pName, "", pRunnable);
 	}
 
 	public void add(final String pName,
+			final Runnable pRunnable,
+			final boolean pLastDublicate) {
+
+		add(EnumEvents.NONE, pName, "", pRunnable, pLastDublicate);
+	}
+
+	public void add(final EnumEvents pEnumEvents,
+			final String pName,
 			final String pDescription,
 			final Runnable pRunnable) {
 
-		add(ImplEvent.createEvent(pName, pDescription, pRunnable));
+		add(pEnumEvents.getType(), pName, "", pRunnable);
+	}
+
+	public void add(final EnumEvents pEnumEvents,
+			final String pName,
+			final String pDescription,
+			final Runnable pRunnable,
+			final boolean pLastDublicate) {
+
+		add(pEnumEvents.getType(), pName, "", pRunnable, pLastDublicate);
+	}
+
+	public void add(final int pType,
+			final String pName,
+			final String pDescription,
+			final Runnable pRunnable) {
+
+		add(ImplEvent.createEvent(pType, pName, pDescription, pRunnable));
+	}
+
+	public void add(final int pType,
+			final String pName,
+			final String pDescription,
+			final Runnable pRunnable,
+			final boolean pLastDublicate) {
+
+		add(
+				ImplEvent.createEvent(pType, pName, pDescription, pRunnable),
+				pLastDublicate);
 	}
 
 	public synchronized void add(final IEvent pEvent) {
+		add(pEvent, true);
+	}
+
+	/**
+	 * @param pEvent
+	 *            событие которое добавляем в очередь
+	 * @param pLastDublicate
+	 *            дублировать последнее событие если они одного типа. true -
+	 *            всеравно добавлять в очередь.
+	 * */
+	public synchronized void add(final IEvent pEvent,
+			final boolean pLastDublicate) {
+
 		if (pEvent != null) {
+			if (!mList.isEmpty()) {
+				IEvent event = mList.getLast();
+				if (pEvent.equals(event) && !pLastDublicate) {
+					return;
+				}
+			}
 			mList.addLast(pEvent);
 			wake();
 			fireUpdateStatus(mList);

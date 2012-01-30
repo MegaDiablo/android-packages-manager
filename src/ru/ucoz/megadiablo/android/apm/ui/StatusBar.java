@@ -16,6 +16,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import ru.ucoz.megadiablo.android.apm.Core;
@@ -106,44 +107,54 @@ public class StatusBar extends JToolBar implements Events.IChangeStatus {
 	}
 
 	@Override
-	public void changeStatus(int pStatus) {
-		if (pStatus == Events.IChangeStatus.START
-				|| pStatus == Events.IChangeStatus.WAKE) {
+	public void changeStatus(final int pStatus) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				if (pStatus == Events.IChangeStatus.START
+						|| pStatus == Events.IChangeStatus.WAKE) {
 
-			mTerminate.setEnabled(true);
-		} else {
-			mTerminate.setEnabled(false);
-		}
+					mTerminate.setEnabled(true);
+				} else {
+					mTerminate.setEnabled(false);
+				}
+			}
+		});
 	}
 
 	@Override
-	public void updateList(List<IEvent> pEvents) {
-		String text = "Осталось %s";
-		String textQueue = "Сейчас : %s";
+	public void updateList(final List<IEvent> pEvents) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				String text = "Осталось %s";
+				String textQueue = "Сейчас : %s";
 
-		if (pEvents == null) {
-			mLabelLastTaskDescription.setString(String.format(
-					textQueue,
-					"- none -"));
-			mLabelLastTaskDescription.setIndeterminate(false);
-			return;
-		}
+				if (pEvents == null) {
+					mLabelLastTaskDescription.setString(String.format(
+							textQueue,
+							"- none -"));
+					mLabelLastTaskDescription.setIndeterminate(false);
+					return;
+				}
 
-		int size = Math.max(0, pEvents.size() - 1);
-		mLabelTaskCount.setText(String.format(text, size));
-		//
-		if (pEvents.size() > 0) {
-			IEvent event = pEvents.get(0);
-			mLabelLastTaskDescription.setString(String.format(
-					textQueue,
-					event.getDescription()));
-			mLabelLastTaskDescription.setIndeterminate(true);
-		} else {
-			mLabelLastTaskDescription.setString(String.format(
-					textQueue,
-					"- none -"));
-			mLabelLastTaskDescription.setIndeterminate(false);
-		}
+				int size = Math.max(0, pEvents.size() - 1);
+				mLabelTaskCount.setText(String.format(text, size));
+				//
+				if (pEvents.size() > 0) {
+					IEvent event = pEvents.get(0);
+					mLabelLastTaskDescription.setString(String.format(
+							textQueue,
+							event.getDescription()));
+					mLabelLastTaskDescription.setIndeterminate(true);
+				} else {
+					mLabelLastTaskDescription.setString(String.format(
+							textQueue,
+							"- none -"));
+					mLabelLastTaskDescription.setIndeterminate(false);
+				}
+			}
+		});
 		//
 		// DefaultListModel model = new DefaultListModel();
 		// for (int i = 1; i < pEvents.size(); i++) {

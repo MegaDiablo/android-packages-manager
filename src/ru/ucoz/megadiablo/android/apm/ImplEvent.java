@@ -6,6 +6,7 @@ package ru.ucoz.megadiablo.android.apm;
 public class ImplEvent implements IEvent {
 
 	private Runnable mRunnable = null;
+	private int mType = 0;
 	private String mName = null;
 	private String mDecription = null;
 
@@ -18,20 +19,28 @@ public class ImplEvent implements IEvent {
 
 	@Override
 	public String getName() {
+		if (mName == null) {
+			mName = super.toString();
+		}
 		return mName;
 	}
 
 	@Override
 	public String getDescription() {
+		if (mDecription == null) {
+			mDecription = "";
+		}
 		return mDecription;
 	}
 
-	public static ImplEvent createEvent(final String pName,
+	public static ImplEvent createEvent(final int pType,
+			final String pName,
 			final String pDescription,
 			final Runnable pRunnable) {
 
 		ImplEvent event = new ImplEvent();
 
+		event.mType = pType;
 		event.mName = pName;
 		event.mDecription = pDescription;
 		event.mRunnable = pRunnable;
@@ -41,9 +50,11 @@ public class ImplEvent implements IEvent {
 
 	@Override
 	public String toString() {
-		if (mName == null) {
-			mName = super.toString();
-		}
-		return mName;
+		return getName();
+	}
+
+	@Override
+	public int getType() {
+		return mType;
 	}
 }

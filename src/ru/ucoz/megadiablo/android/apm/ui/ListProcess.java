@@ -168,7 +168,7 @@ public class ListProcess extends JDialog implements Events.IChangeStatus {
 	}
 
 	@Override
-	public void updateList(List<IEvent> pEvents) {
+	public void updateList(final List<IEvent> pEvents) {
 		// DefaultListModel model = new DefaultListModel();
 		//
 		// if (pEvents != null) {
@@ -179,31 +179,36 @@ public class ListProcess extends JDialog implements Events.IChangeStatus {
 		//
 		// mListProcess.setModel(model);
 
-		String text = "В очереди находится %s элементов";
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				String text = "В очереди находится %s элементов";
 
-		if (pEvents == null) {
-			mLabelName.setText("Не известно");
-			mTextAreaDescription.setText("");
-			mLabelCount.setText(String.format(text, 0));
-			return;
-		}
+				if (pEvents == null) {
+					mLabelName.setText("Не известно");
+					mTextAreaDescription.setText("");
+					mLabelCount.setText(String.format(text, 0));
+					return;
+				}
 
-		int size = Math.max(0, pEvents.size() - 1);
-		mLabelCount.setText(String.format(text, size));
+				int size = Math.max(0, pEvents.size() - 1);
+				mLabelCount.setText(String.format(text, size));
 
-		if (pEvents.size() > 0) {
-			IEvent event = pEvents.get(0);
+				if (pEvents.size() > 0) {
+					IEvent event = pEvents.get(0);
 
-			mLabelName.setText(event.getName());
-			mTextAreaDescription.setText(event.getDescription());
-		}
+					mLabelName.setText(event.getName());
+					mTextAreaDescription.setText(event.getDescription());
+				}
 
-		DefaultListModel model = new DefaultListModel();
-		for (int i = 1; i < pEvents.size(); i++) {
-			IEvent item = pEvents.get(i);
-			model.addElement(item.getName());
-		}
-		mListProcess.setModel(model);
+				DefaultListModel model = new DefaultListModel();
+				for (int i = 1; i < pEvents.size(); i++) {
+					IEvent item = pEvents.get(i);
+					model.addElement(item.getName());
+				}
+				mListProcess.setModel(model);
+			}
+		});
 	}
 
 	@Override

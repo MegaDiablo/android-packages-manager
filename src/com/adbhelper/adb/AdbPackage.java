@@ -23,17 +23,13 @@ public class AdbPackage {
 
 	public AdbPackage(AdbModule adb, String namePackage, String file,
 			String device) {
-		this(adb, namePackage, file, device,  null);
-	}
-
-	public AdbPackage(AdbModule adb, String namePackage, String file,
-			String device, String label) {
 		this.name = namePackage;
 		this.device = device;
 		this.fileName = file;
 		this.adb = adb;
 		this.defaultActivity = adb.getNameActivity(namePackage);
-		this.label=label;
+		this.label=adb.getLabelActivity(namePackage);
+		
 
 	}
 
@@ -73,8 +69,13 @@ public class AdbPackage {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(String label) throws IOException {
 		this.label = label;
+		if (this.label!=null)
+		{
+			adb.setLabelActivity(name, this.label);
+		}
+			
 	}
 
 	public String getDevice() {
@@ -91,11 +92,7 @@ public class AdbPackage {
 
 	@Override
 	public String toString() {
-		if (label!=null)
-		{
-			return String.format("%s - (%s)", name,label);
-		}
-		return name;
+		return adb.formatInfoPackage(this);
 	}
 
 	public void uninstall() {

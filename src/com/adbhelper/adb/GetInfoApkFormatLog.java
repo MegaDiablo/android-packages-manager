@@ -67,9 +67,10 @@ public class GetInfoApkFormatLog extends DefaultFormatLog {
     }
 
     public AdbPackage getPackage(AdbModule adb){
-    	AdbPackage adbPackage=new AdbPackage(adb, packageName, null, null, label);
+    	AdbPackage adbPackage=new AdbPackage(adb, packageName, null, null);
     	try {
 			adbPackage.setDefaultActivity(launchableActivity);
+			adbPackage.setLabel(label);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

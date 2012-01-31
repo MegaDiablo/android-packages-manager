@@ -3,6 +3,7 @@ package com.adbhelper.adb;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,12 +20,15 @@ import com.adbhelper.adb.exceptions.install.InstallException;
 public class AdbModule implements AdbConsts {
 	private static final long CONSOLE_TIMEOUT = 5000;
 	private static final boolean DEFAULT_AUTOSTART_AFTER_INSTALL = false;
+	private static final String DEFAULT_FORMAT_INFO_PACKAGE = "%app%[ - (%label%)]";
 
 	private String fileAdb;
 	private String fileAapt;
 
 	private boolean ownerAdb = false;
+	private static final String MASK_RPOPERTY_NAME_LABEL = "%s:label";
 	private static final String MASK_APP = "%app%";
+	private static final String MASK_LABEL = "%label%";
 	private static final String MASK_FILE = "%file%";
 	private static final String MASK_FROM = "%from%";
 	private static final String MASK_TO = "%to%";
@@ -90,6 +94,7 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_GET_INFO_APK_END = "READ INFORMATION COMPLITE";
 	private static final String LOG_START_GET_PACKAGES = "Getting packages...";
 	private static final String LOG_COUNT_PACKAGES = "Founded %s packages";
+	
 
 	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
 		super();
@@ -590,20 +595,48 @@ public class AdbModule implements AdbConsts {
 		}
 		return propertiesActivities.getProperty(packageName);
 	}
-
+	public String getLabelActivityPropperty(String packageName) {
+		if (propertiesActivities == null) {
+			return null;
+		}
+		return propertiesActivities.getProperty(getNamePropertyLabel(packageName));
+	}
+	
+	public String getLabelActivity(String packageName)
+	{
+		return getLabelActivityPropperty(packageName); 
+	}
+	private String getNamePropertyLabel(String name) {
+		return String.format(MASK_RPOPERTY_NAME_LABEL, name);
+	}
+	
 	public void setNameActivity(String packageName, String nameActivity)
 			throws IOException {
 		if (propertiesActivities == null) {
 			return;
 		}
-
 		propertiesActivities.setProperty(packageName, nameActivity);
+		storeFileActivities(); 
+	}
+
+	private void storeFileActivities() throws FileNotFoundException, IOException{
 		if (fileActivities != null) {
 			propertiesActivities
 					.store(new FileOutputStream(fileActivities), "");
 		}
-	}
+	} 
+	
+	public void setLabelActivity(String packageName, String labelActivity)
+			throws IOException {
+		if (propertiesActivities == null) {
+			return;
+		}
 
+		propertiesActivities.setProperty(getNamePropertyLabel(packageName), labelActivity);
+		storeFileActivities();
+	}
+	
+	
 	public String getFilterValue(String name) {
 		if (filterActivities == null) {
 			return null;
@@ -659,5 +692,22 @@ public class AdbModule implements AdbConsts {
 		}
 		LogAdb.info(LOG_GET_INFO_APK_END.replace(MASK_FILE, pathApp));
 		return formatLog.getPackage(this);
+	}
+	
+	public String formatInfoPackage(AdbPackage adbPackage){
+		String strInfo=DEFAULT_FORMAT_INFO_PACKAGE; 
+		String label=adbPackage.getLabel();
+		if (label==null)
+		{
+			strInfo=strInfo.replaceAll("\\[.*"+MASK_LABEL+".*\\]", "");
+		}else
+		{
+			strInfo=strInfo.replace(MASK_LABEL, label);
+			strInfo=strInfo.replaceAll("\\[", "");
+			strInfo=strInfo.replaceAll("\\]", "");
+		}
+		strInfo=strInfo.replace(MASK_APP, adbPackage.getName());
+		strInfo=strInfo.replace(MASK_FILE, adbPackage.getFileName());
+		return String.format(strInfo, adbPackage.getName(),adbPackage.getLabel());
 	}
 }

@@ -79,7 +79,7 @@ public class ListPackages extends JPanel {
 		{
 			mMenuItemRun = new JMenuItem("Запустить");
 			mMenuItemRun.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(final ActionEvent e) {
 					startPackages();
 				}
 			});
@@ -89,7 +89,7 @@ public class ListPackages extends JPanel {
 		{
 			mMenuItemDelete = new JMenuItem("Удалить");
 			mMenuItemDelete.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(final ActionEvent e) {
 					int result =
 							JOptionPane.showConfirmDialog(
 									ListPackages.this,
@@ -108,7 +108,7 @@ public class ListPackages extends JPanel {
 		{
 			mMenuItemDownload = new JMenuItem("Скачать");
 			mMenuItemDownload.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(final ActionEvent e) {
 					// int result = mChooseFolder
 					// .showSaveDialog(ListPackages.this);
 
@@ -242,12 +242,12 @@ public class ListPackages extends JPanel {
 		mMenuItemDownload.setEnabled(enabled);
 	}
 
-	class FilterByText extends RowFilter<TableModel, Integer> {
+	static class FilterByText extends RowFilter<TableModel, Integer> {
 
 		String text;
 
 		@Override
-		public boolean include(javax.swing.RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
+		public boolean include(final javax.swing.RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
 
 			if (text == null) {
 				return true;
@@ -266,15 +266,15 @@ public class ListPackages extends JPanel {
 	}
 
 	class PopupListener extends MouseAdapter {
-		public void mousePressed(MouseEvent e) {
+		public void mousePressed(final MouseEvent e) {
 			showPopup(e);
 		}
 
-		public void mouseReleased(MouseEvent e) {
+		public void mouseReleased(final MouseEvent e) {
 			showPopup(e);
 		}
 
-		private void showPopup(MouseEvent e) {
+		private void showPopup(final MouseEvent e) {
 			if (e.isPopupTrigger()) {
 				checkButtonEnabled();
 				popupMenu.show(e.getComponent(), e.getX(), e.getY());

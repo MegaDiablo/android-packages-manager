@@ -87,6 +87,7 @@ public class StatusBar extends JToolBar implements Events.IChangeStatus {
 		panel.add(mLabelLastTaskDescription, gbc_mLabelLastTaskDescription);
 
 		mTerminate = new JButton("");
+		mTerminate.setContentAreaFilled(false);
 		mTerminate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mCore.terminatedCurrentTask();

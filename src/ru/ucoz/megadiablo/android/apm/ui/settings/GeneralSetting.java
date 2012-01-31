@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -31,15 +32,17 @@ public class GeneralSetting extends JPanel {
 	private JCheckBox mSettingAutostart;
 	private JCheckBox mSettingReinstall;
 	private JButton mButtonApplay;
-	private JButton mButtonRestore;
+	private JButton mButtonReset;
+	private JButton mButtonCancel;
+	private JButton mButtonOk;
 
 	public GeneralSetting(final Window pOwner) {
 		setBorder(new EmptyBorder(3, 3, 3, 3));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 103, 103, 103, 0 };
+		gridBagLayout.columnWidths = new int[] { 103, 0, 103, 72, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights =
-				new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
+				new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights =
 				new double[] {
 						0.0,
@@ -57,7 +60,7 @@ public class GeneralSetting extends JPanel {
 		mLabelGeneralSettings.setFont(new Font("Dialog", Font.BOLD, 14));
 		GridBagConstraints gbcLabelGeneralSettings = new GridBagConstraints();
 		gbcLabelGeneralSettings.gridwidth = 3;
-		gbcLabelGeneralSettings.insets = new Insets(0, 0, 5, 0);
+		gbcLabelGeneralSettings.insets = new Insets(0, 0, 5, 5);
 		gbcLabelGeneralSettings.gridx = 0;
 		gbcLabelGeneralSettings.gridy = 0;
 		add(mLabelGeneralSettings, gbcLabelGeneralSettings);
@@ -66,8 +69,8 @@ public class GeneralSetting extends JPanel {
 		mSettingPathADB.setPostfixPath("adb");
 		mSettingPathADB.setLabel("Путь к adb :");
 		GridBagConstraints gbcSettingPathADB = new GridBagConstraints();
-		gbcSettingPathADB.gridwidth = 3;
-		gbcSettingPathADB.insets = new Insets(0, 0, 5, 0);
+		gbcSettingPathADB.gridwidth = 5;
+		gbcSettingPathADB.insets = new Insets(0, 0, 5, 5);
 		gbcSettingPathADB.fill = GridBagConstraints.BOTH;
 		gbcSettingPathADB.gridx = 0;
 		gbcSettingPathADB.gridy = 1;
@@ -77,8 +80,8 @@ public class GeneralSetting extends JPanel {
 		mSettingPathAAPT.setPostfixPath("aapt");
 		mSettingPathAAPT.setLabel("Путь к aapt :");
 		GridBagConstraints gbcSettingPathAAPT = new GridBagConstraints();
-		gbcSettingPathAAPT.gridwidth = 3;
-		gbcSettingPathAAPT.insets = new Insets(0, 0, 5, 0);
+		gbcSettingPathAAPT.gridwidth = 5;
+		gbcSettingPathAAPT.insets = new Insets(0, 0, 5, 5);
 		gbcSettingPathAAPT.fill = GridBagConstraints.BOTH;
 		gbcSettingPathAAPT.gridx = 0;
 		gbcSettingPathAAPT.gridy = 2;
@@ -86,8 +89,8 @@ public class GeneralSetting extends JPanel {
 
 		mSettingAutostart = new JCheckBox("Автоматический запск пакетов");
 		GridBagConstraints gbcCheckBoxAutostart = new GridBagConstraints();
-		gbcCheckBoxAutostart.gridwidth = 3;
-		gbcCheckBoxAutostart.insets = new Insets(0, 0, 5, 0);
+		gbcCheckBoxAutostart.gridwidth = 5;
+		gbcCheckBoxAutostart.insets = new Insets(0, 0, 5, 5);
 		gbcCheckBoxAutostart.anchor = GridBagConstraints.WEST;
 		gbcCheckBoxAutostart.gridx = 0;
 		gbcCheckBoxAutostart.gridy = 4;
@@ -95,24 +98,24 @@ public class GeneralSetting extends JPanel {
 
 		mSettingReinstall = new JCheckBox("Переустанавливать пакет");
 		GridBagConstraints gbcCheckBoxReinstall = new GridBagConstraints();
-		gbcCheckBoxReinstall.insets = new Insets(0, 0, 5, 0);
-		gbcCheckBoxReinstall.gridwidth = 3;
+		gbcCheckBoxReinstall.insets = new Insets(0, 0, 5, 5);
+		gbcCheckBoxReinstall.gridwidth = 5;
 		gbcCheckBoxReinstall.anchor = GridBagConstraints.WEST;
 		gbcCheckBoxReinstall.gridx = 0;
 		gbcCheckBoxReinstall.gridy = 5;
 		add(mSettingReinstall, gbcCheckBoxReinstall);
 
-		mButtonRestore = new JButton("Восстановить");
-		mButtonRestore.addActionListener(new ActionListener() {
+		mButtonReset = new JButton("Сбросить");
+		mButtonReset.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent arg0) {
 				loadSettings();
 			}
 		});
 		GridBagConstraints gbcButtonRestore = new GridBagConstraints();
 		gbcButtonRestore.insets = new Insets(0, 0, 0, 5);
-		gbcButtonRestore.gridx = 1;
+		gbcButtonRestore.gridx = 0;
 		gbcButtonRestore.gridy = 7;
-		add(mButtonRestore, gbcButtonRestore);
+		add(mButtonReset, gbcButtonRestore);
 
 		mButtonApplay = new JButton("Применить");
 		mButtonApplay.addActionListener(new ActionListener() {
@@ -121,9 +124,38 @@ public class GeneralSetting extends JPanel {
 			}
 		});
 		GridBagConstraints gbcButtonApplay = new GridBagConstraints();
-		gbcButtonApplay.gridx = 2;
+		gbcButtonApplay.insets = new Insets(0, 0, 0, 5);
+		gbcButtonApplay.gridx = 1;
 		gbcButtonApplay.gridy = 7;
 		add(mButtonApplay, gbcButtonApplay);
+
+		mButtonOk = new JButton("Ok");
+		mButtonOk.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
+			public void actionPerformed(final ActionEvent arg0) {
+				saveSettings();
+				pOwner.hide();
+			}
+		});
+		GridBagConstraints gbc_ButtonOk = new GridBagConstraints();
+		gbc_ButtonOk.fill = GridBagConstraints.HORIZONTAL;
+		gbc_ButtonOk.insets = new Insets(0, 0, 0, 5);
+		gbc_ButtonOk.gridx = 3;
+		gbc_ButtonOk.gridy = 7;
+		add(mButtonOk, gbc_ButtonOk);
+
+		mButtonCancel = new JButton("Отмена");
+		mButtonCancel.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
+			public void actionPerformed(final ActionEvent arg0) {
+				pOwner.hide();
+			}
+		});
+		GridBagConstraints gbc_ButtonCancel = new GridBagConstraints();
+		gbc_ButtonCancel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_ButtonCancel.gridx = 4;
+		gbc_ButtonCancel.gridy = 7;
+		add(mButtonCancel, gbc_ButtonCancel);
 
 		loadSettings();
 	}

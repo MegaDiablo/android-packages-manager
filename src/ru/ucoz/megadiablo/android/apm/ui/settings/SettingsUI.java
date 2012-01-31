@@ -2,6 +2,7 @@ package ru.ucoz.megadiablo.android.apm.ui.settings;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;

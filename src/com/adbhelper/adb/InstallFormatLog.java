@@ -8,7 +8,6 @@ public class InstallFormatLog extends DefaultFormatLog {
 
     @Override
     public String changeLine(String line) {
-	// TODO Auto-generated method stub
 	if (line.startsWith(BEGIN_COMPLITE_UPLOAD))
 	{
 	    LogAdb.info(LOG_UPLOAD_COMPLITE);

@@ -24,13 +24,15 @@ public class PackagesFormatLog extends DefaultFormatLog {
 	    LogAdb.error(line);
 	    return null;
 	}
+	
+	
 	if (line.startsWith(START_PACKAGE)) {
 	    String[] tmp = line.replaceAll(".*:", "").split("=");
 	    if ((filter == null) || (!tmp[0].matches(filter))) {
 
 		countPackages++;
-		return String.format("%4s - %s ", countPackages,
-			tmp[1]);
+		//return String.format("%4s - %s ", countPackages,tmp[1]);
+		return null;
 	    } else
 		return null;
 	}

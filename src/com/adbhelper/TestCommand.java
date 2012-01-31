@@ -24,13 +24,11 @@ public class TestCommand {
 			try {
 				adb.reinstall(null, "/media/Work/workspaceAndroid/!Projects/update/BrainCube/CR_1_5_Label_2011_12_20_liteHD/BrainCubeLiteHD1.5.apk")	;
 			} catch (InstallException e) {
-				// TODO Auto-generated catch block
 			//e.printStackTrace();
 				System.out.print(e.getLabelError());
 				
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -7,7 +7,6 @@ public class StartFormatLog extends DefaultFormatLog {
 
     @Override
     public String changeLine(String line) {
-	// TODO Auto-generated method stub
 	if (line.startsWith(BEGIN_ERROR))
 	{
 	    LogAdb.error(line.substring(BEGIN_ERROR.length()));

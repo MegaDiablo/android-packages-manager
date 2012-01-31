@@ -24,9 +24,7 @@ public class TestMain {
     public static void main(String[] args) throws IOException {
 	//testing git
     	
-    	// TODO Auto-generated method stub
-	
-	// FileSystemView.getFileSystemView().getSystemIcon(f)
+    // FileSystemView.getFileSystemView().getSystemIcon(f)
 	// sun.awt.shell.ShellFolder sf =
 	// sun.awt.shell.ShellFolder.getShellFolder(file);
 
@@ -94,7 +92,6 @@ System.out.println("endddd");
 			    // list.get(1).start();
 
 			} catch (NotAccessPackageManager e) {
-			    // TODO Auto-generated catch block
 			    e.printStackTrace();
 			}
 			System.out.println("endThread");
@@ -104,7 +101,6 @@ thr.run();
 try {
 	Thread.sleep(100);
 } catch (InterruptedException e) {
-	// TODO Auto-generated catch block
 	e.printStackTrace();
 }
 	

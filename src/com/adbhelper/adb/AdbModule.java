@@ -88,6 +88,8 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_CONNECT_FAIL = "Connect to \"%to%\" fail";
 	private static final String LOG_GET_INFO_APK = "GETTING INFORMATION about %file% ...";
 	private static final String LOG_GET_INFO_APK_END = "READ INFORMATION COMPLITE";
+	private static final String LOG_START_GET_PACKAGES = "Getting packages...";
+	private static final String LOG_COUNT_PACKAGES = "Founded %s packages";
 
 	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
 		super();
@@ -406,7 +408,8 @@ public class AdbModule implements AdbConsts {
 
 	public List<AdbPackage> getPackages(String device, String fileIgnoreFilter)
 			throws NotAccessPackageManager {
-		LogAdb.info(LOG_LIST_PACKAGES);
+		//LogAdb.info(LOG_LIST_PACKAGES);
+		LogAdb.info(LOG_START_GET_PACKAGES);
 		String result[] = runAdb(device, CMD_LIST_PACKAGES.split(" "),
 				new PackagesFormatLog(fileIgnoreFilter)).split("\\n");
 		if (result.length > 0) {
@@ -428,7 +431,8 @@ public class AdbModule implements AdbConsts {
 					|| (!tmp[0].matches(fileIgnoreFilter)))
 				packages.add(new AdbPackage(this, tmp[1], tmp[0], device));
 		}
-		LogAdb.info(LOG_END_LIST_PACKAGES);
+		LogAdb.info(LOG_COUNT_PACKAGES,packages.size());
+		//LogAdb.info(LOG_END_LIST_PACKAGES);
 		return packages;
 	}
 

@@ -18,7 +18,6 @@ public class AdbException extends Exception {
      * 
      */
     public AdbException() {
-	// TODO Auto-generated constructor stub
     }
 
     /**
@@ -26,7 +25,6 @@ public class AdbException extends Exception {
      */
     public AdbException(String message) {
 	super(message);
-	// TODO Auto-generated constructor stub
     }
 
     /**
@@ -34,7 +32,6 @@ public class AdbException extends Exception {
      */
     public AdbException(Throwable cause) {
 	super(cause);
-	// TODO Auto-generated constructor stub
     }
 
     /**
@@ -43,7 +40,6 @@ public class AdbException extends Exception {
      */
     public AdbException(String message, Throwable cause) {
 	super(message, cause);
-	// TODO Auto-generated constructor stub
     }
 
     

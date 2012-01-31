@@ -1,6 +1,6 @@
 package com.adbhelper.adb.exceptions;
 
-public class AdbError extends Error {
+public class AdbError extends RuntimeException {
 
 	/**
 	 * 
@@ -8,12 +8,10 @@ public class AdbError extends Error {
 	private static final long serialVersionUID = -4974005004014091801L;
 
 	public AdbError() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public AdbError(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 	public AdbError(Throwable cause) {

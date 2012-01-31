@@ -21,7 +21,6 @@ public class DeviceIsEmulatorRebootException extends AdbException {
      */
     public DeviceIsEmulatorRebootException() {
 	super("Reboot denied: Device is emulator");
-	// TODO Auto-generated constructor stub
     }
  
 }

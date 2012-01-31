@@ -15,8 +15,6 @@ public class Main {
      */
 
     public static void main(String[] args) {
-	// TODO Auto-generated method stub
-	
 	//UIManager.get(null);
 	
 	//FileSystemView.getFileSystemView().getSystemIcon(f)
@@ -74,8 +72,7 @@ public class Main {
 	    break;
 	}
     } catch (InstallException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+    	e.printStackTrace();
 	}
     
 	// adb.uninstall(null, "com.ximad.testtv");

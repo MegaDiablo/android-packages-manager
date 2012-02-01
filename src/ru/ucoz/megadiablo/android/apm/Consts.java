@@ -12,7 +12,8 @@ public final class Consts {
 		public static final String PATH_ADB = "path.adb";
 		public static final String PATH_AAPT = "path.aapt";
 		public static final String FILTER_TEXT = "filter.text";
-		public static final String DEVICE_AUTO_REFRESH = "device.auto.refresh";
+		public static final String DEVICE_AUTO_REFRESH_TIME =
+				"device.auto.refresh";
 
 		public static final String CONNECT_DEVICE_COUNT =
 				"connect.device.count";
@@ -29,6 +30,9 @@ public final class Consts {
 				"settings.package.autostart";
 		public static final String SETTINGS_PACKAGE_USE_REINSTALL =
 				"settings.package.use.reinstall";
+
+		public static final String SETTINGS_DEVICES_AUTOREFRESH =
+				"settings.devices.autorefresh";
 
 		public static final String FILE_PROP = "apm.prop";
 		public static final String FILE_PROP_APP = "app.prop";

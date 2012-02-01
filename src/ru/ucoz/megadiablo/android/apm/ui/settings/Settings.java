@@ -33,6 +33,7 @@ public final class Settings {
 
 	private boolean mVisibleSystemPackages = false;
 	private boolean mAutostartPackage = false;
+	private boolean mAutorefreshListDevices = false;
 	private boolean mUseReinstall = false;
 	private int mTimeAutoRefreshDevices = Consts.Default.AUTO_REFRESH_DEVICES;
 	private int mConnectDeviceMaxCount =
@@ -52,7 +53,7 @@ public final class Settings {
 
 		mSettings.mTimeAutoRefreshDevices =
 				parsePropToInt(
-						Consts.Settings.DEVICE_AUTO_REFRESH,
+						Consts.Settings.DEVICE_AUTO_REFRESH_TIME,
 						Consts.Default.AUTO_REFRESH_DEVICES);
 
 		mSettings.mConnectDeviceMaxCount =
@@ -102,6 +103,19 @@ public final class Settings {
 				String.valueOf(pVisible));
 
 		fireChangedListener(Consts.Settings.SETTINGS_PACKAGE_AUTOSTART);
+	}
+
+	public boolean isAutorefreshListDevices() {
+		return mAutorefreshListDevices;
+	}
+
+	public void setAutorefreshListDevices(final boolean pVisible) {
+		mAutorefreshListDevices = pVisible;
+		mProperties.setProperty(
+				Consts.Settings.SETTINGS_DEVICES_AUTOREFRESH,
+				String.valueOf(pVisible));
+
+		fireChangedListener(Consts.Settings.SETTINGS_DEVICES_AUTOREFRESH);
 	}
 
 	public boolean isUseReinstall() {
@@ -165,10 +179,10 @@ public final class Settings {
 	public void setTimeAutoRefreshDevices(final int pTimeAutoRefreshDevices) {
 		mTimeAutoRefreshDevices = pTimeAutoRefreshDevices;
 		mProperties.setProperty(
-				Consts.Settings.DEVICE_AUTO_REFRESH,
+				Consts.Settings.DEVICE_AUTO_REFRESH_TIME,
 				String.valueOf(pTimeAutoRefreshDevices));
 
-		fireChangedListener(Consts.Settings.DEVICE_AUTO_REFRESH);
+		fireChangedListener(Consts.Settings.DEVICE_AUTO_REFRESH_TIME);
 	}
 
 	public int getConnectDeviceMaxCount() {

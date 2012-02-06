@@ -323,8 +323,10 @@ public class MainMenuBar extends JMenuBar {
 			new SettingsChangedListener() {
 				@Override
 				public void changedSettings(final String pName) {
-					if (Consts.Settings.SETTINGS_PACKAGE_AUTOSTART == pName
-							|| Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL == pName) {
+					if (Consts.Settings.SETTINGS_PACKAGE_AUTOSTART
+							.equals(pName)
+							|| Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL
+									.equals(pName)) {
 
 						loadSettings();
 					}

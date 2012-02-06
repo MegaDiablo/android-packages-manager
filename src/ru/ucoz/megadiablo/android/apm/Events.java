@@ -25,12 +25,10 @@ public class Events extends Thread {
 		while (!mTerminate) {
 			try {
 				if (mList.isEmpty()) {
-					synchronized (this) {
-						fireChangeStatus(IChangeStatus.WAIT);
-						wait();
-						fireChangeStatus(IChangeStatus.WAKE);
-						fireUpdateStatus(mList);
-					}
+					fireChangeStatus(IChangeStatus.WAIT);
+					wait();
+					fireChangeStatus(IChangeStatus.WAKE);
+					fireUpdateStatus(mList);
 				} else {
 					IEvent item = mList.getFirst();
 					logEvent(item);
@@ -182,9 +180,7 @@ public class Events extends Thread {
 
 	private void wake() {
 		try {
-			synchronized (this) {
-				notifyAll();
-			}
+			notifyAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

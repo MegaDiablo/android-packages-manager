@@ -5,10 +5,13 @@
 package com.jtattoo.plaf;
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.plaf.*;
 import javax.swing.plaf.basic.*;
+
+import sun.font.FontFamily;
 
 public class BaseToggleButtonUI extends BasicToggleButtonUI {
 
@@ -116,6 +119,9 @@ public class BaseToggleButtonUI extends BasicToggleButtonUI {
     }
 
     public void paint(Graphics g, JComponent c) {
+    	if (c == null) {
+    		return;
+    	}
         Graphics2D g2D = (Graphics2D) g;
 
         AbstractButton b = (AbstractButton) c;
@@ -129,15 +135,31 @@ public class BaseToggleButtonUI extends BasicToggleButtonUI {
         viewRect.width = b.getWidth() - (insets.right + viewRect.x);
         viewRect.height = b.getHeight() - (insets.bottom + viewRect.y);
 
-        textRect.x = textRect.y = textRect.width = textRect.height = 0;
-        iconRect.x = iconRect.y = iconRect.width = iconRect.height = 0;
+		if (textRect != null) {
+			textRect.x = textRect.y = textRect.width = textRect.height = 0;
+		}
+		if (iconRect != null) {
+			iconRect.x = iconRect.y = iconRect.width = iconRect.height = 0;
+		}
 
-        String text = SwingUtilities.layoutCompoundLabel(
-                c, fm, b.getText(), b.getIcon(),
-                b.getVerticalAlignment(), b.getHorizontalAlignment(),
-                b.getVerticalTextPosition(), b.getHorizontalTextPosition(),
-                viewRect, iconRect, textRect,
-                b.getText() == null ? 0 : defaultTextIconGap);
+		int iconNum = b.getText() == null ? 0 : defaultTextIconGap;
+		String text = "";
+		if (b != null) {
+			text =
+					SwingUtilities.layoutCompoundLabel(
+							c,
+							fm,
+							b.getText(),
+							b.getIcon(),
+							b.getVerticalAlignment(),
+							b.getHorizontalAlignment(),
+							b.getVerticalTextPosition(),
+							b.getHorizontalTextPosition(),
+							viewRect,
+							iconRect,
+							textRect,
+							iconNum);
+		}
 
         paintBackground(g, b);
 

@@ -16,6 +16,8 @@ public class Events extends Thread {
 	private LinkedList<IEvent> mList = new LinkedList<IEvent>();
 	private boolean mTerminate = false;
 
+	private transient boolean mWaiting = false;
+
 	private boolean mLog = true;
 
 	@Override
@@ -26,7 +28,7 @@ public class Events extends Thread {
 			try {
 				if (mList.isEmpty()) {
 					fireChangeStatus(IChangeStatus.WAIT);
-					wait();
+					sleep();
 					fireChangeStatus(IChangeStatus.WAKE);
 					fireUpdateStatus(mList);
 				} else {
@@ -178,11 +180,29 @@ public class Events extends Thread {
 		}
 	}
 
+	private void sleep() {
+		if (!mWaiting) {
+			synchronized (this) {
+				mWaiting = true;
+				try {
+					wait(0);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				mWaiting = false;
+			}
+		}
+	}
+
 	private void wake() {
-		try {
-			notifyAll();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (mWaiting) {
+			synchronized (this) {
+				try {
+					notifyAll();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

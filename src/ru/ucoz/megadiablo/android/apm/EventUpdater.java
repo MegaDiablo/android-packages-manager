@@ -9,9 +9,9 @@ public class EventUpdater extends Thread {
 
 	private boolean mTerminated = false;
 	private boolean mPause = false;
-	private int mDelay = Consts.Default.DELAY_EVENT_UPDATER;
+	private transient int mDelay = Consts.Default.DELAY_EVENT_UPDATER;
 	private boolean mCycle = false;
-	
+
 	public EventUpdater(final Runnable updater) {
 		this(updater, Consts.Default.DELAY_EVENT_UPDATER, false);
 	}
@@ -32,16 +32,14 @@ public class EventUpdater extends Thread {
 
 	@Override
 	public void run() {
-		if (mUpdater == null) {
-			return;
-		}
-
 		boolean prov;
 
 		while (!mTerminated) {
 
 			try {
-				mUpdater.run();
+				if (mUpdater != null) {
+					mUpdater.run();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -78,7 +76,29 @@ public class EventUpdater extends Thread {
 	public synchronized void setPause(final boolean pPause) {
 		try {
 			mPause = pPause;
-				notifyAll();
+			notifyAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public synchronized void setDelay(final int pDelay) {
+		try {
+			mDelay = pDelay;
+			notifyAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public synchronized int getDelay() {
+		return mDelay;
+	}
+
+	public synchronized void setUpdater(final Runnable pUpdater) {
+		try {
+			mUpdater = pUpdater;
+			notifyAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -16,6 +16,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * The Class SettingsPanel.
@@ -111,6 +113,7 @@ public class GeneralSetting extends JPanel {
 
 		mButtonReset = new JButton("Сбросить");
 		mButtonReset.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				loadSettings();
 			}
@@ -118,7 +121,20 @@ public class GeneralSetting extends JPanel {
 
 		mSettingAutorefreshDevices =
 				new JCheckBox("Автоматическое обновление списка устройст");
-		mSettingAutorefreshDevices.setSelected(false);
+		mSettingAutorefreshDevices.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(final ChangeEvent e) {
+				if (mSettingAutorefreshDevices != null
+						&& mSettingTimeAutorefreshDevices != null) {
+
+					mSettingTimeAutorefreshDevices
+							.setEnabled(mSettingAutorefreshDevices.isSelected());
+				}
+			}
+		});
+		mSettingAutorefreshDevices.setSelected(mSettings
+				.isAutorefreshListDevices());
+
 		GridBagConstraints gbc_SettingAutorefreshDevices =
 				new GridBagConstraints();
 		gbc_SettingAutorefreshDevices.anchor = GridBagConstraints.WEST;
@@ -130,7 +146,7 @@ public class GeneralSetting extends JPanel {
 
 		mSettingTimeAutorefreshDevices = new JSpinner();
 		mSettingTimeAutorefreshDevices.setModel(new SpinnerNumberModel(
-				5000,
+				mSettings.getTimeAutoRefreshDevices(),
 				5000,
 				86400000,
 				500));
@@ -150,6 +166,7 @@ public class GeneralSetting extends JPanel {
 
 		mButtonApplay = new JButton("Применить");
 		mButtonApplay.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				saveSettings();
 			}
@@ -162,6 +179,7 @@ public class GeneralSetting extends JPanel {
 
 		mButtonOk = new JButton("Ok");
 		mButtonOk.addActionListener(new ActionListener() {
+			@Override
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(final ActionEvent arg0) {
 				saveSettings();
@@ -177,6 +195,7 @@ public class GeneralSetting extends JPanel {
 
 		mButtonCancel = new JButton("Отмена");
 		mButtonCancel.addActionListener(new ActionListener() {
+			@Override
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(final ActionEvent arg0) {
 				pOwner.hide();
@@ -200,6 +219,14 @@ public class GeneralSetting extends JPanel {
 
 				mSettingReinstall.setSelected(mSettings.isUseReinstall());
 				mSettingAutostart.setSelected(mSettings.isAutostartPackage());
+
+				mSettingAutorefreshDevices.setSelected(mSettings
+						.isAutorefreshListDevices());
+
+				mSettingTimeAutorefreshDevices.setEnabled(mSettings
+						.isAutorefreshListDevices());
+				mSettingTimeAutorefreshDevices.getModel().setValue(
+						mSettings.getTimeAutoRefreshDevices());
 			}
 		});
 	}
@@ -210,6 +237,13 @@ public class GeneralSetting extends JPanel {
 
 		mSettings.setUseReinstall(mSettingReinstall.isSelected());
 		mSettings.setAutostartPackage(mSettingAutostart.isSelected());
+
+		mSettings.setAutorefreshListDevices(mSettingAutorefreshDevices
+				.isSelected());
+		mSettings
+				.setTimeAutoRefreshDevices((Integer) mSettingTimeAutorefreshDevices
+						.getValue());
+		// mSettings.setAutorefreshListDevices(mSettingAutorefreshDevices.isSelected());
 	}
 
 }

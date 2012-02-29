@@ -48,12 +48,20 @@ public final class Runner {
 				new ArrayList<EventUpdater>();
 
 		final EventUpdater eventRefreshDevices =
-				new EventUpdater(new Runnable() {
-					@Override
-					public void run() {
-						core.refreshDevices();
-					}
-				}, settings.getTimeAutoRefreshDevices(), true);
+				new EventUpdater(
+						null,
+						settings.getTimeAutoRefreshDevices(),
+						true);
+		eventRefreshDevices.setUpdater(new Runnable() {
+			@Override
+			public void run() {
+				if (settings.isAutorefreshListDevices()) {
+					core.refreshDevices();
+				}
+				eventRefreshDevices.setDelay(settings
+						.getTimeAutoRefreshDevices());
+			}
+		});
 		listEventUpdaters.add(eventRefreshDevices);
 
 		final MainFrame frame = new MainFrame(core, events, listEventUpdaters);

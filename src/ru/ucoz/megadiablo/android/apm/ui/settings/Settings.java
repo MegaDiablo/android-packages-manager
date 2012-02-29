@@ -71,6 +71,16 @@ public final class Settings {
 						Consts.Settings.SETTINGS_PACKAGE_AUTOSTART,
 						false);
 
+		mSettings.mAutorefreshListDevices =
+				parsePropToBoolean(
+						Consts.Settings.SETTINGS_DEVICES_AUTOREFRESH,
+						false);
+
+		mSettings.mTimeAutoRefreshDevices =
+				parsePropToInt(
+						Consts.Settings.DEVICE_AUTO_REFRESH_TIME,
+						Consts.Default.AUTO_REFRESH_DEVICES);
+
 		mSettings.mUseReinstall =
 				parsePropToBoolean(
 						Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL,

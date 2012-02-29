@@ -1,11 +1,12 @@
 #
-#Tue Feb 14 10:27:31 EET 2012
+#Wed Feb 29 17:29:00 EET 2012
 path.adb=/media/data/software/android-sdk-linux/platform-tools/adb
 plaf=AERO
-device.auto.refresh=15000
+device.auto.refresh=5000
 connect.device.max.count=5
 settings.package.use.reinstall=true
 path.aapt=/media/data/software/android-sdk-linux/platform-tools/aapt
 system.packages.visible=true
 settings.package.autostart=true
-filter.text=calc
+settings.devices.autorefresh=true
+filter.text=xim

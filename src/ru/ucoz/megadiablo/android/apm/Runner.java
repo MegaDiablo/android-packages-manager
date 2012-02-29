@@ -85,6 +85,10 @@ public final class Runner {
 		});
 
 		eventRefreshDevices.start();
+		if (!settings.isAutorefreshListDevices()) {
+			core.refreshDevices();
+			core.refreshPackages();
+		}
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

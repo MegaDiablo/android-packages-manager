@@ -119,7 +119,7 @@ public class Events extends Thread {
 		if (pEvent != null) {
 			if (!mList.isEmpty()) {
 				IEvent event = mList.getLast();
-				if (pEvent.equals(event) && !pLastDublicate) {
+				if (pEvent.getType() == event.getType() && !pLastDublicate) {
 					return;
 				}
 			}

@@ -79,6 +79,7 @@ public class ListPackages extends JPanel {
 		{
 			mMenuItemRun = new JMenuItem("Запустить");
 			mMenuItemRun.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(final ActionEvent e) {
 					startPackages();
 				}
@@ -89,6 +90,7 @@ public class ListPackages extends JPanel {
 		{
 			mMenuItemDelete = new JMenuItem("Удалить");
 			mMenuItemDelete.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(final ActionEvent e) {
 					int result =
 							JOptionPane.showConfirmDialog(
@@ -108,6 +110,7 @@ public class ListPackages extends JPanel {
 		{
 			mMenuItemDownload = new JMenuItem("Скачать");
 			mMenuItemDownload.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(final ActionEvent e) {
 					// int result = mChooseFolder
 					// .showSaveDialog(ListPackages.this);
@@ -134,7 +137,8 @@ public class ListPackages extends JPanel {
 		{
 			mMenuItemRefresh = new JMenuItem("Обновить");
 			mMenuItemRefresh.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
 					mCore.refreshPackages();
 				}
 			});
@@ -147,7 +151,7 @@ public class ListPackages extends JPanel {
 		table.addMouseListener(popupListener);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed(final MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e)) {
 					Point p = e.getPoint();
 					int rowNumber = table.rowAtPoint(p);
@@ -165,7 +169,7 @@ public class ListPackages extends JPanel {
 
 		new FileDrop(scrollPane, new FileDrop.Listener() {
 			@Override
-			public void filesDropped(File[] files) {
+			public void filesDropped(final File[] files) {
 				installPackages(files);
 			}
 		});
@@ -181,7 +185,8 @@ public class ListPackages extends JPanel {
 		mCore.removePackagesListener(mPackagesListner);
 
 		mPackagesListner = new PackagesListenerDefault() {
-			public void updatePackages(List<AdbPackage> pAdbPackages) {
+			@Override
+			public void updatePackages(final List<AdbPackage> pAdbPackages) {
 				updateListPackages(pAdbPackages);
 			};
 		};
@@ -224,7 +229,8 @@ public class ListPackages extends JPanel {
 			 */
 			private static final long serialVersionUID = 5795337809978978846L;
 
-			public boolean isCellEditable(int row, int column) {
+			@Override
+			public boolean isCellEditable(final int row, final int column) {
 				return false;
 			};
 		};
@@ -266,10 +272,12 @@ public class ListPackages extends JPanel {
 	}
 
 	class PopupListener extends MouseAdapter {
+		@Override
 		public void mousePressed(final MouseEvent e) {
 			showPopup(e);
 		}
 
+		@Override
 		public void mouseReleased(final MouseEvent e) {
 			showPopup(e);
 		}
@@ -309,7 +317,7 @@ public class ListPackages extends JPanel {
 		}
 	}
 
-	private boolean removePackage(int index) {
+	private boolean removePackage(final int index) {
 		Object obj = table.getValueAt(index, 0);
 		if (obj != null && obj instanceof AdbPackage) {
 			AdbPackage item = (AdbPackage) obj;
@@ -318,7 +326,7 @@ public class ListPackages extends JPanel {
 		return true;
 	}
 
-	private boolean startPackage(int index) {
+	private boolean startPackage(final int index) {
 		Object obj = table.getValueAt(index, 0);
 		if (obj != null && obj instanceof AdbPackage) {
 			AdbPackage item = (AdbPackage) obj;
@@ -327,7 +335,7 @@ public class ListPackages extends JPanel {
 		return true;
 	}
 
-	private boolean downloadPackage(int index, String to) {
+	private boolean downloadPackage(final int index, final String to) {
 		Object obj = table.getValueAt(index, 0);
 		if (obj != null && obj instanceof AdbPackage) {
 			AdbPackage item = (AdbPackage) obj;
@@ -336,12 +344,13 @@ public class ListPackages extends JPanel {
 		return true;
 	}
 
-	private void installPackages(File[] pFiles) {
-		for (File file : pFiles) {
-			mCore.install(file);
-		}
-
-		mCore.refreshPackages();
+	private void installPackages(final File[] pFiles) {
+		mCore.install(pFiles);
+		// for (File file : pFiles) {
+		// mCore.install(file);
+		// }
+		//
+		// mCore.refreshPackages();
 	}
 
 }

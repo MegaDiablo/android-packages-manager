@@ -71,7 +71,7 @@ public class Events extends Thread {
 			final String pDescription,
 			final Runnable pRunnable) {
 
-		add(pEnumEvents.getType(), pName, "", pRunnable);
+		add(pEnumEvents.getType(), pName, pDescription, pRunnable);
 	}
 
 	public void add(final EnumEvents pEnumEvents,
@@ -80,7 +80,7 @@ public class Events extends Thread {
 			final Runnable pRunnable,
 			final boolean pLastDublicate) {
 
-		add(pEnumEvents.getType(), pName, "", pRunnable, pLastDublicate);
+		add(pEnumEvents.getType(), pName, pDescription, pRunnable, pLastDublicate);
 	}
 
 	public void add(final int pType,

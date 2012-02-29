@@ -3,15 +3,18 @@ package ru.ucoz.megadiablo.android.apm.ui;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.List;
 
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileFilter;
 
 import ru.ucoz.megadiablo.android.apm.AboutDialog;
 import ru.ucoz.megadiablo.android.apm.Consts;
@@ -62,10 +65,42 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemExit = new JMenuItem("Выход");
 		mMenuItemExit.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				pFrame.close();
 			}
 		});
+
+		JMenuItem mMenuItemInstallPackage = new JMenuItem("Установить пакет");
+		mMenuItemInstallPackage.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setMultiSelectionEnabled(true);
+				chooser.setFileFilter(new FileFilter() {
+					@Override
+					public boolean accept(final File f) {
+						return f.getName().toLowerCase().endsWith(".apk")
+								|| f.isDirectory();
+					}
+
+					@Override
+					public String getDescription() {
+						return "Android applications (*.apk)";
+					}
+				});
+
+				int result = chooser.showOpenDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					File[] file = chooser.getSelectedFiles();
+					mCore.install(file);
+				}
+			}
+		});
+		mMenuFile.add(mMenuItemInstallPackage);
+
+		JSeparator separatorFIleExit = new JSeparator();
+		mMenuFile.add(separatorFIleExit);
 		mMenuFile.add(mMenuItemExit);
 
 		JMenu mMenuView = new JMenu("Вид");
@@ -73,6 +108,7 @@ public class MainMenuBar extends JMenuBar {
 
 		mCheckBoxMenuItemKeyBoard = new JCheckBoxMenuItem("Клавиатура");
 		mCheckBoxMenuItemKeyBoard.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				mKeyBoard.setVisible(mCheckBoxMenuItemKeyBoard.isSelected());
 			}
@@ -82,6 +118,7 @@ public class MainMenuBar extends JMenuBar {
 		JCheckBoxMenuItem mCheckBoxMenuItemSystemPackages =
 				new JCheckBoxMenuItem("Системыне пакеты");
 		mCheckBoxMenuItemSystemPackages.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0.getSource());
 				mSettings.setVisibleSystemPackages(item.isSelected());
@@ -101,6 +138,7 @@ public class MainMenuBar extends JMenuBar {
 		JMenuItem mMenuItemReboot = new JMenuItem("Перезагрузить");
 		mMenuItemReboot.setToolTipText("Перезагружает текущее устройство");
 		mMenuItemReboot.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				if (showWarning("Вы точно хотите перезагрузить устройство?")) {
 					mCore.rebootDevice();
@@ -113,6 +151,7 @@ public class MainMenuBar extends JMenuBar {
 
 		mMenuItemAddNetworkDevice = new JMenuItem("Новое соединение");
 		mMenuItemAddNetworkDevice.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				AddConnect connect = new AddConnect();
 				connect.setVisible(true);
@@ -144,6 +183,7 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemAdbStart = new JMenuItem("Запустить");
 		mMenuItemAdbStart.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				if (showWarning("Вы точно хотите запустить ADB?")) {
 					pListEventUpdaters
@@ -157,6 +197,7 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemAdbReboot = new JMenuItem("Перезагрузить");
 		mMenuItemAdbReboot.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				if (showWarning("Вы точно хотите перезапустить ADB?")) {
 					pListEventUpdaters
@@ -170,6 +211,7 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemAdbStop = new JMenuItem("Остановить");
 		mMenuItemAdbStop.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				if (showWarning("Вы точно хотите остановить ADB?")) {
 					pListEventUpdaters
@@ -190,6 +232,7 @@ public class MainMenuBar extends JMenuBar {
 				.setToolTipText("Запускает пакет после установки");
 		mCheckBoxMenuItemAutostartPackage
 				.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(final ActionEvent arg0) {
 						JCheckBoxMenuItem item =
 								(JCheckBoxMenuItem) (arg0.getSource());
@@ -203,6 +246,7 @@ public class MainMenuBar extends JMenuBar {
 		mCheckBoxMenuItemUseReinstall
 				.setToolTipText("Установка происходит с ключем переустановки");
 		mCheckBoxMenuItemUseReinstall.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) (arg0.getSource());
 				mSettings.setUseReinstall(item.isSelected());
@@ -215,6 +259,7 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemSettingsAdvanced = new JMenuItem("Подробно...");
 		mMenuItemSettingsAdvanced.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent arg0) {
 				(new SettingsUI()).setVisible(true);
 			}
@@ -226,6 +271,7 @@ public class MainMenuBar extends JMenuBar {
 
 		JMenuItem mMenuItemAbout = new JMenuItem("О программе...");
 		mMenuItemAbout.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				(new AboutDialog(null)).setVisible(true);
 			}
@@ -295,6 +341,7 @@ public class MainMenuBar extends JMenuBar {
 
 				JMenuItem item = new JMenuItem(connect);
 				item.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(final ActionEvent e) {
 						mCore.connectNetworkDevice(connect);
 						mCore.getListConnects().connectTo(connect);

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.adbhelper.adb;
 
@@ -10,7 +10,7 @@ import com.adbhelper.adb.exceptions.install.InstallException;
 
 /**
  * @author Uladzimir Baraznouski
- * 
+ *
  */
 public class AdbPackage {
 
@@ -28,8 +28,7 @@ public class AdbPackage {
 		this.fileName = file;
 		this.adb = adb;
 		this.defaultActivity = adb.getNameActivity(namePackage);
-		this.label=adb.getLabelActivity(namePackage);
-		
+		this.label = adb.getLabelActivity(namePackage);
 
 	}
 
@@ -48,8 +47,8 @@ public class AdbPackage {
 
 	public void setDefaultActivity(String defaultActivity) throws IOException {
 		setTempDefaultActivity(defaultActivity);
-		if(defaultActivity!=null){
-		adb.setNameActivity(name, defaultActivity);
+		if (defaultActivity != null) {
+			adb.setNameActivity(name, defaultActivity);
 		}
 
 	}
@@ -71,11 +70,10 @@ public class AdbPackage {
 
 	public void setLabel(String label) throws IOException {
 		this.label = label;
-		if (this.label!=null)
-		{
+		if (this.label != null) {
 			adb.setLabelActivity(name, this.label);
 		}
-			
+
 	}
 
 	public String getDevice() {
@@ -98,12 +96,13 @@ public class AdbPackage {
 	public void uninstall() {
 		adb.uninstall(device, name);
 	}
+
 	@Deprecated
 	public void reinstall(String activity, String pathApp)
 			throws InstallException {
 		adb.reinstall(device, name, activity, pathApp);
 	}
-	
+
 	public void reinstall(String pathApp) throws InstallException {
 		adb.reinstall(device, pathApp);
 	}
@@ -126,6 +125,16 @@ public class AdbPackage {
 	public void download() {
 		download(null);
 
+	}
+
+	/**
+	 * start process "Monkey"
+	 *
+	 * @param count
+	 *            - count events
+	 */
+	public void monkey(int count) {
+		adb.monkey(device, name, count);
 	}
 
 }

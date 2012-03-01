@@ -33,6 +33,7 @@ public class AdbModule implements AdbConsts {
 	private static final String MASK_FROM = "%from%";
 	private static final String MASK_TO = "%to%";
 	private static final String MASK_MESSAGE = "%message%";
+	private static final String MASK_COUNT = "%count%";
 	private static final String CONSOLE_STARTED_ADB = "* daemon started successfully *";
 	private static final String VALID_ADRESS = ".*:[0-9]{1,5}";
 	private static final int DEFAULT_PORT = 5555;
@@ -61,6 +62,7 @@ public class AdbModule implements AdbConsts {
 	private static final String CMD_DOWNLOAD_FILE = "pull %from% %to%";
 	private static final String CMD_CONNECT = "connect %to%";
 	private static final String CMD_DISCONNECT = "disconnect %from%";
+	private static final String CMD_MONKEY = "shell monkey -v -p %app% -c android.intent.category.LAUNCHER %count%";
 
 	private static final String LOG_SEND_KEYCODE = "Sending key code ";
 	private static final String LOG_COMPLITE_SEND_KEYCODE = "Sended key code";
@@ -94,7 +96,8 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_GET_INFO_APK_END = "READ INFORMATION COMPLITE";
 	private static final String LOG_START_GET_PACKAGES = "Getting packages...";
 	private static final String LOG_COUNT_PACKAGES = "Founded %s packages";
-	
+	private static final String LOG_MONKEY = "Start monkey for %app%";
+
 
 	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
 		super();
@@ -230,7 +233,7 @@ public class AdbModule implements AdbConsts {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return SUCCESS
 	 */
 	public int uninstall(String device, String app) {
@@ -240,7 +243,7 @@ public class AdbModule implements AdbConsts {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return SUCCESS
 	 */
 	public int downloadFile(String device, String fromPath, String toPath) {
@@ -272,7 +275,7 @@ public class AdbModule implements AdbConsts {
 	/**
 	 * Install package into device.<br/>
 	 * Recommend for use {@link AdbModule#install(String, String, boolean)}
-	 * 
+	 *
 	 * @param device
 	 *            - target device
 	 * @param pathApp
@@ -287,7 +290,7 @@ public class AdbModule implements AdbConsts {
 
 	/**
 	 * Install package into device.
-	 * 
+	 *
 	 * @param device
 	 *            - target device
 	 * @param pathApp
@@ -413,7 +416,7 @@ public class AdbModule implements AdbConsts {
 
 	public List<AdbPackage> getPackages(String device, String fileIgnoreFilter)
 			throws NotAccessPackageManager {
-		//LogAdb.info(LOG_LIST_PACKAGES);
+		// LogAdb.info(LOG_LIST_PACKAGES);
 		LogAdb.info(LOG_START_GET_PACKAGES);
 		String result[] = runAdb(device, CMD_LIST_PACKAGES.split(" "),
 				new PackagesFormatLog(fileIgnoreFilter)).split("\\n");
@@ -436,8 +439,8 @@ public class AdbModule implements AdbConsts {
 					|| (!tmp[0].matches(fileIgnoreFilter)))
 				packages.add(new AdbPackage(this, tmp[1], tmp[0], device));
 		}
-		LogAdb.info(LOG_COUNT_PACKAGES,packages.size());
-		//LogAdb.info(LOG_END_LIST_PACKAGES);
+		LogAdb.info(LOG_COUNT_PACKAGES, packages.size());
+		// LogAdb.info(LOG_END_LIST_PACKAGES);
 		return packages;
 	}
 
@@ -502,6 +505,24 @@ public class AdbModule implements AdbConsts {
 		LogAdb.info(LOG_RESTART_ADB);
 		stop();
 		start();
+	}
+
+	/**
+	 * start process "Monkey"
+	 *
+	 * @param device
+	 *            - device name
+	 * @param app
+	 *            - package name
+	 * @param count
+	 *            - count events
+	 */
+	public void monkey(String device, String app, int count) {
+		LogAdb.info(LOG_MONKEY.replace(MASK_APP, app));
+		String cmd = CMD_MONKEY.replace(MASK_APP, app);
+		cmd = cmd.replace(MASK_COUNT, String.valueOf(count));
+		runAdb(device, cmd);
+
 	}
 
 	public String exec(String[] cmds, FormatLog formatLog) {
@@ -595,48 +616,51 @@ public class AdbModule implements AdbConsts {
 		}
 		return propertiesActivities.getProperty(packageName);
 	}
+
 	public String getLabelActivityPropperty(String packageName) {
 		if (propertiesActivities == null) {
 			return null;
 		}
-		return propertiesActivities.getProperty(getNamePropertyLabel(packageName));
+		return propertiesActivities
+				.getProperty(getNamePropertyLabel(packageName));
 	}
-	
-	public String getLabelActivity(String packageName)
-	{
-		return getLabelActivityPropperty(packageName); 
+
+	public String getLabelActivity(String packageName) {
+		return getLabelActivityPropperty(packageName);
 	}
+
 	private String getNamePropertyLabel(String name) {
 		return String.format(MASK_RPOPERTY_NAME_LABEL, name);
 	}
-	
+
 	public void setNameActivity(String packageName, String nameActivity)
 			throws IOException {
 		if (propertiesActivities == null) {
 			return;
 		}
 		propertiesActivities.setProperty(packageName, nameActivity);
-		storeFileActivities(); 
+		storeFileActivities();
 	}
 
-	private void storeFileActivities() throws FileNotFoundException, IOException{
+	private void storeFileActivities() throws FileNotFoundException,
+			IOException {
 		if (fileActivities != null) {
 			propertiesActivities
 					.store(new FileOutputStream(fileActivities), "");
 		}
-	} 
-	
+	}
+
 	public void setLabelActivity(String packageName, String labelActivity)
 			throws IOException {
 		if (propertiesActivities == null) {
 			return;
 		}
 
-		propertiesActivities.setProperty(getNamePropertyLabel(packageName), labelActivity);
+		propertiesActivities.setProperty(getNamePropertyLabel(packageName),
+				labelActivity);
 		storeFileActivities();
 	}
-	
-	
+
 	public String getFilterValue(String name) {
 		if (filterActivities == null) {
 			return null;
@@ -693,21 +717,20 @@ public class AdbModule implements AdbConsts {
 		LogAdb.info(LOG_GET_INFO_APK_END.replace(MASK_FILE, pathApp));
 		return formatLog.getPackage(this);
 	}
-	
-	public String formatInfoPackage(AdbPackage adbPackage){
-		String strInfo=DEFAULT_FORMAT_INFO_PACKAGE; 
-		String label=adbPackage.getLabel();
-		if (label==null)
-		{
-			strInfo=strInfo.replaceAll("\\[.*"+MASK_LABEL+".*\\]", "");
-		}else
-		{
-			strInfo=strInfo.replace(MASK_LABEL, label);
-			strInfo=strInfo.replaceAll("\\[", "");
-			strInfo=strInfo.replaceAll("\\]", "");
+
+	public String formatInfoPackage(AdbPackage adbPackage) {
+		String strInfo = DEFAULT_FORMAT_INFO_PACKAGE;
+		String label = adbPackage.getLabel();
+		if (label == null) {
+			strInfo = strInfo.replaceAll("\\[.*" + MASK_LABEL + ".*\\]", "");
+		} else {
+			strInfo = strInfo.replace(MASK_LABEL, label);
+			strInfo = strInfo.replaceAll("\\[", "");
+			strInfo = strInfo.replaceAll("\\]", "");
 		}
-		strInfo=strInfo.replace(MASK_APP, adbPackage.getName());
-		strInfo=strInfo.replace(MASK_FILE, adbPackage.getFileName());
-		return String.format(strInfo, adbPackage.getName(),adbPackage.getLabel());
+		strInfo = strInfo.replace(MASK_APP, adbPackage.getName());
+		strInfo = strInfo.replace(MASK_FILE, adbPackage.getFileName());
+		return String.format(strInfo, adbPackage.getName(),
+				adbPackage.getLabel());
 	}
 }

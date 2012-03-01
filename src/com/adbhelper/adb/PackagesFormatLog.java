@@ -15,8 +15,8 @@ public class PackagesFormatLog extends DefaultFormatLog {
 
     private static final String STR_ERROR = "Error:";
 
-    
-    
+
+
     @Override
     public String changeLine(String line) {
 	if (line.startsWith(STR_ERROR))
@@ -24,8 +24,8 @@ public class PackagesFormatLog extends DefaultFormatLog {
 	    LogAdb.error(line);
 	    return null;
 	}
-	
-	
+
+
 	if (line.startsWith(START_PACKAGE)) {
 	    String[] tmp = line.replaceAll(".*:", "").split("=");
 	    if ((filter == null) || (!tmp[0].matches(filter))) {

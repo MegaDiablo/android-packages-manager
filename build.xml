@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project default="build-jar">
+<project default="release">
 
 	<propertyfile file="build.properties">
 		<entry key="app.build.number" default="0" type="int" operation="+" value="1" />
@@ -40,7 +40,7 @@
 	</target>
 	<target name="precompile" depends="clean,create-dir,copy">
 		<replace dir="${app.build.src}" encoding="UTF-8">
-			<replacefilter token="%%VERSION%%" value="${app.build.verision}.${app.build.number}(beta)" />
+			<replacefilter token="%%VERSION%%" value="${app.build.verision}.${app.build.number}" />
 		</replace>
 
 		<echo>Finished</echo>
@@ -50,7 +50,6 @@
 		<javac srcdir="${app.build.src}" destdir="${app.build.bin}" classpath="${app.libs}" includeantruntime="false" debug="off" encoding="UTF-8">
 		</javac>
 	</target>
-
 	<target name="build-jar" depends="">
 		<delete file="${app.build.jar.path}" />
 		<jar destfile="${app.build.jar.path}">

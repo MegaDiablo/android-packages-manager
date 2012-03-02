@@ -21,18 +21,31 @@ public class LogAdb {
 		System.out.println();
 	}
 
-	public static void info(String log,Object...args) {
+	public static void info(String log, Object... args) {
 		info(String.format(log, args));
 	}
+
 	@SuppressWarnings("deprecation")
 	public static void info(String log) {
 		if (log == null)
 			return;
-		System.out.print("["
-				+ new Date(System.currentTimeMillis()).toLocaleString()
-				+ "] : ");
+		printInfo("[" + new Date(System.currentTimeMillis()).toLocaleString()
+				+ "] : ", false);
 		// System.out.print(new Time(System.currentTimeMillis())+" : ");
-		System.out.println(log);
+		printInfo(log,true);
+	}
+
+	public static void printInfo(String log, Object... args) {
+		printInfo(String.format(log, args), true);
+	}
+
+	private static void printInfo(String log, boolean newLine) {
+		if (log == null)
+			return;
+		System.out.print(log);
+		if (newLine) {
+			System.out.println();
+		}
 	}
 
 	@SuppressWarnings("deprecation")

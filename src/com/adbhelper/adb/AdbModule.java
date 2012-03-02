@@ -18,10 +18,12 @@ import com.adbhelper.adb.exceptions.NotFoundActivityException;
 import com.adbhelper.adb.exceptions.install.InstallException;
 
 public class AdbModule implements AdbConsts {
+
+	public static final String VERSION_ADB_HELPER="%%VERSION%%";
+
 	private static final long CONSOLE_TIMEOUT = 5000;
 	private static final boolean DEFAULT_AUTOSTART_AFTER_INSTALL = false;
 	private static final String DEFAULT_FORMAT_INFO_PACKAGE = "%app%[ - (%label%)]";
-
 	private String fileAdb;
 	private String fileAapt;
 
@@ -97,6 +99,7 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_START_GET_PACKAGES = "Getting packages...";
 	private static final String LOG_COUNT_PACKAGES = "Founded %s packages";
 	private static final String LOG_MONKEY = "Start monkey for %app%";
+	private static final String LOG_INIT_ADBMODULE = "Initialize ADB Helper version %s.";
 
 
 	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
@@ -114,6 +117,7 @@ public class AdbModule implements AdbConsts {
 
 		this.fileAapt = fileAapt;
 		this.propertiesActivities = listActivities;
+		LogAdb.printInfo(LOG_INIT_ADBMODULE,VERSION_ADB_HELPER);
 
 	}
 

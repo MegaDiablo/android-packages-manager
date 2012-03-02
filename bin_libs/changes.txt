@@ -30,3 +30,6 @@ AdbHelper 1.4.1
 
 AdbHelper 1.4.2
 [+] Add Monkey
+
+AdbHelper 1.4.3
+[+] Show current version

@@ -4,6 +4,8 @@
 package com.adbhelper.adb;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.adbhelper.adb.exceptions.NotFoundActivityException;
 import com.adbhelper.adb.exceptions.install.InstallException;
@@ -20,6 +22,10 @@ public class AdbPackage {
 	private String defaultActivity;
 	private String label;
 	private AdbModule adb;
+	private String versionCode;
+	private String versionName;
+	private List<Permission> permissions;
+
 
 	public AdbPackage(AdbModule adb, String namePackage, String file,
 			String device) {
@@ -136,5 +142,35 @@ public class AdbPackage {
 	public void monkey(int count) {
 		adb.monkey(device, name, count);
 	}
+
+	public void setPerrmissons(List<String> permissions) {
+		this.permissions=new LinkedList<Permission>();
+		for (String string : permissions) {
+			this.permissions.add(new Permission(string));
+		}
+	}
+
+	public void setVersionName(String versionName) {
+		this.versionName=versionName;
+
+	}
+
+	public void setVersionCode(String versionCode) {
+		this.versionCode=versionCode;
+	}
+
+	public String getVersionCode() {
+		return versionCode;
+	}
+
+	public String getVersionName() {
+		return versionName;
+	}
+
+	public List<Permission> getPermissions() {
+		return permissions;
+	}
+
+
 
 }

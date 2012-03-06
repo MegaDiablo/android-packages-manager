@@ -33,3 +33,6 @@ AdbHelper 1.4.2
 
 AdbHelper 1.4.3
 [+] Show current version
+
+AdbHelper 1.4.4
+[+] Add support getting permissions from apk

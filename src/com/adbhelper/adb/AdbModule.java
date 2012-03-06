@@ -733,7 +733,10 @@ public class AdbModule implements AdbConsts {
 			strInfo = strInfo.replaceAll("\\]", "");
 		}
 		strInfo = strInfo.replace(MASK_APP, adbPackage.getName());
+		if (adbPackage.getFileName()!=null){
 		strInfo = strInfo.replace(MASK_FILE, adbPackage.getFileName());
+		}
+
 		return String.format(strInfo, adbPackage.getName(),
 				adbPackage.getLabel());
 	}

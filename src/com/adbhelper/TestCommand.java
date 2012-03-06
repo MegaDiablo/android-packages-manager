@@ -3,6 +3,7 @@ package com.adbhelper;
 import java.io.IOException;
 
 import com.adbhelper.adb.AdbModule;
+import com.adbhelper.adb.AdbPackage;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
 import com.adbhelper.adb.exceptions.install.InstallException;
 
@@ -19,14 +20,15 @@ public class TestCommand {
 			adb = new AdbModule("/home/vbaraznovsky/android/android-sdk-linux/platform-tools/adb","aa.prop");
 
 		//AdbModule adb=new AdbModule("adb");
-		adb.devices().get(0).getPackagesNonSystem().get(18).monkey(5000);
+		//adb.devices().get(0).getPackagesNonSystem().get(18).monkey(5000);
 
 		//adb.runAapt("dump badging /media/Work/workspaceAndroid/!Projects/update/BrainCube/CR_1_5_Label_2011_12_20_liteHD/BrainCubeLiteHD1.5.apk".split(" "));
-		//System.out.println(adb.getInfoApk("/media/Work/workspaceAndroid/!Projects/update/BrainCube/CR_1_5_Label_2011_12_20_liteHD/BrainCubeLiteHD1.5.apk"));
+		AdbPackage info = adb.getInfoApk("/media/Work/workspaceAndroid/!Projects/update/BrainCube/CR_1_5_Label_2011_12_20_liteHD/BrainCubeLiteHD1.5.apk");
+		System.out.println(info);
+		System.out.println(info.getVersionCode());
+		System.out.println(info.getVersionName());
+		System.out.println(info.getPermissions());
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NotAccessPackageManager e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

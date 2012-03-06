@@ -1,6 +1,9 @@
 package com.adbhelper.adb;
 
+
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GetInfoApkFormatLog extends DefaultFormatLog {
 
@@ -9,22 +12,22 @@ public class GetInfoApkFormatLog extends DefaultFormatLog {
     private static final String VERSION_NAME = "versionName='([^']*)'";
     private static final String APPLICATIN_LABEL = "application-label:'([^']*)'";
     private static final String LAUCHABLE_ACTIVITY = "launchable-activity: name='([^']*)'";
+    private static final String PERMISSION  = "uses-permission:'([^']*)'";
+
     private String packageName=null;
-    @SuppressWarnings("unused")
-	private String versionCode=null;
-   	@SuppressWarnings("unused")
-	private String versionName=null;
+    private String versionCode=null;
+   	private String versionName=null;
    	private String label=null;
    	private String launchableActivity=null;
-
-    public GetInfoApkFormatLog() {
+   	private List<String> permissions=new LinkedList<String>();
+	public GetInfoApkFormatLog() {
 
     }
 
     private static final String STR_ERROR = "Error:";
 
-    
-    
+
+
     @Override
     public String changeLine(String line) {
     	String showLine=null;
@@ -38,7 +41,7 @@ public class GetInfoApkFormatLog extends DefaultFormatLog {
 		packageName=AdbUtils.getResultsPattern(packageLine,PACKAGE_NAME)[0];
 		showLine=line;
 	}
-	
+
 	if (line.matches(".*"+LAUCHABLE_ACTIVITY+".*")) {
 		String tmpLine=AdbUtils.getResultPattern(line, LAUCHABLE_ACTIVITY);
 		launchableActivity=AdbUtils.getResultsPattern(tmpLine,LAUCHABLE_ACTIVITY)[0];
@@ -54,13 +57,20 @@ public class GetInfoApkFormatLog extends DefaultFormatLog {
 		versionName=AdbUtils.getResultsPattern(packageLine,VERSION_NAME)[0];
 		showLine=line;
 	}
-	
+
 	if (line.matches(".*"+APPLICATIN_LABEL+".*")) {
 		String packageLine=AdbUtils.getResultPattern(line, APPLICATIN_LABEL);
 		label=AdbUtils.getResultsPattern(packageLine,APPLICATIN_LABEL)[0];
 		showLine=line;
 	}
-	
+
+	if (line.matches(".*"+PERMISSION+".*")) {
+		String packageLine=AdbUtils.getResultPattern(line, PERMISSION);
+		String permession=AdbUtils.getResultsPattern(packageLine,PERMISSION)[0];
+		permissions.add(permession);
+		showLine=line;
+	}
+
 	if (showLine==null){
 	LogAdb.debug(line);}
 	return showLine;
@@ -71,10 +81,13 @@ public class GetInfoApkFormatLog extends DefaultFormatLog {
     	try {
 			adbPackage.setDefaultActivity(launchableActivity);
 			adbPackage.setLabel(label);
+			adbPackage.setVersionCode(versionCode);
+			adbPackage.setVersionName(versionName);
+			adbPackage.setPerrmissons(permissions);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
     	return adbPackage;
     }
-    
+
 }

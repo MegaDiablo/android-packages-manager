@@ -26,6 +26,11 @@ public class AdbPackage {
 	private String versionName;
 	private List<Permission> permissions;
 
+	public AdbPackage(String namePackage) {
+	this(null, namePackage,null, null);
+
+
+	}
 
 	public AdbPackage(AdbModule adb, String namePackage, String file,
 			String device) {
@@ -33,8 +38,11 @@ public class AdbPackage {
 		this.device = device;
 		this.fileName = file;
 		this.adb = adb;
-		this.defaultActivity = adb.getNameActivity(namePackage);
-		this.label = adb.getLabelActivity(namePackage);
+		if (adb != null) {
+			this.defaultActivity = adb.getNameActivity(namePackage);
+			this.label = adb.getLabelActivity(namePackage);
+		}
+
 
 	}
 
@@ -144,19 +152,19 @@ public class AdbPackage {
 	}
 
 	public void setPerrmissons(List<String> permissions) {
-		this.permissions=new LinkedList<Permission>();
+		this.permissions = new LinkedList<Permission>();
 		for (String string : permissions) {
-			this.permissions.add(new Permission(string));
+			this.permissions.add(new Permission(adb,string));
 		}
 	}
 
 	public void setVersionName(String versionName) {
-		this.versionName=versionName;
+		this.versionName = versionName;
 
 	}
 
 	public void setVersionCode(String versionCode) {
-		this.versionCode=versionCode;
+		this.versionCode = versionCode;
 	}
 
 	public String getVersionCode() {
@@ -171,6 +179,23 @@ public class AdbPackage {
 		return permissions;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (name == null) {
+			return false;
+		}
+		if (obj instanceof AdbPackage) {
+			AdbPackage oPackage = (AdbPackage) obj;
+			return name.equals(oPackage.name);
+		}
+		if (obj instanceof String) {
+			obj.toString().equals(name);
+		}
 
+		return false;
+	}
 
 }

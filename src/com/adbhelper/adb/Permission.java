@@ -9,10 +9,12 @@ package com.adbhelper.adb;
  */
 public class Permission {
 	private String name;
+	private String label;
 
-	public Permission(String name) {
+	public Permission(AdbModule adb, String name) {
 		super();
 		this.name = name;
+		this.label = adb.getLabelPermisssion(name);
 	}
 
 	public String getName() {
@@ -21,6 +23,9 @@ public class Permission {
 
 	@Override
 	public String toString() {
+		if (label != null) {
+			return label;
+		}
 		return name;
 	}
 

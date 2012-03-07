@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.ResourceBundle.Control;
 
 import com.adbhelper.adb.exceptions.AdbError;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
@@ -19,8 +21,8 @@ import com.adbhelper.adb.exceptions.install.InstallException;
 
 public class AdbModule implements AdbConsts {
 
-	public static final String VERSION_ADB_HELPER="%%VERSION%%";
-
+	public static final String VERSION_ADB_HELPER = "%%VERSION%%";
+	private static final String NAME_RESOURCE_LABELS_PERMISSIONS = "com.adbhelper.adb.permissions";
 	private static final long CONSOLE_TIMEOUT = 5000;
 	private static final boolean DEFAULT_AUTOSTART_AFTER_INSTALL = false;
 	private static final String DEFAULT_FORMAT_INFO_PACKAGE = "%app%[ - (%label%)]";
@@ -44,6 +46,8 @@ public class AdbModule implements AdbConsts {
 	private Properties filterActivities;
 	private File fileActivities;
 	private Process currentProcess;
+
+	private ResourceBundle labelsPermissions;
 
 	// public static final String DEFAULT_PATH_ABD =
 	// "d:\\androidSDK\\platform-tools\\adb";
@@ -101,7 +105,6 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_MONKEY = "Start monkey for %app%";
 	private static final String LOG_INIT_ADBMODULE = "Initialize ADB Helper version %s.";
 
-
 	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
 		super();
 		this.fileAdb = fileAdb;
@@ -117,7 +120,7 @@ public class AdbModule implements AdbConsts {
 
 		this.fileAapt = fileAapt;
 		this.propertiesActivities = listActivities;
-		LogAdb.printInfo(LOG_INIT_ADBMODULE,VERSION_ADB_HELPER);
+		LogAdb.printInfo(LOG_INIT_ADBMODULE, VERSION_ADB_HELPER);
 
 	}
 
@@ -704,6 +707,19 @@ public class AdbModule implements AdbConsts {
 		}
 	}
 
+	public ResourceBundle getLabelsPermissions() {
+		if (labelsPermissions == null) {
+			labelsPermissions = ResourceBundle
+					.getBundle(NAME_RESOURCE_LABELS_PERMISSIONS);
+		}
+		return labelsPermissions;
+	}
+
+	public void setLocale(Control locale) {
+		labelsPermissions = ResourceBundle.getBundle(
+				NAME_RESOURCE_LABELS_PERMISSIONS, locale);
+	}
+
 	public AdbPackage getInfoApk(String pathApp) {
 		LogAdb.info(LOG_GET_INFO_APK.replace(MASK_FILE, pathApp));
 		String[] cmds = CMD_GET_INFO_APK.split(" ");
@@ -733,11 +749,21 @@ public class AdbModule implements AdbConsts {
 			strInfo = strInfo.replaceAll("\\]", "");
 		}
 		strInfo = strInfo.replace(MASK_APP, adbPackage.getName());
-		if (adbPackage.getFileName()!=null){
-		strInfo = strInfo.replace(MASK_FILE, adbPackage.getFileName());
+		if (adbPackage.getFileName() != null) {
+			strInfo = strInfo.replace(MASK_FILE, adbPackage.getFileName());
 		}
 
 		return String.format(strInfo, adbPackage.getName(),
 				adbPackage.getLabel());
 	}
+
+	public String getLabelPermisssion(String string) {
+		ResourceBundle labelsPermissions = getLabelsPermissions();
+		if (labelsPermissions.containsKey(string)) {
+			return labelsPermissions.getString(string);
+		} else {
+			return string;
+		}
+	}
+
 }

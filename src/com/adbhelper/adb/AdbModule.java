@@ -69,7 +69,7 @@ public class AdbModule implements AdbConsts {
 	private static final String CMD_CONNECT = "connect %to%";
 	private static final String CMD_DISCONNECT = "disconnect %from%";
 	private static final String CMD_MONKEY = "shell monkey -v -p %app% -c android.intent.category.LAUNCHER %count%";
-	private static final String CMD_CLEAR_TMP = "shell /data/local/tmp/rm *";
+	private static final String CMD_CLEAR_TMP = "shell rm /data/local/tmp/*";
 
 	private static final String LOG_SEND_KEYCODE = "Sending key code ";
 	private static final String LOG_COMPLITE_SEND_KEYCODE = "Sended key code";

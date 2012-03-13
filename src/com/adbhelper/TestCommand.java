@@ -25,13 +25,18 @@ public class TestCommand {
 			// AdbModule adb=new AdbModule("adb");
 			// adb.devices().get(0).getPackagesNonSystem().get(18).monkey(5000);
 			try {
-				List<AdbPackage> packages = adb.devices().get(0).getPackagesNonSystem();
-				int index=packages.indexOf(new AdbPackage("com.ximad.snake"));
-				System.out.println(packages.get(index));
+				List<AdbPackage> packages = adb.devices().get(0)
+						.getPackagesNonSystem();
+				int index = packages.indexOf(new AdbPackage("com.ximad.snake"));
+				if (index != -1) {
+					System.out.println(packages.get(index));
+				}
 			} catch (NotAccessPackageManager e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			adb.devices().get(0).clearTemp();
+
 			// adb.runAapt("dump badging /media/Work/workspaceAndroid/!Projects/update/BrainCube/CR_1_5_Label_2011_12_20_liteHD/BrainCubeLiteHD1.5.apk".split(" "));
 			AdbPackage info = adb
 					.getInfoApk("/media/Work/workspaceAndroid/!Projects/update/BrainCube/CR_1_5_Label_2011_12_20_liteHD/BrainCubeLiteHD1.5.apk");

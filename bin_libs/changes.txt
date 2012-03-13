@@ -37,3 +37,4 @@ AdbHelper 1.4.3
 AdbHelper 1.4.4
 [+] Add support getting permissions from apk
 [+] Add support locale of permissions
+[+] Add command clear temp

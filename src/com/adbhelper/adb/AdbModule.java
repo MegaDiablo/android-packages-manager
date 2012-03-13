@@ -69,6 +69,7 @@ public class AdbModule implements AdbConsts {
 	private static final String CMD_CONNECT = "connect %to%";
 	private static final String CMD_DISCONNECT = "disconnect %from%";
 	private static final String CMD_MONKEY = "shell monkey -v -p %app% -c android.intent.category.LAUNCHER %count%";
+	private static final String CMD_CLEAR_TMP = "shell /data/local/tmp/rm *";
 
 	private static final String LOG_SEND_KEYCODE = "Sending key code ";
 	private static final String LOG_COMPLITE_SEND_KEYCODE = "Sended key code";
@@ -104,6 +105,8 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_COUNT_PACKAGES = "Founded %s packages";
 	private static final String LOG_MONKEY = "Start monkey for %app%";
 	private static final String LOG_INIT_ADBMODULE = "Initialize ADB Helper version %s.";
+	private static final String LOG_CLEAR_TMP_START = "Start clear temp(/data/local/tmp)";
+	private static final String LOG_CLEAR_TMP_END = "Clear temp complite";
 
 	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
 		super();
@@ -456,6 +459,8 @@ public class AdbModule implements AdbConsts {
 		runAdb(device, CMD_REBOOT.split(" "));
 	}
 
+
+
 	public void reboot(AdbDevice device) {
 		reboot(device.getName());
 	}
@@ -530,6 +535,19 @@ public class AdbModule implements AdbConsts {
 		cmd = cmd.replace(MASK_COUNT, String.valueOf(count));
 		runAdb(device, cmd);
 
+	}
+
+
+	public void clearTemp(String device) {
+		LogAdb.info(LOG_CLEAR_TMP_START);
+		runAdb(device, CMD_CLEAR_TMP.split(" "));
+		LogAdb.info(LOG_CLEAR_TMP_END);
+	}
+
+
+
+	public void clearTemp(AdbDevice device) {
+		clearTemp(device.getName());
 	}
 
 	public String exec(String[] cmds, FormatLog formatLog) {

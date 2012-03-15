@@ -5,6 +5,11 @@ package ru.ucoz.megadiablo.android.apm;
  * */
 public final class Consts {
 
+	private Consts() {
+	}
+
+	public static final String VERSION_APP = "%%VERSION%%";
+
 	/**
 	 * Класс с константами настроек.
 	 * */

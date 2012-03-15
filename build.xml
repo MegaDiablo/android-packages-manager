@@ -16,13 +16,15 @@
 	<property name="app.src" value="src" />
 
 
-	<target name="release" depends="compile,build-jar,clean">
-		<antcall target="clean">
-		</antcall>
+	<target name="release" depends="clean,compile,build-jar,clean_bin">
 		<echo>Finished</echo>
 	</target>
 
 	<target name="clean">
+		<delete dir="${app.build.bin}" />
+		<delete dir="${app.build.src}" />
+	</target>
+	<target name="clean_bin">
 		<delete dir="${app.build.bin}" />
 		<delete dir="${app.build.src}" />
 	</target>

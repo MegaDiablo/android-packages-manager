@@ -59,6 +59,7 @@ public class AdbModule implements AdbConsts {
 	private static final String CMD_REINSTALL = "install -r %file%";
 	private static final String CMD_DEVICES = "devices";
 	private static final String CMD_START = "shell am start -n %app%/%activity% -a android.intent.action.MAIN -c android.intent.category.LAUNCHER";
+
 	private static final String CMD_LIST_PACKAGES = "shell pm list packages -f";
 	private static final String CMD_REBOOT = "reboot";
 	private static final String CMD_WAIT = "wait-for-device";
@@ -70,6 +71,7 @@ public class AdbModule implements AdbConsts {
 	private static final String CMD_DISCONNECT = "disconnect %from%";
 	private static final String CMD_MONKEY = "shell monkey -v -p %app% -c android.intent.category.LAUNCHER %count%";
 	private static final String CMD_CLEAR_TMP = "shell rm /data/local/tmp/*";
+	private static final String CMD_DEBUG = "shell am start -D -n %app%/%activity% -a android.intent.action.MAIN -c android.intent.category.LAUNCHER";
 
 	private static final String LOG_SEND_KEYCODE = "Sending key code ";
 	private static final String LOG_COMPLITE_SEND_KEYCODE = "Sended key code";
@@ -107,6 +109,7 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_INIT_ADBMODULE = "Initialize ADB Helper version %s.";
 	private static final String LOG_CLEAR_TMP_START = "Start clear temp(/data/local/tmp)";
 	private static final String LOG_CLEAR_TMP_END = "Clear temp complite";
+	private static final String LOG_DEBUG = "Start debug %app%";
 
 	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
 		super();
@@ -373,6 +376,14 @@ public class AdbModule implements AdbConsts {
 		LogAdb.info(LOG_START.replace(MASK_APP, app));
 		runAdb(device,
 				CMD_START.replace(MASK_APP, app)
+						.replace("%activity%", activity).split(" "),
+				new StartFormatLog());
+	}
+
+	public void debugActivity(String device, String app, String activity) {
+		LogAdb.info(LOG_DEBUG.replace(MASK_APP, app));
+		runAdb(device,
+				CMD_DEBUG.replace(MASK_APP, app)
 						.replace("%activity%", activity).split(" "),
 				new StartFormatLog());
 	}

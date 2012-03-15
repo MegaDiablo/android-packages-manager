@@ -132,6 +132,17 @@ public class AdbPackage {
 		adb.startActivity(device, name, defaultActivity);
 	}
 
+	public void debug(String activity) {
+		adb.debugActivity(device, name, activity);
+	}
+
+	public void debug() throws NotFoundActivityException {
+		if (defaultActivity == null) {
+			throw new NotFoundActivityException();
+		}
+		adb.debugActivity(device, name, defaultActivity);
+	}
+
 	public void download(String toPath) {
 		adb.downloadFile(device, fileName, toPath);
 	}

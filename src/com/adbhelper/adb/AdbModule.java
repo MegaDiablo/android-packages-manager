@@ -18,6 +18,13 @@ import com.adbhelper.adb.exceptions.AdbError;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
 import com.adbhelper.adb.exceptions.NotFoundActivityException;
 import com.adbhelper.adb.exceptions.install.InstallException;
+import com.adbhelper.adb.log.DefaultFormatLog;
+import com.adbhelper.adb.log.FormatLog;
+import com.adbhelper.adb.log.GetInfoApkFormatLog;
+import com.adbhelper.adb.log.InstallFormatLog;
+import com.adbhelper.adb.log.LogAdb;
+import com.adbhelper.adb.log.PackagesFormatLog;
+import com.adbhelper.adb.log.StartFormatLog;
 
 public class AdbModule implements AdbConsts {
 

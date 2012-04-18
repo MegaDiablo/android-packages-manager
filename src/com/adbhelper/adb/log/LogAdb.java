@@ -1,4 +1,4 @@
-package com.adbhelper.adb;
+package com.adbhelper.adb.log;
 
 import java.util.Date;
 

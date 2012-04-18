@@ -7,8 +7,8 @@ import java.util.Properties;
 import com.adbhelper.adb.AdbDevice;
 import com.adbhelper.adb.AdbModule;
 import com.adbhelper.adb.AdbPackage;
-import com.adbhelper.adb.LogAdb;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
+import com.adbhelper.adb.log.LogAdb;
 
 public class TestMain {
 

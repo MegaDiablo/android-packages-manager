@@ -1,4 +1,5 @@
-package com.adbhelper.adb;
+package com.adbhelper.adb.log;
+
 
 public class StartFormatLog extends DefaultFormatLog {
     

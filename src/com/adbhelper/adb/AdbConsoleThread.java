@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.adbhelper.adb.log.FormatLog;
+import com.adbhelper.adb.log.LogAdb;
+
 public class AdbConsoleThread extends Thread {
 
 	private Process currentProcess;

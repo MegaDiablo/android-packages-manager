@@ -1,8 +1,8 @@
 package com.adbhelper;
 
 import com.adbhelper.adb.AdbModule;
-import com.adbhelper.adb.LogAdb;
 import com.adbhelper.adb.exceptions.install.InstallException;
+import com.adbhelper.adb.log.LogAdb;
 
 public class Main {
 

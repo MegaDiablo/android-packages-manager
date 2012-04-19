@@ -39,3 +39,7 @@ AdbHelper 1.4.4
 [+] Add support locale of permissions
 [+] Add command clear temp
 [+] Add Debug
+
+AdbHelper 1.4.5
+[+] Add getting device's properties
+[*] Change label device

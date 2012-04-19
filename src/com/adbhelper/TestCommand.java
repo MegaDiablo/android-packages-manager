@@ -2,7 +2,9 @@ package com.adbhelper;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
+import com.adbhelper.adb.AdbDevice;
 import com.adbhelper.adb.AdbModule;
 import com.adbhelper.adb.AdbPackage;
 import com.adbhelper.adb.Permission;
@@ -36,6 +38,18 @@ public class TestCommand {
 				e.printStackTrace();
 			}
 			adb.devices().get(0).clearTemp();
+			List<AdbDevice> devices = adb.devices();
+			for (AdbDevice adbDevice : devices) {
+				Map<String, String> prop = adb.getPropertiesDevice(adbDevice);
+				System.out.print("!!!!!!!!!!!!!!!!!!!!!!!");
+				System.out.print(prop.get("ro.product.manufacturer"));
+				System.out.print(" ");
+				System.out.println(prop.get("ro.product.model"));
+				System.out.println(adbDevice.getLabel());
+
+
+			}
+
 
 			// adb.runAapt("dump badging /media/Work/workspaceAndroid/!Projects/update/BrainCube/CR_1_5_Label_2011_12_20_liteHD/BrainCubeLiteHD1.5.apk".split(" "));
 			AdbPackage info = adb

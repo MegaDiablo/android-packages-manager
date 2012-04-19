@@ -1,6 +1,7 @@
 package com.adbhelper.adb;
 
 import java.util.List;
+import java.util.Map;
 
 import com.adbhelper.adb.exceptions.DeviceIsEmulatorRebootException;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
@@ -10,10 +11,15 @@ public class AdbDevice {
 
 	private static final String EMULATOR_NAME = "emulator\\-[0-9]*";
 	private static final boolean DEFAULT_OPTIONS_WITH_SYSTEM = false;
+	private static final String PROPERTY_MANUFACTURER = "ro.product.manufacturer";
+	private static final String PROPERTY_MODEL = "ro.product.model";
+	private static final String PROPERTY_VERSION_API = "ro.build.version.sdk";
+	private static final String PROPERTY_VERSION_NAME = "ro.build.version.release";
 	private String name;
 	private String type;
 	private AdbModule adb;
 	private List<AdbPackage> listPackges;
+	private Map<String, String> properties;
 
 	public AdbDevice(String name, String type, AdbModule adb) {
 		super();
@@ -66,16 +72,14 @@ public class AdbDevice {
 		return adb.install(name, pathApp, autostart);
 	}
 
-	public void reinstall(String pathApp)
-			throws InstallException {
-		adb.reinstall(name,  pathApp);
+	public void reinstall(String pathApp) throws InstallException {
+		adb.reinstall(name, pathApp);
 	}
 
 	public void reinstall(String pathApp, boolean autoStart)
 			throws InstallException {
-		adb.reinstall(name,  pathApp,autoStart);
+		adb.reinstall(name, pathApp, autoStart);
 	}
-
 
 	@Deprecated
 	public void reinstall(String app, String activity, String pathApp)
@@ -133,7 +137,8 @@ public class AdbDevice {
 
 	@Override
 	public String toString() {
-		return name;
+	//	return name;
+		return getLabel();
 	}
 
 	public boolean isEmulator() {
@@ -146,6 +151,72 @@ public class AdbDevice {
 
 	public void clearTemp() {
 		adb.clearTemp(this);
+	}
+
+	public Map<String, String> getProperties() {
+		if (properties == null) {
+			properties = adb.getPropertiesDevice(this);
+		}
+		return properties;
+	}
+
+	public String getProperty(String key) {
+		return getProperties().get(key);
+	}
+
+	public String getManufacturer() {
+		return getProperty(PROPERTY_MANUFACTURER);
+
+	}
+
+	public String getModel() {
+		return getProperty(PROPERTY_MODEL);
+
+	}
+
+	public String getVersionApi() {
+		return getProperty(PROPERTY_VERSION_API);
+
+	}
+
+	public String getVersionName() {
+		return getProperty(PROPERTY_VERSION_NAME);
+
+	}
+
+	public String getLabel() {
+		String manufacturer = getManufacturer();
+		String model = getModel();
+		String version = getVersionName();
+
+		String result = "";
+		boolean hasInfo = false;
+
+		if (manufacturer != null) {
+			result += manufacturer;
+			hasInfo = true;
+		}
+		if (model != null) {
+			if (hasInfo) {
+				result += " ";
+			}
+			result += model;
+			hasInfo = true;
+		} else {
+			if (!hasInfo) {
+				result += name;
+				hasInfo = true;
+			}
+		}
+		if (version != null) {
+			if (hasInfo) {
+				result += " ";
+			}
+			result += "("+version+")";
+			hasInfo = true;
+		}
+		return result;
+
 	}
 
 	@Override

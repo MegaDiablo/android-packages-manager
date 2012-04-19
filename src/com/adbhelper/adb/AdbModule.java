@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
@@ -21,6 +23,7 @@ import com.adbhelper.adb.exceptions.install.InstallException;
 import com.adbhelper.adb.log.DefaultFormatLog;
 import com.adbhelper.adb.log.FormatLog;
 import com.adbhelper.adb.log.GetInfoApkFormatLog;
+import com.adbhelper.adb.log.GetPropertiesDeviceFormatLog;
 import com.adbhelper.adb.log.InstallFormatLog;
 import com.adbhelper.adb.log.LogAdb;
 import com.adbhelper.adb.log.PackagesFormatLog;
@@ -47,6 +50,7 @@ public class AdbModule implements AdbConsts {
 	private static final String MASK_COUNT = "%count%";
 	private static final String CONSOLE_STARTED_ADB = "* daemon started successfully *";
 	private static final String VALID_ADRESS = ".*:[0-9]{1,5}";
+
 	private static final int DEFAULT_PORT = 5555;
 
 	private Properties propertiesActivities;
@@ -79,6 +83,8 @@ public class AdbModule implements AdbConsts {
 	private static final String CMD_MONKEY = "shell monkey -v -p %app% -c android.intent.category.LAUNCHER %count%";
 	private static final String CMD_CLEAR_TMP = "shell rm /data/local/tmp/*";
 	private static final String CMD_DEBUG = "shell am start -D -n %app%/%activity% -a android.intent.action.MAIN -c android.intent.category.LAUNCHER";
+
+	private static final String CMD_GET_PROP = "shell getprop";
 
 	private static final String LOG_SEND_KEYCODE = "Sending key code ";
 	private static final String LOG_COMPLITE_SEND_KEYCODE = "Sended key code";
@@ -116,6 +122,10 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_INIT_ADBMODULE = "Initialize ADB Helper version %s.";
 	private static final String LOG_CLEAR_TMP_START = "Start clear temp(/data/local/tmp)";
 	private static final String LOG_CLEAR_TMP_END = "Clear temp complite";
+
+	private static final String LOG_GET_PROPERTIES_START = "Getting device's properties from %s...";
+	private static final String LOG_GET_PROPERTIES_END = "Completed getting device's properties ";
+
 	private static final String LOG_DEBUG = "Start debug %app%";
 
 	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
@@ -477,8 +487,6 @@ public class AdbModule implements AdbConsts {
 		runAdb(device, CMD_REBOOT.split(" "));
 	}
 
-
-
 	public void reboot(AdbDevice device) {
 		reboot(device.getName());
 	}
@@ -555,17 +563,39 @@ public class AdbModule implements AdbConsts {
 
 	}
 
-
 	public void clearTemp(String device) {
 		LogAdb.info(LOG_CLEAR_TMP_START);
 		runAdb(device, CMD_CLEAR_TMP.split(" "));
 		LogAdb.info(LOG_CLEAR_TMP_END);
 	}
 
-
-
 	public void clearTemp(AdbDevice device) {
 		clearTemp(device.getName());
+	}
+
+	public Map<String, String> getPropertiesDevice(String device) {
+
+		LogAdb.info(String.format(LOG_GET_PROPERTIES_START, device));
+		String[] res = runAdb(device, CMD_GET_PROP.split(" "),
+				new GetPropertiesDeviceFormatLog()).split("\\n");
+		Map<String, String> map = new HashMap<String, String>();
+		for (String string : res) {
+
+			if (string.matches(AdbConsts.PATTERN_PROPERTY_DEVICE)) {
+				String[] str = AdbUtils.getResultsPattern(string,
+						AdbConsts.PATTERN_PROPERTY_DEVICE);
+				if (str.length > 1) {
+					map.put(str[0], str[1]);
+				}
+			}
+		}
+	//	LogAdb.info(LOG_GET_PROPERTIES_END);
+		return map;
+
+	}
+
+	public Map<String, String> getPropertiesDevice(AdbDevice device) {
+		return getPropertiesDevice(device.getName());
 	}
 
 	public String exec(String[] cmds, FormatLog formatLog) {

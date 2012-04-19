@@ -1,5 +1,6 @@
 package com.adbhelper;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +18,12 @@ public class TestCommand {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+		File propfile=new File("aa.prop");
 		AdbModule adb;
 		try {
 			adb = new AdbModule(
 					"/home/vbaraznovsky/android/android-sdk-linux/platform-tools/adb",
-					"aa.prop");
+					propfile.getAbsolutePath());
 
 			// AdbModule adb=new AdbModule("adb");
 			// adb.devices().get(0).getPackagesNonSystem().get(18).monkey(5000);
@@ -64,6 +65,7 @@ public class TestCommand {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		propfile.deleteOnExit();
 	}
 	/*
 	 * [29.12.2011 12:24:36] : badging Print the label and icon for the app

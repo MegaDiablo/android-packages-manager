@@ -188,7 +188,9 @@ public class AdbDevice {
 		String manufacturer = getManufacturer();
 		String model = getModel();
 		String version = getVersionName();
-
+		if (isEmulator()){
+			manufacturer=name;
+		}
 		String result = "";
 		boolean hasInfo = false;
 

@@ -10,7 +10,6 @@ import com.adbhelper.adb.AdbModule;
 import com.adbhelper.adb.AdbPackage;
 import com.adbhelper.adb.Permission;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
-import com.adbhelper.adb.exceptions.install.InstallException;
 
 public class TestCommand {
 

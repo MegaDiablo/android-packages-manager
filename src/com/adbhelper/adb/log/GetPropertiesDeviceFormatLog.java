@@ -1,13 +1,6 @@
 package com.adbhelper.adb.log;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.adbhelper.adb.AdbConsts;
-import com.adbhelper.adb.AdbModule;
-import com.adbhelper.adb.AdbPackage;
-import com.adbhelper.adb.AdbUtils;
 
 public class GetPropertiesDeviceFormatLog extends DefaultFormatLog {
 

@@ -43,3 +43,6 @@ AdbHelper 1.4.4
 AdbHelper 1.4.5
 [+] Add getting device's properties
 [*] Change label device
+
+AdbHelper 1.4.6
+[-] Fix emulator's label

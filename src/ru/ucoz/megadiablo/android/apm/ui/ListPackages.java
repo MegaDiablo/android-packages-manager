@@ -81,7 +81,18 @@ public class ListPackages extends JPanel {
 			mMenuItemRun.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
-					startPackages();
+					startPackages(false);
+				}
+			});
+			popupMenu.add(mMenuItemRun);
+		}
+
+		{
+			mMenuItemRun = new JMenuItem("Отладка");
+			mMenuItemRun.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					startPackages(true);
 				}
 			});
 			popupMenu.add(mMenuItemRun);
@@ -300,14 +311,15 @@ public class ListPackages extends JPanel {
 		mCore.refreshPackages();
 	}
 
-	public void startPackages() {
+	public void startPackages(final boolean pDebug) {
 		int[] selected = table.getSelectedRows();
 		for (int index : selected) {
-			startPackage(index);
+			startPackage(index, pDebug);
 		}
 	}
 
-	public void downloadPackages(String to) {
+	public void downloadPackages(final String pTo) {
+		String to = pTo;
 		if (to != null && to.length() > 1 && !to.endsWith(File.separator)) {
 			to += File.separator;
 		}
@@ -326,11 +338,11 @@ public class ListPackages extends JPanel {
 		return true;
 	}
 
-	private boolean startPackage(final int index) {
+	private boolean startPackage(final int index, final boolean pDebug) {
 		Object obj = table.getValueAt(index, 0);
 		if (obj != null && obj instanceof AdbPackage) {
 			AdbPackage item = (AdbPackage) obj;
-			mCore.startApp(item);
+			mCore.startApp(item, pDebug);
 		}
 		return true;
 	}

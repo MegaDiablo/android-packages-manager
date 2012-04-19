@@ -2,7 +2,7 @@ package ru.ucoz.megadiablo.android.apm;
 
 /**
  * Перечисление типов событий.
- * 
+ *
  * @author Alexander Gromyko
  * */
 public enum EnumEvents {
@@ -23,7 +23,8 @@ public enum EnumEvents {
 	START_ADB(10010),
 	STOP_ADB(10011),
 	RESTART_ADB(10012),
-	CONNECT_NETWORK_DEVICE(10013);
+	CONNECT_NETWORK_DEVICE(10013),
+	CLEAR_FOLDER_TEMP(10014);
 	// STOP_ADB(10011),
 	// ;
 

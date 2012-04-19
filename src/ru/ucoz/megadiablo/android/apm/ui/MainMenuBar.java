@@ -176,6 +176,18 @@ public class MainMenuBar extends JMenuBar {
 		mSeparatorConnects = new JSeparator();
 		mMenuAdbConnect.add(mSeparatorConnects);
 		mMenuAdbConnect.add(mMenuItemAddNetworkDevice);
+
+				JMenuItem mMenuItemClearFolderTemp = new JMenuItem("Очистить папку temp");
+				mMenuDevices.add(mMenuItemClearFolderTemp);
+				mMenuItemClearFolderTemp.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(final ActionEvent e) {
+						mCore.clearFolderTemp();
+					}
+				});
+
+		JSeparator separatorRebootDevice = new JSeparator();
+		mMenuDevices.add(separatorRebootDevice);
 		mMenuDevices.add(mMenuItemReboot);
 
 		JMenu mMenuADB = new JMenu("ADB");

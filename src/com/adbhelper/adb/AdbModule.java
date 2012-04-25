@@ -589,13 +589,55 @@ public class AdbModule implements AdbConsts {
 				}
 			}
 		}
-	//	LogAdb.info(LOG_GET_PROPERTIES_END);
+		// LogAdb.info(LOG_GET_PROPERTIES_END);
 		return map;
 
 	}
 
 	public Map<String, String> getPropertiesDevice(AdbDevice device) {
 		return getPropertiesDevice(device.getName());
+	}
+
+	public AdbPackage getInfoPackage(AdbPackage adbPackage) {
+		AdbPackage info = null;
+
+		File tmpFile = AdbUtils.generateTempFile("apm_package", ".apk");
+		String tmpFileName = tmpFile.getAbsolutePath();
+		downloadFile(adbPackage.getDevice(), adbPackage.getFileName(),
+				tmpFileName);
+		info = getInfoApk(tmpFileName);
+		if (tmpFile.exists()) {
+			tmpFile.delete();
+		}
+		return info;
+	}
+
+	public void updatePackages(List<AdbPackage> adbPackages) {
+		updatePackages(adbPackages, false);
+	}
+
+	public void updatePackages(List<AdbPackage> adbPackages,
+			boolean alwaysUpdate) {
+		for (AdbPackage adbPackage : adbPackages) {
+			updatePackage(adbPackage, alwaysUpdate);
+		}
+	}
+
+	public void updatePackage(AdbPackage adbPackage) {
+		updatePackage(adbPackage, true);
+	}
+
+	public void updatePackage(AdbPackage adbPackage, boolean alwaysUpdate) {
+		if (alwaysUpdate || (adbPackage.getLabel() == null)
+				|| (adbPackage.getDefaultActivity() == null)) {
+			try {
+				adbPackage.updateInfo(getInfoPackage(adbPackage));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+
 	}
 
 	public String exec(String[] cmds, FormatLog formatLog) {
@@ -685,6 +727,9 @@ public class AdbModule implements AdbConsts {
 
 	public String getNameActivityPropperty(String packageName) {
 		if (propertiesActivities == null) {
+			return null;
+		}
+		if (packageName == null) {
 			return null;
 		}
 		return propertiesActivities.getProperty(packageName);

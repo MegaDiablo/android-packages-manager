@@ -221,6 +221,14 @@ public class AdbDevice {
 
 	}
 
+	public void updatePackages(boolean withSystem) throws NotAccessPackageManager{
+		adb.updatePackages(getPackages(withSystem));
+	}
+
+	public void updatePackages() throws NotAccessPackageManager{
+		adb.updatePackages(getPackages(DEFAULT_OPTIONS_WITH_SYSTEM));
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {

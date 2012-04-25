@@ -169,6 +169,12 @@ public class AdbPackage {
 		}
 	}
 
+	public void setListPerrmissons(List<Permission> permissions) {
+		this.permissions = permissions;
+
+	}
+
+
 	public void setVersionName(String versionName) {
 		this.versionName = versionName;
 
@@ -190,6 +196,20 @@ public class AdbPackage {
 		return permissions;
 	}
 
+	public void update(){
+		adb.updatePackage(this);
+	}
+
+	public void updateInfo(AdbPackage adbPackage) throws IOException
+	{
+		this.setDefaultActivity(adbPackage.getDefaultActivity());
+		this.setLabel(adbPackage.getLabel());
+		this.setVersionCode(adbPackage.getVersionCode());
+		this.setVersionName(adbPackage.getVersionName());
+		this.setListPerrmissons(adbPackage.getPermissions());
+
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
@@ -208,5 +228,8 @@ public class AdbPackage {
 
 		return false;
 	}
+
+
+
 
 }

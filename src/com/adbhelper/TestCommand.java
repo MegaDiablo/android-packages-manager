@@ -17,7 +17,7 @@ public class TestCommand {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		File propfile=new File("aa.prop");
+		File propfile=new File("/home/vbaraznovsky/android/android-sdk-linux/app.prop");
 		AdbModule adb;
 		try {
 			adb = new AdbModule(
@@ -27,17 +27,21 @@ public class TestCommand {
 			// AdbModule adb=new AdbModule("adb");
 			// adb.devices().get(0).getPackagesNonSystem().get(18).monkey(5000);
 			try {
+				adb.devices().get(0).updatePackages(true);
 				List<AdbPackage> packages = adb.devices().get(0)
 						.getPackagesNonSystem();
+
 				int index = packages.indexOf(new AdbPackage("com.ximad.snake"));
 				if (index != -1) {
 					System.out.println(packages.get(index));
 				}
+
 			} catch (NotAccessPackageManager e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			adb.devices().get(0).clearTemp();
+
 			List<AdbDevice> devices = adb.devices();
 			for (AdbDevice adbDevice : devices) {
 				Map<String, String> prop = adb.getPropertiesDevice(adbDevice);
@@ -64,7 +68,7 @@ public class TestCommand {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		propfile.deleteOnExit();
+		//propfile.deleteOnExit();
 	}
 	/*
 	 * [29.12.2011 12:24:36] : badging Print the label and icon for the app

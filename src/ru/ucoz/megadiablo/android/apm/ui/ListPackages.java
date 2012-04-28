@@ -142,6 +142,19 @@ public class ListPackages extends JPanel {
 		}
 
 		{
+			mMenuItemRun = new JMenuItem("Информация");
+			mMenuItemRun.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					updateInformationPackages();
+				}
+			});
+			mMenuItemRun
+					.setToolTipText("Позволяет обновить информацию о приложении");
+			popupMenu.add(mMenuItemRun);
+		}
+
+		{
 			separator = new JSeparator();
 			popupMenu.add(separator);
 		}
@@ -225,9 +238,9 @@ public class ListPackages extends JPanel {
 
 	private void updateModel(final List<AdbPackage> pList) {
 
-		String columsNames[] = { "Пакет", "Название" };
+		String[] columsNames = { "Пакет", "Название" };
 
-		Object data[][] = {};
+		Object[][] data = {};
 		if (pList != null) {
 			data = new Object[pList.size()][columsNames.length + 1];
 
@@ -342,6 +355,15 @@ public class ListPackages extends JPanel {
 		mCore.refreshPackages();
 	}
 
+	public void updateInformationPackages() {
+		int[] selected = table.getSelectedRows();
+		for (int index : selected) {
+			updateInformationPackage(index);
+		}
+
+		mCore.refreshPackages();
+	}
+
 	public void startPackages(final boolean pDebug) {
 		int[] selected = table.getSelectedRows();
 		for (int index : selected) {
@@ -372,6 +394,14 @@ public class ListPackages extends JPanel {
 		AdbPackage item = getAdbPackageByIndex(index);
 		if (item != null) {
 			mCore.startApp(item, pDebug);
+		}
+		return true;
+	}
+
+	private boolean updateInformationPackage(final int index) {
+		AdbPackage item = getAdbPackageByIndex(index);
+		if (item != null) {
+			mCore.updateInforamtionApplication(item);
 		}
 		return true;
 	}

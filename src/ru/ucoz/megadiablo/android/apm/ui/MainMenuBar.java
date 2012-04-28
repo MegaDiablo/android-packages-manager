@@ -116,7 +116,7 @@ public class MainMenuBar extends JMenuBar {
 						});
 						mMenuADB.add(mMenuItemAdbStart);
 
-								JMenuItem mMenuItemAdbReboot = new JMenuItem("Перезагрузить");
+								JMenuItem mMenuItemAdbReboot = new JMenuItem("Перезапустить");
 								mMenuItemAdbReboot.addActionListener(new ActionListener() {
 									@Override
 									public void actionPerformed(final ActionEvent e) {

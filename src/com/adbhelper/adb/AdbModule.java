@@ -842,6 +842,7 @@ public class AdbModule implements AdbConsts {
 			runAapt(cmds, formatLog).split("\\n");
 		} catch (AdbError e) {
 			LogAdb.error(LOG_INSTALL_FAIL.replace(MASK_FILE, pathApp));
+			e.printStackTrace();
 			// throw InstallException.createInstallException(e);
 
 		}

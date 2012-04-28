@@ -46,3 +46,6 @@ AdbHelper 1.4.5
 
 AdbHelper 1.4.6
 [-] Fix emulator's label
+
+AdbHelper 1.4.7
+[+] add function "update info about package"

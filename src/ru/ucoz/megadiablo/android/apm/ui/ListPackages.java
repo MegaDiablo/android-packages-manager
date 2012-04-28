@@ -87,16 +87,16 @@ public class ListPackages extends JPanel {
 			popupMenu.add(mMenuItemRun);
 		}
 
-		{
-			mMenuItemRun = new JMenuItem("Отладка");
-			mMenuItemRun.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(final ActionEvent e) {
-					startPackages(true);
-				}
-			});
-			popupMenu.add(mMenuItemRun);
-		}
+		// {
+		// mMenuItemRun = new JMenuItem("Отладка");
+		// mMenuItemRun.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(final ActionEvent e) {
+		// startPackages(true);
+		// }
+		// });
+		// popupMenu.add(mMenuItemRun);
+		// }
 
 		{
 			mMenuItemDelete = new JMenuItem("Удалить");

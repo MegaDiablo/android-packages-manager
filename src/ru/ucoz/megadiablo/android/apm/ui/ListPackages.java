@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
@@ -206,7 +207,12 @@ public class ListPackages extends JPanel {
 	}
 
 	private void updateListPackages(final List<AdbPackage> packages) {
-		updateModel(packages);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				updateModel(packages);
+			}
+		});
 	}
 
 	public void setFilter(String text) {
@@ -218,27 +224,52 @@ public class ListPackages extends JPanel {
 	}
 
 	private void updateModel(final List<AdbPackage> pList) {
+
+		String columsNames[] = { "Пакет", "Название" };
+
 		Object data[][] = {};
 		if (pList != null) {
-			data = new Object[pList.size()][1];
+			data = new Object[pList.size()][columsNames.length + 1];
 
 			for (int i = 0; i < pList.size(); i++) {
 				AdbPackage item = pList.get(i);
+				data[i][columsNames.length] = item;
 				if (item != null) {
-					data[i][0] = item;
-				} else {
 					data[i][0] = " - пакет не определен - ";
+					if (item.getName() != null) {
+						data[i][0] = item.getName();
+					}
+
+					data[i][1] = "";
+					if (item.getLabel() != null) {
+						data[i][1] = item.getLabel();
+					}
 				}
+
 			}
 		}
 
-		String columsNames[] = { "Название пакета" };
-
 		model = new DefaultTableModel(data, columsNames) {
-			/**
-			 *
-			 */
+
 			private static final long serialVersionUID = 5795337809978978846L;
+
+			@SuppressWarnings("rawtypes")
+			private Vector nonNullVector(final Vector v) {
+				if (v == null) {
+					return new Vector();
+				}
+				return v;
+			}
+
+			@SuppressWarnings("rawtypes")
+			@Override
+			public void setDataVector(final Vector dataVector,
+					final Vector columnIdentifiers) {
+
+				this.dataVector = nonNullVector(dataVector);
+				this.columnIdentifiers = nonNullVector(columnIdentifiers);
+				fireTableStructureChanged();
+			}
 
 			@Override
 			public boolean isCellEditable(final int row, final int column) {
@@ -261,7 +292,7 @@ public class ListPackages extends JPanel {
 
 	static class FilterByText extends RowFilter<TableModel, Integer> {
 
-		String text;
+		private String text;
 
 		@Override
 		public boolean include(final javax.swing.RowFilter.Entry<? extends TableModel, ? extends Integer> entry) {
@@ -330,27 +361,24 @@ public class ListPackages extends JPanel {
 	}
 
 	private boolean removePackage(final int index) {
-		Object obj = table.getValueAt(index, 0);
-		if (obj != null && obj instanceof AdbPackage) {
-			AdbPackage item = (AdbPackage) obj;
+		AdbPackage item = getAdbPackageByIndex(index);
+		if (item != null) {
 			mCore.uninstall(item);
 		}
 		return true;
 	}
 
 	private boolean startPackage(final int index, final boolean pDebug) {
-		Object obj = table.getValueAt(index, 0);
-		if (obj != null && obj instanceof AdbPackage) {
-			AdbPackage item = (AdbPackage) obj;
+		AdbPackage item = getAdbPackageByIndex(index);
+		if (item != null) {
 			mCore.startApp(item, pDebug);
 		}
 		return true;
 	}
 
 	private boolean downloadPackage(final int index, final String to) {
-		Object obj = table.getValueAt(index, 0);
-		if (obj != null && obj instanceof AdbPackage) {
-			AdbPackage item = (AdbPackage) obj;
+		AdbPackage item = getAdbPackageByIndex(index);
+		if (item != null) {
 			mCore.download(item, String.format("%s%s.apk", to, item));
 		}
 		return true;
@@ -363,6 +391,17 @@ public class ListPackages extends JPanel {
 		// }
 		//
 		// mCore.refreshPackages();
+	}
+
+	private AdbPackage getAdbPackageByIndex(final int pIndex) {
+		int newIndex = table.convertRowIndexToModel(pIndex);
+
+		Object obj = table.getModel().getValueAt(newIndex, 2);
+		if (obj != null && obj instanceof AdbPackage) {
+			AdbPackage item = (AdbPackage) obj;
+			return item;
+		}
+		return null;
 	}
 
 }

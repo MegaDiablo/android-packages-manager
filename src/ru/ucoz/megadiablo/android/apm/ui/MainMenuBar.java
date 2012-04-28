@@ -99,6 +99,51 @@ public class MainMenuBar extends JMenuBar {
 		});
 		mMenuFile.add(mMenuItemInstallPackage);
 
+				JMenu mMenuADB = new JMenu("ADB");
+				mMenuFile.add(mMenuADB);
+
+						JMenuItem mMenuItemAdbStart = new JMenuItem("Запустить");
+						mMenuItemAdbStart.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(final ActionEvent e) {
+								if (showWarning("Вы точно хотите запустить ADB?")) {
+									pListEventUpdaters
+											.get(Runner.EVENT_UPDATER_REFRESH_DEVICES)
+											.setPause(false);
+									mCore.startAdb();
+								}
+							}
+						});
+						mMenuADB.add(mMenuItemAdbStart);
+
+								JMenuItem mMenuItemAdbReboot = new JMenuItem("Перезагрузить");
+								mMenuItemAdbReboot.addActionListener(new ActionListener() {
+									@Override
+									public void actionPerformed(final ActionEvent e) {
+										if (showWarning("Вы точно хотите перезапустить ADB?")) {
+											pListEventUpdaters
+													.get(Runner.EVENT_UPDATER_REFRESH_DEVICES)
+													.setPause(false);
+											mCore.restartAdb();
+										}
+									}
+								});
+								mMenuADB.add(mMenuItemAdbReboot);
+
+										JMenuItem mMenuItemAdbStop = new JMenuItem("Остановить");
+										mMenuItemAdbStop.addActionListener(new ActionListener() {
+											@Override
+											public void actionPerformed(final ActionEvent e) {
+												if (showWarning("Вы точно хотите остановить ADB?")) {
+													pListEventUpdaters
+															.get(Runner.EVENT_UPDATER_REFRESH_DEVICES)
+															.setPause(true);
+													mCore.stopAdb();
+												}
+											}
+										});
+										mMenuADB.add(mMenuItemAdbStop);
+
 		JSeparator separatorFIleExit = new JSeparator();
 		mMenuFile.add(separatorFIleExit);
 		mMenuFile.add(mMenuItemExit);
@@ -189,51 +234,6 @@ public class MainMenuBar extends JMenuBar {
 		JSeparator separatorRebootDevice = new JSeparator();
 		mMenuDevices.add(separatorRebootDevice);
 		mMenuDevices.add(mMenuItemReboot);
-
-		JMenu mMenuADB = new JMenu("ADB");
-		add(mMenuADB);
-
-		JMenuItem mMenuItemAdbStart = new JMenuItem("Запустить");
-		mMenuItemAdbStart.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				if (showWarning("Вы точно хотите запустить ADB?")) {
-					pListEventUpdaters
-							.get(Runner.EVENT_UPDATER_REFRESH_DEVICES)
-							.setPause(false);
-					mCore.startAdb();
-				}
-			}
-		});
-		mMenuADB.add(mMenuItemAdbStart);
-
-		JMenuItem mMenuItemAdbReboot = new JMenuItem("Перезагрузить");
-		mMenuItemAdbReboot.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				if (showWarning("Вы точно хотите перезапустить ADB?")) {
-					pListEventUpdaters
-							.get(Runner.EVENT_UPDATER_REFRESH_DEVICES)
-							.setPause(false);
-					mCore.restartAdb();
-				}
-			}
-		});
-		mMenuADB.add(mMenuItemAdbReboot);
-
-		JMenuItem mMenuItemAdbStop = new JMenuItem("Остановить");
-		mMenuItemAdbStop.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				if (showWarning("Вы точно хотите остановить ADB?")) {
-					pListEventUpdaters
-							.get(Runner.EVENT_UPDATER_REFRESH_DEVICES)
-							.setPause(true);
-					mCore.stopAdb();
-				}
-			}
-		});
-		mMenuADB.add(mMenuItemAdbStop);
 
 		JMenu mMenuSettings = new JMenu("Настройки");
 		add(mMenuSettings);

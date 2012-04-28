@@ -49,3 +49,6 @@ AdbHelper 1.4.6
 
 AdbHelper 1.4.7
 [+] add function "update info about package"
+
+AdbHelper 1.4.8
+[-] Fix permisson's labels

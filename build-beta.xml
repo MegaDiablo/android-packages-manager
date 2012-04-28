@@ -17,14 +17,16 @@
 	<property name="app.src" value="src" />
 
 
-	<target name="release" depends="compile,build-jar,clean">
-		<antcall target="clean">
-		</antcall>
+	<target name="release" depends="clean,compile,build-jar,clean_bin">
 		<echo>Finished</echo>
 	</target>
 
 	<target name="clean">
 		<delete dir="${app.build.bin}" />
+		<delete dir="${app.build.src}" />
+	</target>
+	<target name="clean_bin">
+	    <delete dir="${app.build.bin}" />
 		<delete dir="${app.build.src}" />
 	</target>
 
@@ -50,13 +52,16 @@
 	<target name="compile" depends="precompile">
 		<javac srcdir="${app.build.src}" destdir="${app.build.bin}" classpath="${app.libs}" includeantruntime="false" debug="off" encoding="UTF-8">
 		</javac>
+		<copy todir="${app.build.bin}">
+		    <fileset dir="${app.build.src}" includes="**/*.*" excludes="**/*.java" />
+		</copy>
 	</target>
 
 	<target name="build-jar" depends="">
 
 		<delete file="${app.build.jar.path}" />
 		<jar destfile="${app.build.jar.path}">
-			<fileset dir="${app.build.bin}" includes="**/*.class" excludes="com/adbhelper/*.class" />
+			<fileset dir="${app.build.bin}" includes="**/*.*" excludes="com/adbhelper/*.class" />
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
 				<attribute name="Class-Path" value="." />

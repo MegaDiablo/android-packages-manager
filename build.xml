@@ -51,12 +51,15 @@
 	<target name="compile" depends="precompile">
 		<javac srcdir="${app.build.src}" destdir="${app.build.bin}" classpath="${app.libs}" includeantruntime="false" debug="off" encoding="UTF-8">
 		</javac>
+		<copy todir="${app.build.bin}">
+		    <fileset dir="${app.build.src}" includes="**/*.*" excludes="**/*.java" />
+		</copy>
 	</target>
 	<target name="build-jar" depends="">
 		<delete file="${app.build.jar.path}" />
 		<jar destfile="${app.build.jar.path}">
 
-			<fileset dir="${app.build.bin}" includes="**/*.class" excludes="com/adbhelper/*.class" />
+			<fileset dir="${app.build.bin}" includes="**/*.*" excludes="com/adbhelper/*.class" />
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
 				<attribute name="Class-Path" value="." />

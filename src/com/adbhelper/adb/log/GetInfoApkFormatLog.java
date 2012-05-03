@@ -11,7 +11,8 @@ import com.adbhelper.adb.AdbUtils;
 
 public class GetInfoApkFormatLog extends DefaultFormatLog {
 
-    private static final String PACKAGE_NAME = "package: name='([^']*)'";
+
+	private static final String PACKAGE_NAME = "package: name='([^']*)'";
     private static final String VERSION_CODE = "versionCode='([^']*)'";
     private static final String VERSION_NAME = "versionName='([^']*)'";
     private static final String APPLICATIN_LABEL = "application-label:'([^']*)'";
@@ -24,20 +25,21 @@ public class GetInfoApkFormatLog extends DefaultFormatLog {
    	private String label=null;
    	private String launchableActivity=null;
    	private List<String> permissions=new LinkedList<String>();
-	public GetInfoApkFormatLog() {
 
-    }
 
     private static final String STR_ERROR = "Error:";
 
 
+    public GetInfoApkFormatLog(LogAdb logAdb) {
+		super(logAdb);
+    }
 
     @Override
     public String changeLine(String line) {
     	String showLine=null;
 	if (line.startsWith(STR_ERROR))
 	{
-	    LogAdb.error(line);
+		error(line);
 	    return null;
 	}
 	if (line.matches(".*"+PACKAGE_NAME+".*")) {
@@ -76,7 +78,8 @@ public class GetInfoApkFormatLog extends DefaultFormatLog {
 	}
 
 	if (showLine==null){
-	LogAdb.debug(line);}
+	debug(line);
+	}
 	return showLine;
     }
 

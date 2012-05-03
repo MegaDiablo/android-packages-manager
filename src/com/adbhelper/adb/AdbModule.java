@@ -128,6 +128,8 @@ public class AdbModule implements AdbConsts {
 
 	private static final String LOG_DEBUG = "Start debug %app%";
 
+	private final LogAdb logAdb=new LogAdb();
+
 	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
 		super();
 		this.fileAdb = fileAdb;
@@ -143,7 +145,7 @@ public class AdbModule implements AdbConsts {
 
 		this.fileAapt = fileAapt;
 		this.propertiesActivities = listActivities;
-		LogAdb.printInfo(LOG_INIT_ADBMODULE, VERSION_ADB_HELPER);
+		logAdb.printInfo(LOG_INIT_ADBMODULE, VERSION_ADB_HELPER);
 
 	}
 
@@ -183,11 +185,11 @@ public class AdbModule implements AdbConsts {
 	}
 
 	public String runAdb(String device, String string) {
-		return runAdb(device, string.split(" "), new DefaultFormatLog());
+		return runAdb(device, string.split(" "), new DefaultFormatLog(logAdb));
 	}
 
 	public String runAdb(String device, String[] string) {
-		return runAdb(device, string, new DefaultFormatLog());
+		return runAdb(device, string, new DefaultFormatLog(logAdb));
 	}
 
 	public String runCmd(String pathAdb, String device, String[] cmd,
@@ -215,7 +217,7 @@ public class AdbModule implements AdbConsts {
 		}
 
 		if (formatLog == null)
-			formatLog = new DefaultFormatLog();
+			formatLog = new DefaultFormatLog(logAdb);
 
 		return exec(shellCmd, formatLog);
 	}
@@ -267,7 +269,7 @@ public class AdbModule implements AdbConsts {
 	 * @return SUCCESS
 	 */
 	public int uninstall(String device, String app) {
-		LogAdb.info(LOG_UNINSTALL.replace(MASK_APP, app));
+		logAdb.info(LOG_UNINSTALL.replace(MASK_APP, app));
 		runAdb(device, CMD_UNINSTALL + app);
 		return AdbConsts.SUCCESS;
 	}
@@ -277,7 +279,7 @@ public class AdbModule implements AdbConsts {
 	 * @return SUCCESS
 	 */
 	public int downloadFile(String device, String fromPath, String toPath) {
-		LogAdb.info(LOG_DOWNLOAD_FILE + fromPath);
+		logAdb.info(LOG_DOWNLOAD_FILE + fromPath);
 
 		if (toPath == null) {
 			toPath = "";
@@ -288,7 +290,7 @@ public class AdbModule implements AdbConsts {
 					toPath);
 		}
 		runAdb(device, cmds);
-		LogAdb.info(LOG_END_DOWNLOAD_FILE + toPath);
+		logAdb.info(LOG_END_DOWNLOAD_FILE + toPath);
 		return AdbConsts.SUCCESS;
 	}
 
@@ -336,22 +338,22 @@ public class AdbModule implements AdbConsts {
 
 	protected String install(String cmd, String device, String pathApp,
 			boolean autoStart) throws InstallException {
-		LogAdb.info(LOG_INSTALL.replace(MASK_FILE, pathApp));
-		LogAdb.info(LOG_UPLOAD.replace(MASK_FILE, pathApp));
+		logAdb.info(LOG_INSTALL.replace(MASK_FILE, pathApp));
+		logAdb.info(LOG_UPLOAD.replace(MASK_FILE, pathApp));
 		String[] cmds = cmd.split(" ");
 		for (int i = 0; i < cmds.length; i++) {
 			cmds[i] = cmds[i].replace(MASK_FILE, pathApp);
 		}
 		String[] res = null;
 		try {
-			res = runAdb(device, cmds, new InstallFormatLog()).split("\\n");
+			res = runAdb(device, cmds, new InstallFormatLog(logAdb)).split("\\n");
 		} catch (AdbError e) {
-			LogAdb.error(LOG_INSTALL_FAIL.replace(MASK_FILE, pathApp));
+			logAdb.error(LOG_INSTALL_FAIL.replace(MASK_FILE, pathApp));
 			throw InstallException.createInstallException(e);
 
 		}
 		if ((res == null) || (res.length < 1)) {
-			LogAdb.error(LOG_INSTALL_FAIL.replace(MASK_FILE, pathApp));
+			logAdb.error(LOG_INSTALL_FAIL.replace(MASK_FILE, pathApp));
 			throw InstallException.createInstallException((String) null);
 		}
 		if (res[res.length - 1].startsWith(STR_FAILTURE)) {
@@ -360,12 +362,12 @@ public class AdbModule implements AdbConsts {
 			String errorMessage = AdbUtils
 					.getResultPattern(message, "\\[.*\\]");
 
-			LogAdb.error(LOG_INSTALL_FAIL_MESSAGE.replace(MASK_FILE, pathApp)
+			logAdb.error(LOG_INSTALL_FAIL_MESSAGE.replace(MASK_FILE, pathApp)
 					.replace(MASK_MESSAGE, errorMessage));
 			throw InstallException.createInstallException(errorMessage);
 			// return FAILTURE;
 		}
-		LogAdb.info(LOG_INSTALL_COMPLITE.replace(MASK_FILE, pathApp));
+		logAdb.info(LOG_INSTALL_COMPLITE.replace(MASK_FILE, pathApp));
 		AdbPackage adbPackage = getInfoApk(pathApp);
 		if (autoStart) {
 			adbPackage.setDevice(device);
@@ -390,29 +392,29 @@ public class AdbModule implements AdbConsts {
 	}
 
 	public void startActivity(String device, String app, String activity) {
-		LogAdb.info(LOG_START.replace(MASK_APP, app));
+		logAdb.info(LOG_START.replace(MASK_APP, app));
 		runAdb(device,
 				CMD_START.replace(MASK_APP, app)
 						.replace("%activity%", activity).split(" "),
-				new StartFormatLog());
+				new StartFormatLog(logAdb));
 	}
 
 	public void debugActivity(String device, String app, String activity) {
-		LogAdb.info(LOG_DEBUG.replace(MASK_APP, app));
+		logAdb.info(LOG_DEBUG.replace(MASK_APP, app));
 		runAdb(device,
 				CMD_DEBUG.replace(MASK_APP, app)
 						.replace("%activity%", activity).split(" "),
-				new StartFormatLog());
+				new StartFormatLog(logAdb));
 	}
 
 	public void waitDevice() {
-		LogAdb.info(LOG_START_WAIT);
+		logAdb.info(LOG_START_WAIT);
 		runAdb(null, CMD_WAIT.split(" "));
-		LogAdb.info(LOG_END_WAIT);
+		logAdb.info(LOG_END_WAIT);
 	}
 
 	public List<AdbDevice> devices() {
-		LogAdb.info(LOG_GET_DEVICES);
+		logAdb.info(LOG_GET_DEVICES);
 		String ss[] = runAdb(null, CMD_DEVICES).split("\\n");
 		List<AdbDevice> devices = new ArrayList<AdbDevice>();
 		for (int i = 1; i < ss.length; i++) {
@@ -422,7 +424,7 @@ public class AdbModule implements AdbConsts {
 			}
 			devices.add(new AdbDevice(tmp[0], tmp[1], this));
 		}
-		LogAdb.info(LOG_END_LIST_DEVICES);
+		logAdb.info(LOG_END_LIST_DEVICES);
 		return devices;
 	}
 
@@ -454,10 +456,10 @@ public class AdbModule implements AdbConsts {
 
 	public List<AdbPackage> getPackages(String device, String fileIgnoreFilter)
 			throws NotAccessPackageManager {
-		// LogAdb.info(LOG_LIST_PACKAGES);
-		LogAdb.info(LOG_START_GET_PACKAGES);
+		// logAdb.info(LOG_LIST_PACKAGES);
+		logAdb.info(LOG_START_GET_PACKAGES);
 		String result[] = runAdb(device, CMD_LIST_PACKAGES.split(" "),
-				new PackagesFormatLog(fileIgnoreFilter)).split("\\n");
+				new PackagesFormatLog(logAdb,fileIgnoreFilter)).split("\\n");
 		if (result.length > 0) {
 			if (result[result.length - 1]
 					.equals(AdbConsts.STR_ERROR_NOT_ACCESS_PACKAGE_MANAGER)) {
@@ -477,13 +479,13 @@ public class AdbModule implements AdbConsts {
 					|| (!tmp[0].matches(fileIgnoreFilter)))
 				packages.add(new AdbPackage(this, tmp[1], tmp[0], device));
 		}
-		LogAdb.info(LOG_COUNT_PACKAGES, packages.size());
-		// LogAdb.info(LOG_END_LIST_PACKAGES);
+		logAdb.info(LOG_COUNT_PACKAGES, packages.size());
+		// logAdb.info(LOG_END_LIST_PACKAGES);
 		return packages;
 	}
 
 	public void reboot(String device) {
-		LogAdb.info(LOG_REBOOT);
+		logAdb.info(LOG_REBOOT);
 		runAdb(device, CMD_REBOOT.split(" "));
 	}
 
@@ -492,9 +494,9 @@ public class AdbModule implements AdbConsts {
 	}
 
 	public void sendKeyCode(String device, int keyCode) {
-		LogAdb.info(LOG_SEND_KEYCODE + keyCode);
+		logAdb.info(LOG_SEND_KEYCODE + keyCode);
 		runAdb(device, CMD_SEND_KEYCODE + keyCode);
-		LogAdb.info(LOG_COMPLITE_SEND_KEYCODE);
+		logAdb.info(LOG_COMPLITE_SEND_KEYCODE);
 	}
 
 	public void sendKeyCode(AdbDevice device, int keyCode) {
@@ -505,12 +507,12 @@ public class AdbModule implements AdbConsts {
 		if (existProcess()) {
 			stopCurrentProcess();
 		}
-		LogAdb.info(LOG_STOP_ADB);
+		logAdb.info(LOG_STOP_ADB);
 		runAdb(null, CMD_STOP_ADB);
 	}
 
 	public int connet(String address) {
-		LogAdb.info(LOG_START_CONNECT.replace(MASK_TO, address));
+		logAdb.info(LOG_START_CONNECT.replace(MASK_TO, address));
 		if (!address.matches(VALID_ADRESS)) {
 			address += ":" + DEFAULT_PORT;
 		}
@@ -518,29 +520,29 @@ public class AdbModule implements AdbConsts {
 				.split("\\n");
 		;
 		if (res[res.length - 1].matches(STR_CONNECT_COMPLITE)) {
-			LogAdb.info(LOG_END_CONNECT.replace(MASK_TO, address));
+			logAdb.info(LOG_END_CONNECT.replace(MASK_TO, address));
 			return SUCCESS;
 		} else {
-			LogAdb.error(LOG_CONNECT_FAIL.replace(MASK_TO, address));
+			logAdb.error(LOG_CONNECT_FAIL.replace(MASK_TO, address));
 			return FAILTURE;
 		}
 
 	}
 
 	public void disconnet(String address) {
-		LogAdb.info(LOG_START_DISCONNECT.replace(MASK_FROM, address));
+		logAdb.info(LOG_START_DISCONNECT.replace(MASK_FROM, address));
 		runAdb(null, CMD_DISCONNECT.replace(MASK_FROM, address));
-		LogAdb.info(LOG_END_DISCONNECT.replace(MASK_FROM, address));
+		logAdb.info(LOG_END_DISCONNECT.replace(MASK_FROM, address));
 	}
 
 	public void start() {
-		LogAdb.info(LOG_START_ADB);
+		logAdb.info(LOG_START_ADB);
 		runAdb(null, CMD_START_ADB);
-		LogAdb.info(LOG_END_START_ADB);
+		logAdb.info(LOG_END_START_ADB);
 	}
 
 	public void restart() {
-		LogAdb.info(LOG_RESTART_ADB);
+		logAdb.info(LOG_RESTART_ADB);
 		stop();
 		start();
 	}
@@ -556,7 +558,7 @@ public class AdbModule implements AdbConsts {
 	 *            - count events
 	 */
 	public void monkey(String device, String app, int count) {
-		LogAdb.info(LOG_MONKEY.replace(MASK_APP, app));
+		logAdb.info(LOG_MONKEY.replace(MASK_APP, app));
 		String cmd = CMD_MONKEY.replace(MASK_APP, app);
 		cmd = cmd.replace(MASK_COUNT, String.valueOf(count));
 		runAdb(device, cmd);
@@ -564,9 +566,9 @@ public class AdbModule implements AdbConsts {
 	}
 
 	public void clearTemp(String device) {
-		LogAdb.info(LOG_CLEAR_TMP_START);
+		logAdb.info(LOG_CLEAR_TMP_START);
 		runAdb(device, CMD_CLEAR_TMP.split(" "));
-		LogAdb.info(LOG_CLEAR_TMP_END);
+		logAdb.info(LOG_CLEAR_TMP_END);
 	}
 
 	public void clearTemp(AdbDevice device) {
@@ -575,9 +577,9 @@ public class AdbModule implements AdbConsts {
 
 	public Map<String, String> getPropertiesDevice(String device) {
 
-		LogAdb.info(String.format(LOG_GET_PROPERTIES_START, device));
+		logAdb.info(String.format(LOG_GET_PROPERTIES_START, device));
 		String[] res = runAdb(device, CMD_GET_PROP.split(" "),
-				new GetPropertiesDeviceFormatLog()).split("\\n");
+				new GetPropertiesDeviceFormatLog(logAdb)).split("\\n");
 		Map<String, String> map = new HashMap<String, String>();
 		for (String string : res) {
 
@@ -589,7 +591,7 @@ public class AdbModule implements AdbConsts {
 				}
 			}
 		}
-		// LogAdb.info(LOG_GET_PROPERTIES_END);
+		// logAdb.info(LOG_GET_PROPERTIES_END);
 		return map;
 
 	}
@@ -649,8 +651,8 @@ public class AdbModule implements AdbConsts {
 			// Date(System.currentTimeMillis()).toLocaleString()+"] : ");
 			// System.out.print(new Time(System.currentTimeMillis())+" : ");
 			// System.out.println("Exec " + cmd);
-			// LogAdb.info("Exec " + cmd);
-			// LogAdb.info("start process");
+			// logAdb.info("Exec " + cmd);
+			// logAdb.info("start process");
 			currentProcess = run.exec(cmds);
 			AdbConsoleThread consoleThread = new AdbConsoleThread(
 					currentProcess, formatLog);
@@ -659,7 +661,7 @@ public class AdbModule implements AdbConsts {
 
 			currentProcess.waitFor();
 
-			// LogAdb.info("end process");
+			// logAdb.info("end process");
 			// currentProcess.destroy();
 			if (currentProcess.exitValue() != 0) {
 				InputStreamReader in = new InputStreamReader(
@@ -670,7 +672,7 @@ public class AdbModule implements AdbConsts {
 				String line = buf.readLine();
 				while ((line != null)) {
 					if (!line.equals("")) {
-						LogAdb.error(formatLog.changeLine(line));
+						logAdb.error(formatLog.changeLine(line));
 
 					}
 					lastLine = line;
@@ -679,7 +681,7 @@ public class AdbModule implements AdbConsts {
 				throw new AdbError(lastLine);
 			}
 			// Thread.sleep(10);
-			LogAdb.debug("end process");
+			logAdb.debug("end process");
 			if (consoleThread.isAlive()) {
 				synchronized (consoleThread) {
 					consoleThread.wait(CONSOLE_TIMEOUT);
@@ -688,11 +690,11 @@ public class AdbModule implements AdbConsts {
 			}
 			currentProcess = null;
 			consoleThread.endConsole();
-			LogAdb.debug("Console End");
+			logAdb.debug("Console End");
 			res = consoleThread.getStringConsole();
 			ownerAdb = ownerAdb || res.contains(CONSOLE_STARTED_ADB);
 
-			// LogAdb.info("res process");
+			// logAdb.info("res process");
 		} catch (IOException e) {
 			throw new AdbError(e);
 		} catch (InterruptedException e) {
@@ -706,9 +708,9 @@ public class AdbModule implements AdbConsts {
 	}
 
 	public boolean stopCurrentProcess() {
-		LogAdb.info("Stoped Curent Process");
+		logAdb.info("Stoped Curent Process");
 		if (!existProcess()) {
-			LogAdb.error("Process not started");
+			logAdb.error("Process not started");
 			return false;
 		}
 		currentProcess.destroy();
@@ -832,21 +834,21 @@ public class AdbModule implements AdbConsts {
 	}
 
 	public AdbPackage getInfoApk(String pathApp) {
-		LogAdb.info(LOG_GET_INFO_APK.replace(MASK_FILE, pathApp));
+		logAdb.info(LOG_GET_INFO_APK.replace(MASK_FILE, pathApp));
 		String[] cmds = CMD_GET_INFO_APK.split(" ");
 		for (int i = 0; i < cmds.length; i++) {
 			cmds[i] = cmds[i].replace(MASK_FILE, pathApp);
 		}
-		GetInfoApkFormatLog formatLog = new GetInfoApkFormatLog();
+		GetInfoApkFormatLog formatLog = new GetInfoApkFormatLog(logAdb);
 		try {
 			runAapt(cmds, formatLog).split("\\n");
 		} catch (AdbError e) {
-			LogAdb.error(LOG_INSTALL_FAIL.replace(MASK_FILE, pathApp));
+			logAdb.error(LOG_INSTALL_FAIL.replace(MASK_FILE, pathApp));
 			e.printStackTrace();
 			// throw InstallException.createInstallException(e);
 
 		}
-		LogAdb.info(LOG_GET_INFO_APK_END.replace(MASK_FILE, pathApp));
+		logAdb.info(LOG_GET_INFO_APK_END.replace(MASK_FILE, pathApp));
 		return formatLog.getPackage(this);
 	}
 

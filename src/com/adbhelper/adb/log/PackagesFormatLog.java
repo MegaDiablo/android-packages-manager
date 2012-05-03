@@ -8,9 +8,11 @@ public class PackagesFormatLog extends DefaultFormatLog {
     private String filter;
 
     /**
+     * @param logAdb
      * @param fileIgnoreFilter
-     */
-    public PackagesFormatLog(String fileIgnoreFilter) {
+          */
+    public PackagesFormatLog(LogAdb logAdb,String fileIgnoreFilter) {
+    super(logAdb);
 	filter = fileIgnoreFilter;
     }
 
@@ -22,7 +24,7 @@ public class PackagesFormatLog extends DefaultFormatLog {
     public String changeLine(String line) {
 	if (line.startsWith(STR_ERROR))
 	{
-	    LogAdb.error(line);
+	    error(line);
 	    return null;
 	}
 

@@ -23,13 +23,13 @@ public class TestMain {
 
     public static void main(String[] args) throws IOException {
 	//testing git
-    	
+
     // FileSystemView.getFileSystemView().getSystemIcon(f)
 	// sun.awt.shell.ShellFolder sf =
 	// sun.awt.shell.ShellFolder.getShellFolder(file);
 
 
-	
+
 	String fileAdb = "/home/vbaraznovsky/android/android-sdk-linux/platform-tools/adb";
 	AdbCommand cmd = null;
 	// String fileApk = args[0] + File.separator + "bin" + File.separator+
@@ -71,7 +71,7 @@ System.out.println("endddd");
 	//adb.waitDevice();
 	final List<AdbDevice> devices = adb.devices();
 	if (devices.isEmpty()) {
-	    LogAdb.error("Not found devices");
+		System.err.println("Not found devices");
 	    return;
 	}
 
@@ -82,7 +82,7 @@ System.out.println("endddd");
 	}
 
 	Thread thr=new Thread(new Runnable() {
-		
+
 		@Override
 		public void run() {
 			try {
@@ -97,15 +97,15 @@ System.out.println("endddd");
 			System.out.println("endThread");
 		}
 	});
-thr.run();	
+thr.run();
 try {
 	Thread.sleep(100);
 } catch (InterruptedException e) {
 	e.printStackTrace();
 }
-	
+
 	adb.stopCurrentProcess();
-	LogAdb.debug("end Main");
+	//LogAdb.debug("end Main");
 	//adb.finishAdb();
 	// devices.get(0).reboot();
 	// adb.uninstall(null, "com.ximad.testtv");

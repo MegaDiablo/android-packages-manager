@@ -16,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) {
 	//UIManager.get(null);
-	
+
 	//FileSystemView.getFileSystemView().getSystemIcon(f)
 	String fileAdb = AdbModule.DEFAULT_PATH_ABD;
 	AdbCommand cmd = null;
@@ -47,19 +47,19 @@ public class Main {
 		}
 		if(!isCmd)
 		    fileAdb+=" "+args[i];
-		
+
 	    }
-	    
+
 	}
 	AdbModule adb = new AdbModule(fileAdb);
 	if (adb.devices().isEmpty())
 	    {
-	    LogAdb.error("Not found devices");
+		System.err.println("Not found devices");
 	    return;}
     try {
 	switch (cmd) {
 	case REINSTALL:
-	
+
 			adb.reinstall(divice, app, activity, file);
 		break;
 	case INSTALL:
@@ -74,12 +74,12 @@ public class Main {
     } catch (InstallException e) {
     	e.printStackTrace();
 	}
-    
+
 	// adb.uninstall(null, "com.ximad.testtv");
 	// adb.uninstall(null, "com.ximad.dropletstv");
 	// adb.install(null,
 	// "d:\\workspaceEclipse\\ShotBallsTVFragment\\bin\\ShotBallsTVFragment.apk");
 	// adb.start(null, "com.ximad.dropletstv",".SplashActivity");
     }
-    
+
 }

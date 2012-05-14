@@ -5,6 +5,5 @@
 	<classpathentry kind="src" path="src-gui"/>
 	<classpathentry kind="src" path="src-core"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="libs/adb-helper.jar" sourcepath="/adbHelper"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

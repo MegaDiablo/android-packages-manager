@@ -44,7 +44,7 @@ public class AdbConsoleThread extends Thread {
 			while ((line != null)) {
 				if (!line.equals("")) {
 					res.append(line).append("\n");
-					LogAdb.info(formatLog.changeLine(line));
+					formatLog.info(formatLog.changeLine(line));
 
 				}
 				line = buf.readLine();
@@ -70,7 +70,7 @@ public class AdbConsoleThread extends Thread {
 				line = bufferedReader.readLine();
 				if ((line != null) && (!line.equals(""))) {
 					console.append(line).append("\n");
-					LogAdb.info(formatLog.changeLine(line));
+					formatLog.info(formatLog.changeLine(line));
 
 				}
 
@@ -90,7 +90,7 @@ public class AdbConsoleThread extends Thread {
 			while ((isLive()) && ((line = bufferedReader.readLine()) != null)) {
 				if (!line.equals("")) {
 					console.append(line).append("\n");
-					LogAdb.info(formatLog.changeLine(line));
+					formatLog.info(formatLog.changeLine(line));
 
 				}
 

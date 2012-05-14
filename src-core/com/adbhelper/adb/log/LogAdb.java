@@ -2,44 +2,61 @@ package com.adbhelper.adb.log;
 
 import java.util.Date;
 
+import com.adbhelper.adb.ILogListener;
+
 public class LogAdb {
 
 	private static boolean debugMode = false;
+	private ILogListener logListener=null;
 
 	@SuppressWarnings("deprecation")
-	public static void debug(String log) {
+	public void debug(String log) {
 		if (!debugMode) {
 			return;
 		}
 		if (log == null)
 			return;
+
+		long currentTime = System.currentTimeMillis();
 		System.out.print("["
-				+ new Date(System.currentTimeMillis()).toLocaleString()
+				+ new Date(currentTime).toLocaleString()
 				+ "] : (--Debug--) ");
 		// System.out.print(new Time(System.currentTimeMillis())+" : ");
 		System.out.print(log);
 		System.out.println();
+		if (logListener!=null){
+			logListener.onDebug(currentTime, log);
+		}
+
 	}
 
-	public static void info(String log, Object... args) {
+	public void info(String log, Object... args) {
 		info(String.format(log, args));
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void info(String log) {
+	public void info(String log) {
 		if (log == null)
 			return;
-		printInfo("[" + new Date(System.currentTimeMillis()).toLocaleString()
+		long currentTime = System.currentTimeMillis();
+		printInfo("[" + new Date(currentTime).toLocaleString()
 				+ "] : ", false);
 		// System.out.print(new Time(System.currentTimeMillis())+" : ");
 		printInfo(log,true);
+		if (logListener!=null){
+			logListener.onInfo(currentTime, log);
+		}
+
 	}
 
-	public static void printInfo(String log, Object... args) {
+	public void printInfo(String log, Object... args) {
 		printInfo(String.format(log, args), true);
+		if (logListener!=null){
+			logListener.onInfo(-1, log);
+		}
 	}
 
-	private static void printInfo(String log, boolean newLine) {
+	private void printInfo(String log, boolean newLine) {
 		if (log == null)
 			return;
 		System.out.print(log);
@@ -49,11 +66,12 @@ public class LogAdb {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void error(String log) {
+	public void error(String log) {
 		if (log == null)
 			return;
+		long currentTime = System.currentTimeMillis();
 		System.out.print("["
-				+ new Date(System.currentTimeMillis()).toLocaleString()
+				+ new Date(currentTime).toLocaleString()
 				+ "] : ");
 		System.out.flush();
 
@@ -66,6 +84,9 @@ public class LogAdb {
 		System.err.println(log);
 
 		System.err.flush();
+		if (logListener!=null){
+			logListener.onError(currentTime, log);
+		}
 		try {
 			Thread.sleep(10);
 		} catch (InterruptedException e) {

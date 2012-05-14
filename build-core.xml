@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="release">
-	<tstamp>
-		<format property="TODAY_UK" pattern="yyyy_MM_dd" locale="en,UK" />
-	</tstamp>
 
+	<propertyfile file="build.properties">
+		<entry key="app.build.number" default="0" type="int" operation="+" value="1" />
+	</propertyfile>
 	<property file="build.properties" />
 	<property name="path_libs" value="bin_libs" />
-	<property name="app.build.jar.path" value="${path_libs}/beta/${app.build.jar.name}.jar" />
-	<property name="app.build.currentversion.path" value="${path_libs}/beta/${app.build.jar.name}.jar" />
-
+	<property name="app.build.jar.path" value="${path_libs}/${app.build.jar.name}.jar" />
+	<property name="app.build.currentversion.path" value="${path_libs}/versions/${app.build.jar.name}-${app.build.verision}.${app.build.number}.jar" />
 
 	<property name="app.build" value="bin" />
 	<property name="app.build.bin" value="${app.build}/bin" />
@@ -26,7 +25,7 @@
 		<delete dir="${app.build.src}" />
 	</target>
 	<target name="clean_bin">
-	    <delete dir="${app.build.bin}" />
+		<delete dir="${app.build.bin}" />
 		<delete dir="${app.build.src}" />
 	</target>
 
@@ -43,7 +42,7 @@
 	</target>
 	<target name="precompile" depends="clean,create-dir,copy">
 		<replace dir="${app.build.src}" encoding="UTF-8">
-			<replacefilter token="%%VERSION%%" value="${app.build.verision}.${app.build.number}(beta)" />
+			<replacefilter token="%%VERSION%%" value="${app.build.verision}.${app.build.number}" />
 		</replace>
 
 		<echo>Finished</echo>
@@ -56,22 +55,27 @@
 		    <fileset dir="${app.build.src}" includes="**/*.*" excludes="**/*.java" />
 		</copy>
 	</target>
-
 	<target name="build-jar" depends="">
-
 		<delete file="${app.build.jar.path}" />
 		<jar destfile="${app.build.jar.path}">
+
 			<fileset dir="${app.build.bin}" includes="**/*.*" excludes="com/adbhelper/*.class" />
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
 				<attribute name="Class-Path" value="." />
 				<attribute name="Built-By" value="Vladimir Baraznovsky" />
 				<section name="common">
-					<attribute name="Specification-Version" value="${app.build.verision}-beta" />
-					<attribute name="Implementation-Version" value="${app.build.verision} Build ${app.build.number}(beta) ${TODAY}" />
+					<!--
+					  <attribute name="Specification-Title" value="Example"/>
+				      <attribute name="Specification-Vendor" value="Example Organization"/>
+				      <attribute name="Implementation-Title" value="common"/>
+				 	  <attribute name="Implementation-Vendor" value="Example Corp."/>-->
+					<attribute name="Specification-Version" value="${app.build.verision}" />
+					<attribute name="Implementation-Version" value="${app.build.verision} Build ${app.build.number} ${TODAY}" />
 				</section>
 			</manifest>
 		</jar>
+		<copyfile dest="${app.build.currentversion.path}" src="${app.build.jar.path}" />
 	</target>
 
 </project>

@@ -27,7 +27,11 @@ public class TestCommand {
 			// AdbModule adb=new AdbModule("adb");
 			// adb.devices().get(0).getPackagesNonSystem().get(18).monkey(5000);
 			try {
+<<<<<<< HEAD
 				adb.devices().get(0).updatePackages(true);
+=======
+		//		adb.devices().get(0).updatePackages(true);
+>>>>>>> refs/heads/core
 				List<AdbPackage> packages = adb.devices().get(0)
 						.getPackagesNonSystem();
 

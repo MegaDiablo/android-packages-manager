@@ -5,7 +5,7 @@
 	</tstamp>
 
 	<property file="build.properties" />
-	<property name="path_libs" value="bin_libs" />
+	<property name="path_libs" value="builds/apm-core" />
 	<property name="app.build.jar.path" value="${path_libs}/beta/${app.build.jar.name}.jar" />
 	<property name="app.build.currentversion.path" value="${path_libs}/beta/${app.build.jar.name}.jar" />
 

@@ -16,7 +16,7 @@ public class TestCommand {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		File propfile=new File("/home/vbaraznovsky/android/android-sdk-linux/app.prop");
 		AdbModule adb;
 		try {
@@ -27,11 +27,9 @@ public class TestCommand {
 			// AdbModule adb=new AdbModule("adb");
 			// adb.devices().get(0).getPackagesNonSystem().get(18).monkey(5000);
 			try {
-<<<<<<< HEAD
 				adb.devices().get(0).updatePackages(true);
-=======
+
 		//		adb.devices().get(0).updatePackages(true);
->>>>>>> refs/heads/core
 				List<AdbPackage> packages = adb.devices().get(0)
 						.getPackagesNonSystem();
 

@@ -1,0 +1,54 @@
+[+] - Add
+[*] - Change
+[-] - Fix
+
+AdbHelper 1.2.1
+[-] Add sleep before end exec adb
+[-] Fix result FAILTURE
+[+] Add default WITH_SYSTEM_PACKAGE
+[+] Add Exceptions in Install
+
+AdbHelper 1.3.1
+[+]support aapt
+
+AdbHelper 1.3.2
+[+] JavaDoc for install
+[+] Add reinstall in AdbDevice
+
+AdbHelper 1.3.3
+[+] Add install error [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+
+AdbHelper 1.3.4
+[-] fix bug with [INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES]
+
+AdbHelper 1.3.5
+[+] Support fileAppt in constructor
+[+] Аdd Exception of install INSTALL_FAILED_INVALID_INSTALL_LOCATION
+
+AdbHelper 1.4.1
+[+] Support label of Package
+
+AdbHelper 1.4.2
+[+] Add Monkey
+
+AdbHelper 1.4.3
+[+] Show current version
+
+AdbHelper 1.4.4
+[+] Add support getting permissions from apk
+[+] Add support locale of permissions
+[+] Add command clear temp
+[+] Add Debug
+
+AdbHelper 1.4.5
+[+] Add getting device's properties
+[*] Change label device
+
+AdbHelper 1.4.6
+[-] Fix emulator's label
+
+AdbHelper 1.4.7
+[+] add function "update info about package"
+
+AdbHelper 1.4.8
+[-] Fix permisson's labels

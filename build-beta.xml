@@ -12,9 +12,9 @@
 
 	<property name="app.build" value="bin" />
 	<property name="app.build.bin" value="${app.build}/bin" />
-	<property name="app.build.src" value="${app.build}/src" />
+	<property name="app.build.src" value="${app.build}/src-core" />
 	<property name="app.libs" value="" />
-	<property name="app.src" value="src" />
+	<property name="app.src" value="src-core" />
 
 
 	<target name="release" depends="clean,compile,build-jar,clean_bin">

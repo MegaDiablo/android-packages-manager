@@ -1,7 +1,7 @@
 <project name="Jimm" default="release">
 
 	<property name="app.short-name" value="apm" />
-	<property name="version" value="0.5.1" />
+	<property name="version" value="0.6.0" />
 	<property name="version.apm" value="${version}" />
 
 	<property name="name.src" value="src" />

@@ -95,7 +95,7 @@ public class MainFrame extends JFrame {
 		mLabelListPackages.setFont(new Font("Tahoma", Font.BOLD, 11));
 		mLabelListPackages.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(final MouseEvent e) {
 				// TODO Bug
 				mCore.refreshPackages();
 			}
@@ -146,7 +146,7 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
-	public void setFilter(String pFilter) {
+	public void setFilter(final String pFilter) {
 		mSearchPackages.setFilter(pFilter);
 	}
 

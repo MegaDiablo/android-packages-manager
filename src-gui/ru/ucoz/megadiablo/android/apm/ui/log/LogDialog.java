@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -47,6 +48,7 @@ public class LogDialog extends JDialog implements ILogListener {
 	public LogDialog(final Core pCore) {
 		mCore = pCore;
 		setMinimumSize(new Dimension(320, 240));
+		setSize(new Dimension(640, 480));
 		setTitle("Лог");
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -62,10 +64,6 @@ public class LogDialog extends JDialog implements ILogListener {
 
 		tableLog.setModel(mLogTableModel);
 		initLog();
-		tableLog.getColumnModel().getColumn(0).setPreferredWidth(116);
-		tableLog.getColumnModel().getColumn(0).setMaxWidth(250);
-		tableLog.getColumnModel().getColumn(1).setMaxWidth(75);
-		tableLog.getColumnModel().getColumn(2).setPreferredWidth(226);
 		scrollPane.setViewportView(tableLog);
 
 		JPanel panel_1 = new JPanel();
@@ -97,9 +95,10 @@ public class LogDialog extends JDialog implements ILogListener {
 
 	private void initLog() {
 		mLogTableModel.setDataVector(new Object[][] {}, TITLE_LOG);
-		tableLog.getColumnModel().getColumn(0).setPreferredWidth(116);
-		tableLog.getColumnModel().getColumn(0).setMaxWidth(250);
-		tableLog.getColumnModel().getColumn(1).setMaxWidth(75);
+		tableLog.getColumnModel().getColumn(0).setPreferredWidth(140);
+		tableLog.getColumnModel().getColumn(0).setMaxWidth(300);
+		tableLog.getColumnModel().getColumn(1).setMaxWidth(50);
+
 		tableLog.getColumnModel().getColumn(2).setPreferredWidth(226);
 
 	}
@@ -130,7 +129,8 @@ public class LogDialog extends JDialog implements ILogListener {
 	}
 
 	protected Object formatTime(final long pTime) {
-		return new Date(pTime);
+		Date date = new Date(pTime);
+		return DateFormat.getInstance().format(date);
 	}
 
 	@Override

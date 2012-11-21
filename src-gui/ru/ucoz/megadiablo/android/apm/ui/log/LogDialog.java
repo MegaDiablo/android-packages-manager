@@ -96,8 +96,7 @@ public class LogDialog extends JDialog implements ILogListener {
 		mLogTableModel.setDataVector(new Object[][] {}, TITLE_LOG);
 		tableLog.getColumnModel().getColumn(0).setPreferredWidth(140);
 		tableLog.getColumnModel().getColumn(0).setMaxWidth(300);
-		tableLog.getColumnModel().getColumn(1).setMaxWidth(50);
-
+		tableLog.getColumnModel().getColumn(1).setMaxWidth(150);
 		tableLog.getColumnModel().getColumn(2).setPreferredWidth(226);
 		int countColumn = tableLog.getColumnCount();
 		int[] widhts = new int[countColumn];
@@ -153,7 +152,7 @@ public class LogDialog extends JDialog implements ILogListener {
 	@Override
 	public void onDebug(final long pTime, final String pMessage) {
 
-		addRowMessage(TypeMessage.ERROR, pTime, pMessage);
+		addRowMessage(TypeMessage.DEBUG, pTime, pMessage);
 
 	}
 

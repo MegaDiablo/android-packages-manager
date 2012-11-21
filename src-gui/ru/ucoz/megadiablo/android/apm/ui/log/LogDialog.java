@@ -9,6 +9,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultRowSorter;
@@ -85,6 +87,7 @@ public class LogDialog extends JDialog implements ILogListener {
 			}
 		};
 		tableLog.setModel(mLogTableModel);
+
 		initLog();
 		scrollPane.setViewportView(tableLog);
 
@@ -115,12 +118,33 @@ public class LogDialog extends JDialog implements ILogListener {
 		JComboBox comboBox = new JComboBox();
 
 		comboBox.setModel(new DefaultComboBoxModel(LIST_TYPES_FILTER));
+		comboBox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(final ItemEvent e) {
+
+				Object[] objects = e.getItemSelectable().getSelectedObjects();
+
+				if (objects != null && objects.length > 0) {
+					Object object = objects[0];
+					if (object instanceof TypeMessage) {
+						setFilterType((TypeMessage) object);
+					} else {
+						setFilterType(null);
+					}
+
+				}
+			}
+
+
+		});
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.insets = new Insets(5, 0, 5, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.gridx = 1;
 		gbc_comboBox.gridy = 0;
 		panel_1.add(comboBox, gbc_comboBox);
+
+
 
 		mCore.setLogListener(this);
 		mSorter = new TableRowSorter(mLogTableModel);
@@ -134,7 +158,11 @@ public class LogDialog extends JDialog implements ILogListener {
 	}
 
 
+	public void setFilterType(final TypeMessage type){
+		mFilter.setFilteredType(type);
+		mSorter.setRowFilter(mFilter);
 
+	}
 	private void initLog() {
 		mLogTableModel.setDataVector(new Object[][] {}, TITLE_LOG);
 		tableLog.getColumnModel().getColumn(COLUMN_TIME).setMaxWidth(300);
@@ -147,6 +175,7 @@ public class LogDialog extends JDialog implements ILogListener {
 		for (int i = 0; i < widhts.length; i++) {
 			tableLog.getColumnModel().getColumn(i).setCellRenderer(typedColumnCellRenderer);
 		}
+		tableLog.updateUI();
 
 	}
 

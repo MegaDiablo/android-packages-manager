@@ -3,6 +3,7 @@ package ru.ucoz.megadiablo.android.apm.ui.log;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,6 +12,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -27,7 +29,8 @@ import com.adbhelper.adb.ILogListener;
  *
  */
 public class LogDialog extends JDialog implements ILogListener {
-
+	private static final int COLUMN_TYPE = 1;
+	private static final int COLUMN_TIME = 0;
 	private static final String[] TITLE_LOG = new String[] {
 			"\u0412\u0440\u0435\u043C\u044F",
 			"\u0422\u0438\u043F",
@@ -55,6 +58,7 @@ public class LogDialog extends JDialog implements ILogListener {
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 
 		tableLog = new JTable();
+		tableLog.setFont(new Font("Dialog", Font.PLAIN, 10));
 		mLogTableModel = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(final int row, final int column) {
@@ -94,10 +98,10 @@ public class LogDialog extends JDialog implements ILogListener {
 
 	private void initLog() {
 		mLogTableModel.setDataVector(new Object[][] {}, TITLE_LOG);
-		tableLog.getColumnModel().getColumn(0).setPreferredWidth(140);
-		tableLog.getColumnModel().getColumn(0).setMaxWidth(300);
-		tableLog.getColumnModel().getColumn(1).setMaxWidth(150);
-		tableLog.getColumnModel().getColumn(2).setPreferredWidth(226);
+		tableLog.getColumnModel().getColumn(COLUMN_TIME).setMaxWidth(300);
+		tableLog.getColumnModel().getColumn(COLUMN_TIME).setPreferredWidth(80);
+		tableLog.getColumnModel().getColumn(COLUMN_TYPE).setMaxWidth(200);
+		tableLog.getColumnModel().getColumn(COLUMN_TYPE).setPreferredWidth(50);
 		int countColumn = tableLog.getColumnCount();
 		int[] widhts = new int[countColumn];
 		TypedColumnCellRenderer typedColumnCellRenderer = new TypedColumnCellRenderer();
@@ -157,18 +161,24 @@ public class LogDialog extends JDialog implements ILogListener {
 	}
 
 	public class TypedColumnCellRenderer extends DefaultTableCellRenderer {
-		  @Override
+
+
+		@Override
 		  public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int col) {
 
 			Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-
 			if (value instanceof Message) {
 				Message message = (Message) value;
 				component.setForeground(message.getTypeMessage().getColor());
 			}
+			JLabel label = (JLabel) component;
+			if (col == COLUMN_TYPE) {
 
-		  //Return the JLabel which renders the cell.
-		  return component;
+				label.setHorizontalAlignment(JLabel.CENTER);
+			} else {
+				label.setHorizontalAlignment(JLabel.LEFT);
+			}
+			return component;
 
 		}
 };

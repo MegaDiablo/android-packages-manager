@@ -30,7 +30,8 @@ public class Message {
 	public static Message createMessageTime(final TypeMessage pType,
 			final long pTime) {
 		Date date = new Date(pTime);
-		String message = DateFormat.getDateInstance().format(date);
+
+		String message = DateFormat.getInstance().format(date);
 		return createMessage(pType, message);
 	}
 

@@ -25,6 +25,11 @@ import com.adbhelper.adb.ILogListener;
  */
 public class LogDialog extends JDialog implements ILogListener {
 
+	private static final String[] TITLE_LOG = new String[] {
+			"\u0412\u0440\u0435\u043C\u044F",
+			"\u0422\u0438\u043F",
+			"\u0421\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u0435" };
+
 	private static final long serialVersionUID = -7228934472909425734L;
 
 	private Core mCore;
@@ -47,19 +52,11 @@ public class LogDialog extends JDialog implements ILogListener {
 		mLogTableModel =
 				new DefaultTableModel(
 						new Object[][] {},
-						new String[] {
-								"\u0412\u0440\u0435\u043C\u044F",
-								"\u0422\u0438\u043F",
-								"\u0421\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u0435" }) {
-					boolean[] columnEditables = new boolean[] {
-							false,
-							false,
-							false };
-
+						TITLE_LOG) {
 					@Override
 					public boolean isCellEditable(final int row,
 							final int column) {
-						return columnEditables[column];
+						return false;
 					}
 				};
 		tableLog.setModel(mLogTableModel);

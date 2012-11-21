@@ -1,7 +1,6 @@
 package ru.ucoz.megadiablo.android.apm.ui.log;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -162,15 +161,15 @@ public class LogDialog extends JDialog implements ILogListener {
 		  @Override
 		  public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int col) {
 
-			Component l = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+			Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 
 			if (value instanceof Message) {
 				Message message = (Message) value;
-				l.setForeground(Color.RED);
+				component.setForeground(message.getTypeMessage().getColor());
 			}
 
 		  //Return the JLabel which renders the cell.
-		  return l;
+		  return component;
 
 		}
 };

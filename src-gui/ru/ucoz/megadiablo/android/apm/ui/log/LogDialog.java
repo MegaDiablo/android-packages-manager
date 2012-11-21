@@ -97,19 +97,23 @@ public class LogDialog extends JDialog implements ILogListener {
 
 	@Override
 	public void onInfo(final long pTime, final String pMessage) {
-		addRowLog(new Date(pTime), "info", pMessage);
+		addRowLog(formatTime(pTime), "info", pMessage);
 
+	}
+
+	protected Object formatTime(final long pTime) {
+		return new Date(pTime);
 	}
 
 	@Override
 	public void onError(final long pTime, final String pMessage) {
-		addRowLog(new Date(pTime), "error", pMessage);
+		addRowLog(formatTime(pTime), "error", pMessage);
 
 	}
 
 	@Override
 	public void onDebug(final long pTime, final String pMessage) {
-		addRowLog(new Date(pTime), "debug", pMessage);
+		addRowLog(formatTime(pTime), "debug", pMessage);
 
 	}
 }

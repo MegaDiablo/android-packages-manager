@@ -10,14 +10,18 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultRowSorter;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import ru.ucoz.megadiablo.android.apm.Core;
 
@@ -44,6 +48,8 @@ public class LogDialog extends JDialog implements ILogListener {
 	private DefaultTableModel mLogTableModel;
 
 	private JButton btnClear;
+	private DefaultRowSorter<? extends TableModel,? extends Object> mSorter;
+	private FilterByType mFilter;
 
 	/**
 	 * Create the dialog.
@@ -59,6 +65,9 @@ public class LogDialog extends JDialog implements ILogListener {
 
 		tableLog = new JTable();
 		tableLog.setFont(new Font("Dialog", Font.PLAIN, 10));
+
+	//	mSorter.setRowFilter(new FilterByType());
+
 		mLogTableModel = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(final int row, final int column) {
@@ -94,7 +103,17 @@ public class LogDialog extends JDialog implements ILogListener {
 		panel_1.add(btnClear, gbc_btnClear);
 
 		mCore.setLogListener(this);
+		mSorter = new TableRowSorter(mLogTableModel);
+
+		mFilter = new FilterByType();
+		mSorter.setRowFilter(mFilter);
+
+		tableLog.setRowSorter(mSorter);
+
+
 	}
+
+
 
 	private void initLog() {
 		mLogTableModel.setDataVector(new Object[][] {}, TITLE_LOG);
@@ -128,6 +147,7 @@ public class LogDialog extends JDialog implements ILogListener {
 			final Object pType,
 			final Object pMessage) {
 		mLogTableModel.addRow(new Object[] { pTime, pType, pMessage });
+
 	}
 
 
@@ -135,6 +155,7 @@ public class LogDialog extends JDialog implements ILogListener {
 	@Override
 	public void onInfo(final long pTime, final String pMessage) {
 		addRowMessage(TypeMessage.INFO, pTime, pMessage);
+
 	}
 
 
@@ -145,6 +166,7 @@ public class LogDialog extends JDialog implements ILogListener {
 		Message type = Message.createMessageType(pType);
 		Message message = Message.createMessage(pType, pMessage);
 		addRowLog(time, type, message);
+
 	}
 
 	@Override
@@ -160,7 +182,32 @@ public class LogDialog extends JDialog implements ILogListener {
 
 	}
 
-	public class TypedColumnCellRenderer extends DefaultTableCellRenderer {
+	static class FilterByType extends RowFilter<TableModel, Object> {
+		private TypeMessage mFilteredType = null;
+		@Override
+		public boolean include(final javax.swing.RowFilter.Entry<? extends TableModel, ? extends Object> entry) {
+			if (mFilteredType==null){
+				return true;
+			}
+			int count = entry.getValueCount();
+			for (int i = 0; i < count; i++) {
+				Message value = (Message) entry.getValue(i);
+				if (value.getTypeMessage() == mFilteredType){
+					return true;
+				}
+			}
+
+			return false;
+		}
+		public TypeMessage getFilteredType() {
+			return mFilteredType;
+		}
+		public void setFilteredType(final TypeMessage filteredType) {
+			mFilteredType = filteredType;
+		}
+	}
+
+	public static class TypedColumnCellRenderer extends DefaultTableCellRenderer {
 
 
 		@Override

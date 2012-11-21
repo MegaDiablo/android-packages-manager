@@ -1,20 +1,21 @@
 package ru.ucoz.megadiablo.android.apm.ui.log;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import ru.ucoz.megadiablo.android.apm.Core;
@@ -61,7 +62,6 @@ public class LogDialog extends JDialog implements ILogListener {
 				return false;
 			}
 		};
-
 		tableLog.setModel(mLogTableModel);
 		initLog();
 		scrollPane.setViewportView(tableLog);
@@ -100,6 +100,12 @@ public class LogDialog extends JDialog implements ILogListener {
 		tableLog.getColumnModel().getColumn(1).setMaxWidth(50);
 
 		tableLog.getColumnModel().getColumn(2).setPreferredWidth(226);
+		int countColumn = tableLog.getColumnCount();
+		int[] widhts = new int[countColumn];
+		TypedColumnCellRenderer typedColumnCellRenderer = new TypedColumnCellRenderer();
+		for (int i = 0; i < widhts.length; i++) {
+			tableLog.getColumnModel().getColumn(i).setCellRenderer(typedColumnCellRenderer);
+		}
 
 	}
 
@@ -122,26 +128,50 @@ public class LogDialog extends JDialog implements ILogListener {
 		mLogTableModel.addRow(new Object[] { pTime, pType, pMessage });
 	}
 
+
+
 	@Override
 	public void onInfo(final long pTime, final String pMessage) {
-		addRowLog(formatTime(pTime), "info", pMessage);
-
+		addRowMessage(TypeMessage.INFO, pTime, pMessage);
 	}
 
-	protected Object formatTime(final long pTime) {
-		Date date = new Date(pTime);
-		return DateFormat.getInstance().format(date);
+
+	protected void addRowMessage(final TypeMessage pType,
+			final long pTime,
+			final String pMessage) {
+		Message time = Message.createMessageTime(pType, pTime);
+		Message type = Message.createMessageType(pType);
+		Message message = Message.createMessage(pType, pMessage);
+		addRowLog(time, type, message);
 	}
 
 	@Override
 	public void onError(final long pTime, final String pMessage) {
-		addRowLog(formatTime(pTime), "error", pMessage);
+		addRowMessage(TypeMessage.ERROR, pTime, pMessage);
 
 	}
 
 	@Override
 	public void onDebug(final long pTime, final String pMessage) {
-		addRowLog(formatTime(pTime), "debug", pMessage);
+
+		addRowMessage(TypeMessage.ERROR, pTime, pMessage);
 
 	}
+
+	public class TypedColumnCellRenderer extends DefaultTableCellRenderer {
+		  @Override
+		  public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int col) {
+
+			Component l = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+
+			if (value instanceof Message) {
+				Message message = (Message) value;
+				l.setForeground(Color.RED);
+			}
+
+		  //Return the JLabel which renders the cell.
+		  return l;
+
+		}
+};
 }

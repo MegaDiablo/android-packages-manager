@@ -10,8 +10,10 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultRowSorter;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,7 +43,15 @@ public class LogDialog extends JDialog implements ILogListener {
 			"\u0421\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u0435" };
 
 	private static final long serialVersionUID = -7228934472909425734L;
-
+	private static final Object[] LIST_TYPES_FILTER = new Object[TypeMessage.values().length + 1];
+	static {
+		LIST_TYPES_FILTER[0] = "Весь лог";
+		int i = 1;
+		for (TypeMessage typeMessage : TypeMessage.values()) {
+			LIST_TYPES_FILTER[i] = typeMessage;
+			i++;
+		}
+	}
 	private Core mCore;
 	private JTable tableLog;
 
@@ -81,10 +91,10 @@ public class LogDialog extends JDialog implements ILogListener {
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.NORTH);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[] { 98, 0 };
+		gbl_panel_1.columnWidths = new int[] { 98, 0, 0, 0 };
 		gbl_panel_1.rowHeights = new int[] { 25, 0 };
-		gbl_panel_1.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+		gbl_panel_1.columnWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
 		btnClear = new JButton("Очистить");
@@ -101,6 +111,16 @@ public class LogDialog extends JDialog implements ILogListener {
 		gbc_btnClear.gridx = 0;
 		gbc_btnClear.gridy = 0;
 		panel_1.add(btnClear, gbc_btnClear);
+
+		JComboBox comboBox = new JComboBox();
+
+		comboBox.setModel(new DefaultComboBoxModel(LIST_TYPES_FILTER));
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.insets = new Insets(5, 0, 5, 5);
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.gridx = 1;
+		gbc_comboBox.gridy = 0;
+		panel_1.add(comboBox, gbc_comboBox);
 
 		mCore.setLogListener(this);
 		mSorter = new TableRowSorter(mLogTableModel);

@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -37,6 +39,8 @@ public class LogDialog extends JDialog implements ILogListener {
 
 	private DefaultTableModel mLogTableModel;
 
+	private JButton btnClear;
+
 	/**
 	 * Create the dialog.
 	 */
@@ -49,17 +53,15 @@ public class LogDialog extends JDialog implements ILogListener {
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 
 		tableLog = new JTable();
-		mLogTableModel =
-				new DefaultTableModel(
-						new Object[][] {},
-						TITLE_LOG) {
-					@Override
-					public boolean isCellEditable(final int row,
-							final int column) {
-						return false;
-					}
-				};
+		mLogTableModel = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(final int row, final int column) {
+				return false;
+			}
+		};
+
 		tableLog.setModel(mLogTableModel);
+		initLog();
 		tableLog.getColumnModel().getColumn(0).setPreferredWidth(116);
 		tableLog.getColumnModel().getColumn(0).setMaxWidth(250);
 		tableLog.getColumnModel().getColumn(1).setMaxWidth(75);
@@ -75,7 +77,14 @@ public class LogDialog extends JDialog implements ILogListener {
 		gbl_panel_1.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
-		JButton btnClear = new JButton("Очистить");
+		btnClear = new JButton("Очистить");
+		btnClear.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent arg0) {
+				clearLog();
+			}
+
+		});
 		GridBagConstraints gbc_btnClear = new GridBagConstraints();
 		gbc_btnClear.insets = new Insets(5, 5, 5, 5);
 		gbc_btnClear.anchor = GridBagConstraints.LINE_START;
@@ -84,6 +93,28 @@ public class LogDialog extends JDialog implements ILogListener {
 		panel_1.add(btnClear, gbc_btnClear);
 
 		mCore.setLogListener(this);
+	}
+
+	private void initLog() {
+		mLogTableModel.setDataVector(new Object[][] {}, TITLE_LOG);
+		tableLog.getColumnModel().getColumn(0).setPreferredWidth(116);
+		tableLog.getColumnModel().getColumn(0).setMaxWidth(250);
+		tableLog.getColumnModel().getColumn(1).setMaxWidth(75);
+		tableLog.getColumnModel().getColumn(2).setPreferredWidth(226);
+
+	}
+
+	protected void clearLog() {
+		int countColumn = tableLog.getColumnCount();
+		int[] widhts = new int[countColumn];
+		for (int i = 0; i < widhts.length; i++) {
+			widhts[i] = tableLog.getColumnModel().getColumn(i).getWidth();
+		}
+		initLog();
+		for (int i = 0; i < widhts.length; i++) {
+			tableLog.getColumnModel().getColumn(i).setPreferredWidth(widhts[i]);
+		}
+
 	}
 
 	public void addRowLog(final Object pTime,

@@ -90,4 +90,13 @@ public class LogAdb {
 		}
 
 	}
+
+	public ILogListener getLogListener() {
+		return logListener;
+	}
+
+	public void setLogListener(final ILogListener pLogListener) {
+		logListener = pLogListener;
+	}
+
 }

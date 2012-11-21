@@ -25,6 +25,8 @@ public class LogDialog extends JDialog {
 	private Core mCore;
 	private JTable tableLog;
 
+	private DefaultTableModel mLogTableModel;
+
 	/**
 	 * Create the dialog.
 	 */
@@ -54,7 +56,7 @@ public class LogDialog extends JDialog {
 		tableLog = new JTable();
 		tableLog.setRowSelectionAllowed(false);
 		tableLog.setColumnSelectionAllowed(true);
-		tableLog.setModel(new DefaultTableModel(
+		mLogTableModel = new DefaultTableModel(
 			new Object[][] {
 				{null, null, null},
 				{null, null, null},
@@ -72,7 +74,9 @@ public class LogDialog extends JDialog {
 			public boolean isCellEditable(final int row, final int column) {
 				return columnEditables[column];
 			}
-		});
+		};
+		tableLog.setModel(mLogTableModel);
+
 		tableLog.getColumnModel().getColumn(0).setResizable(false);
 		tableLog.getColumnModel().getColumn(0).setPreferredWidth(116);
 		tableLog.getColumnModel().getColumn(0).setMaxWidth(250);
@@ -81,5 +85,9 @@ public class LogDialog extends JDialog {
 		tableLog.getColumnModel().getColumn(2).setPreferredWidth(226);
 		getContentPane().add(tableLog, BorderLayout.CENTER);
 
+	}
+
+	public void addRowLog(final Object pTime, final Object pType, final Object pMessage) {
+		mLogTableModel.addRow(new Object[] { pTime, pType, pMessage });
 	}
 }

@@ -3,6 +3,7 @@ package ru.ucoz.megadiablo.android.apm.ui.log;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -196,6 +197,14 @@ public class LogDialog extends JDialog implements ILogListener {
 			final Object pType,
 			final Object pMessage) {
 		mLogTableModel.addRow(new Object[] { pTime, pType, pMessage });
+		EventQueue.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				int max = mScrollPane.getVerticalScrollBar().getMaximum();
+				mScrollPane.getVerticalScrollBar().setValue(max);
+			}
+		});
 	}
 
 

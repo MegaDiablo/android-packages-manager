@@ -49,7 +49,7 @@ public class LogDialog extends JDialog implements ILogListener {
 	private static final long serialVersionUID = -7228934472909425734L;
 	private static final Object[] LIST_TYPES_FILTER = new Object[TypeMessage.values().length + 1];
 	static {
-		LIST_TYPES_FILTER[0] = "Весь лог";
+		LIST_TYPES_FILTER[0] = "\u0412\u0435\u0441\u044c \u043b\u043e\u0433";
 		int i = 1;
 		for (TypeMessage typeMessage : TypeMessage.values()) {
 			LIST_TYPES_FILTER[i] = typeMessage;
@@ -62,7 +62,7 @@ public class LogDialog extends JDialog implements ILogListener {
 	private DefaultTableModel mLogTableModel;
 
 	private JButton btnClear;
-	private DefaultRowSorter<? extends TableModel,? extends Object> mSorter;
+	private DefaultRowSorter<? extends TableModel, ? extends Object> mSorter;
 	private FilterByType mFilter;
 	private JScrollPane mScrollPane;
 	private JCheckBox mAutoscroll;
@@ -74,7 +74,7 @@ public class LogDialog extends JDialog implements ILogListener {
 		mCore = pCore;
 		setMinimumSize(new Dimension(320, 240));
 		setSize(new Dimension(640, 480));
-		setTitle("Лог");
+		setTitle("\u041b\u043e\u0433");
 
 		mScrollPane = new JScrollPane();
 		getContentPane().add(mScrollPane, BorderLayout.CENTER);
@@ -104,7 +104,7 @@ public class LogDialog extends JDialog implements ILogListener {
 		gbl_panel_1.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
-		btnClear = new JButton("Очистить");
+		btnClear = new JButton("\u041e\u0447\u0438\u0441\u0442\u0438\u0442\u044c");
 		btnClear.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent arg0) {
@@ -148,7 +148,7 @@ public class LogDialog extends JDialog implements ILogListener {
 		gbc_comboBox.gridy = 0;
 		panel_1.add(comboBox, gbc_comboBox);
 
-		mAutoscroll = new JCheckBox("Следить");
+		mAutoscroll = new JCheckBox("\u0421\u043b\u0435\u0434\u0438\u0442\u044c");
 		mAutoscroll.setSelected(true);
 		GridBagConstraints gbc_Autoscroll = new GridBagConstraints();
 		gbc_Autoscroll.insets = new Insets(5, 0, 5, 5);

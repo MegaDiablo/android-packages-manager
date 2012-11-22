@@ -99,4 +99,14 @@ public class LogAdb {
 		logListener = pLogListener;
 	}
 
+	public static boolean isDebugMode() {
+		return debugMode;
+	}
+
+	public static void setDebugMode(final boolean pDebugMode) {
+		debugMode = pDebugMode;
+	}
+
+
+
 }

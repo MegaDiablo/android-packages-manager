@@ -16,6 +16,7 @@ import java.awt.event.ItemListener;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultRowSorter;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -64,6 +65,7 @@ public class LogDialog extends JDialog implements ILogListener {
 	private DefaultRowSorter<? extends TableModel,? extends Object> mSorter;
 	private FilterByType mFilter;
 	private JScrollPane mScrollPane;
+	private JCheckBox mAutoscroll;
 
 	/**
 	 * Create the dialog.
@@ -96,9 +98,9 @@ public class LogDialog extends JDialog implements ILogListener {
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.NORTH);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[] { 98, 0, 0, 0 };
+		gbl_panel_1.columnWidths = new int[] { 98, 0, 0, 0, 0 };
 		gbl_panel_1.rowHeights = new int[] { 25, 0 };
-		gbl_panel_1.columnWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panel_1.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		gbl_panel_1.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
@@ -145,6 +147,14 @@ public class LogDialog extends JDialog implements ILogListener {
 		gbc_comboBox.gridx = 1;
 		gbc_comboBox.gridy = 0;
 		panel_1.add(comboBox, gbc_comboBox);
+
+		mAutoscroll = new JCheckBox("Следить");
+		mAutoscroll.setSelected(true);
+		GridBagConstraints gbc_Autoscroll = new GridBagConstraints();
+		gbc_Autoscroll.insets = new Insets(5, 0, 5, 5);
+		gbc_Autoscroll.gridx = 2;
+		gbc_Autoscroll.gridy = 0;
+		panel_1.add(mAutoscroll, gbc_Autoscroll);
 
 
 
@@ -197,6 +207,7 @@ public class LogDialog extends JDialog implements ILogListener {
 			final Object pType,
 			final Object pMessage) {
 		mLogTableModel.addRow(new Object[] { pTime, pType, pMessage });
+		if (mAutoscroll.isSelected()){
 		EventQueue.invokeLater(new Runnable() {
 
 			@Override
@@ -205,6 +216,7 @@ public class LogDialog extends JDialog implements ILogListener {
 				mScrollPane.getVerticalScrollBar().setValue(max);
 			}
 		});
+		}
 	}
 
 
@@ -285,5 +297,5 @@ public class LogDialog extends JDialog implements ILogListener {
 			return component;
 
 		}
-};
+}
 }

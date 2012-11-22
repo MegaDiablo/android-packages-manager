@@ -3,7 +3,7 @@ package ru.ucoz.megadiablo.android.apm.ui.log;
 import java.awt.Color;
 
 public enum TypeMessage {
-	DEBUG(Color.BLUE), INFO(Color.DARK_GRAY), ERROR(Color.RED);
+	INFO(Color.DARK_GRAY), ERROR(Color.RED), DEBUG(Color.BLUE);
 	private final Color mColor;
 
 

@@ -62,6 +62,7 @@ public class LogDialog extends JDialog implements ILogListener {
 	private JButton btnClear;
 	private DefaultRowSorter<? extends TableModel,? extends Object> mSorter;
 	private FilterByType mFilter;
+	private JScrollPane mScrollPane;
 
 	/**
 	 * Create the dialog.
@@ -72,8 +73,8 @@ public class LogDialog extends JDialog implements ILogListener {
 		setSize(new Dimension(640, 480));
 		setTitle("Лог");
 
-		JScrollPane scrollPane = new JScrollPane();
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		mScrollPane = new JScrollPane();
+		getContentPane().add(mScrollPane, BorderLayout.CENTER);
 
 		tableLog = new JTable();
 		tableLog.setFont(new Font("Dialog", Font.PLAIN, 10));
@@ -89,7 +90,7 @@ public class LogDialog extends JDialog implements ILogListener {
 		tableLog.setModel(mLogTableModel);
 
 		initLog();
-		scrollPane.setViewportView(tableLog);
+		mScrollPane.setViewportView(tableLog);
 
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.NORTH);
@@ -154,7 +155,6 @@ public class LogDialog extends JDialog implements ILogListener {
 
 		tableLog.setRowSorter(mSorter);
 
-
 	}
 
 
@@ -196,7 +196,6 @@ public class LogDialog extends JDialog implements ILogListener {
 			final Object pType,
 			final Object pMessage) {
 		mLogTableModel.addRow(new Object[] { pTime, pType, pMessage });
-
 	}
 
 

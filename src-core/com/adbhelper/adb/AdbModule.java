@@ -31,7 +31,7 @@ import com.adbhelper.adb.log.StartFormatLog;
 
 public class AdbModule implements AdbConsts {
 
-	public static final String VERSION_ADB_HELPER = "%%VERSION%%";
+	public static final String VERSION_ADB_HELPER = "%%VERSION_CORE%%";
 	private static final String NAME_RESOURCE_LABELS_PERMISSIONS = "com.adbhelper.adb.permissions";
 	private static final long CONSOLE_TIMEOUT = 5000;
 	private static final boolean DEFAULT_AUTOSTART_AFTER_INSTALL = false;

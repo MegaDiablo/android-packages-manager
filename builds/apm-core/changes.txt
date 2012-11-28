@@ -52,3 +52,6 @@ AdbHelper 1.4.7
 
 AdbHelper 1.4.8
 [-] Fix permisson's labels
+
+AdbHelper 1.5.0
+[+] Add support log listener

@@ -1,14 +1,17 @@
 <project name="Jimm" default="release">
 
 	<property name="app.short-name" value="apm" />
-	<property name="version" value="0.5.0" />
-	<property name="version/apm" value="${version}" />
+	<property name="version" value="0.5.1" />
+	<property name="version.apm" value="${version}" />
 
 	<property name="name.src" value="src" />
 	<property name="name.dest" value="dest" />
 	<property name="name.bin" value="bin" />
 	<property name="name.build" value="build" />
+	<property name="name.builds" value="builds" />
 	<property name="name.img" value="img" />
+	<property name="name.apm-gui" value="apm-gui" />
+	<property name="name.apm-core" value="apm-core" />
 	<property name="name.file.icon" value="apm64.png" />
 
 	<property name="app.base" value="${basedir}" />
@@ -17,18 +20,14 @@
 
 	<property name="app.java.main-class" value="ru.ucoz.megadiablo.android.apm.Runner" />
 
-	<property name="app.build.jar" value="${app.base}/builds" />
-	<property name="app.build.jar.name" value="${app.build.jar}/${app.short-name}-${version/apm}.jar" />
-
-	<property name="app.build.zip" value="${app.base}/builds" />
-	<property name="app.build.zip.name" value="${app.build.zip}/${app.short-name}-${version/apm}.zip" />
-
 	<property name="app.lib" value="${basedir}/libs" />
 
 	<property name="app.lib.adb-helper" value="${app.lib}/adb-helper.jar" />
-	<property name="app.libs" value="${app.lib.adb-helper}" />
+	<property name="app.libs" value="" />
 
 	<property name="app.src" value="${app.base}/${name.src}" />
+	<property name="app.src-gui" value="${app.base}/${name.src}-gui" />
+	<property name="app.src-core" value="${app.base}/${name.src}-core" />
 	<property name="app.src-jtatoo" value="${app.base}/${name.src}-jtatoo" />
 	<property name="app.src-data" value="${app.base}/${name.src}-data" />
 
@@ -36,6 +35,11 @@
 	<property name="app.build.src" value="${app.build}/${name.src}" />
 	<property name="app.build.bin" value="${app.build}/${name.bin}" />
 
+	<property name="app.build.jar" value="${app.base}/${name.builds}/${name.apm-gui}" />
+	<property name="app.build.jar.name" value="${app.build.jar}/${app.short-name}-${version.apm}.jar" />
+
+	<property name="app.build.zip" value="${app.base}/${name.builds}/${name.apm-gui}" />
+	<property name="app.build.zip.name" value="${app.build.zip}/${app.short-name}-${version.apm}.zip" />
 
 	<target name="release" depends="compile,build-jar,build-zip,clean">
 		<echo>Finished</echo>
@@ -53,7 +57,8 @@
 
 	<target name="copy">
 		<copy todir="${app.build.src}" overwrite="true">
-			<fileset dir="${app.src}" includes="**/*" />
+			<fileset dir="${app.src-gui}" includes="**/*" />
+			<fileset dir="${app.src-core}" includes="**/*" />
 			<fileset dir="${app.src-jtatoo}" includes="**/*" />
 			<fileset dir="${app.src-data}" includes="**/*" />
 		</copy>
@@ -61,7 +66,7 @@
 
 	<target name="precompile" depends="clean,create-dir,copy">
 		<replace dir="${app.build.src}" encoding="UTF-8">
-			<replacefilter token="%%VERSION%%" value="${version/apm}" />
+			<replacefilter token="%%VERSION%%" value="${version.apm}" />
 		</replace>
 
 		<echo>Finished</echo>
@@ -79,8 +84,6 @@
 
 			<fileset dir="${app.build.bin}" includes="**/*.class" />
 			<fileset dir="${app.build.src}" includes="**/*" excludes="**/*.java" />
-
-			<zipfileset includes="**/*" src="${app.lib.adb-helper}" />
 
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />

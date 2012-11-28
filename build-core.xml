@@ -42,7 +42,7 @@
 	</target>
 	<target name="precompile" depends="clean,create-dir,copy">
 		<replace dir="${app.build.src}" encoding="UTF-8">
-			<replacefilter token="%%VERSION%%" value="${app.build.verision}.${app.build.number}" />
+			<replacefilter token="%%VERSION_CORE%%" value="${app.build.verision}.${app.build.number}" />
 		</replace>
 
 		<echo>Finished</echo>

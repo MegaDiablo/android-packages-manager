@@ -6,8 +6,8 @@
 	</propertyfile>
 	<property file="build.properties" />
 	<property name="path_libs" value="builds/apm-core" />
-	<property name="app.build.jar.path" value="${path_libs}/${app.build.jar.name}.jar" />
-	<property name="app.build.currentversion.path" value="${path_libs}/versions/${app.build.jar.name}-${app.build.verision}.${app.build.number}.jar" />
+	<property name="app.build.jar.path" value="${path_libs}/${app.build.jar.core}.jar" />
+	<property name="app.build.currentversion.path" value="${path_libs}/versions/${app.build.jar.core}-${app.build.verision}.${app.build.number}.jar" />
 
 	<property name="app.build" value="bin" />
 	<property name="app.build.bin" value="${app.build}/bin" />

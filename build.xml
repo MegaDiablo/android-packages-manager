@@ -1,9 +1,10 @@
 <project name="Jimm" default="release">
 
+	<property file="build.properties"/>
+	<property name="version.core"  value="${app.build.verision}.${app.build.number}"/>
 	<property name="app.short-name" value="apm" />
 	<property name="version" value="0.5.1" />
 	<property name="version.apm" value="${version}" />
-
 	<property name="name.src" value="src" />
 	<property name="name.dest" value="dest" />
 	<property name="name.bin" value="bin" />
@@ -41,8 +42,12 @@
 	<property name="app.build.zip" value="${app.base}/${name.builds}/${name.apm-gui}" />
 	<property name="app.build.zip.name" value="${app.build.zip}/${app.short-name}-${version.apm}.zip" />
 
-	<target name="release" depends="compile,build-jar,build-zip,clean">
+	<target name="release" depends="version,compile,build-jar,build-zip,clean">
 		<echo>Finished</echo>
+	</target>
+	<target name="version">
+		<echo>GUI  : ${version.apm}</echo>
+		<echo>Core : ${version.core}</echo>
 	</target>
 
 	<target name="clean">
@@ -67,6 +72,7 @@
 	<target name="precompile" depends="clean,create-dir,copy">
 		<replace dir="${app.build.src}" encoding="UTF-8">
 			<replacefilter token="%%VERSION%%" value="${version.apm}" />
+			<replacefilter token="%%VERSION_CORE%%" value="${version.core}" />
 		</replace>
 
 		<echo>Finished</echo>

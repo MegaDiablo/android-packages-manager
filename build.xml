@@ -88,7 +88,7 @@
 
 		<jar destfile="${app.build.jar.name}">
 
-			<fileset dir="${app.build.bin}" includes="**/*.class" />
+			<fileset dir="${app.build.bin}" includes="**/*.class" excludes="com/adbhelper/*.class" />
 			<fileset dir="${app.build.src}" includes="**/*" excludes="**/*.java" />
 
 			<manifest>

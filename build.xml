@@ -1,34 +1,39 @@
-<project name="Jimm" default="release">
+<project name="apm" default="release">
 
 	<property name="app.short-name" value="apm" />
-	<property name="version" value="0.5.0" />
-	<property name="version/apm" value="${version}" />
+	<property name="version" value="0.6.0" />
+	<property name="version.apm" value="${version}" />
 
 	<property name="name.src" value="src" />
 	<property name="name.dest" value="dest" />
 	<property name="name.bin" value="bin" />
 	<property name="name.build" value="build" />
+	<property name="name.builds" value="builds" />
 	<property name="name.img" value="img" />
+	<property name="name.apm-gui" value="apm-gui" />
+	<property name="name.apm-core" value="apm-core" />
 	<property name="name.file.icon" value="apm64.png" />
 
 	<property name="app.base" value="${basedir}" />
 	<property name="app.prop-default" value="${app.base}/prop-default" />
 	<property name="app.icon" value="${app.base}/${name.img}/${name.file.icon}" />
+	
+	<property name="app.platform-tools" value="${app.base}/platform-tools" />
+	<property name="app.platform-tools.nix" value="${app.platform-tools}/nix" />
+	<property name="app.platform-tools.win" value="${app.platform-tools}/win" />
+	<property name="app.platform-tools.mac" value="${app.platform-tools}/mac" />
+	
 
 	<property name="app.java.main-class" value="ru.ucoz.megadiablo.android.apm.Runner" />
-
-	<property name="app.build.jar" value="${app.base}/builds" />
-	<property name="app.build.jar.name" value="${app.build.jar}/${app.short-name}-${version/apm}.jar" />
-
-	<property name="app.build.zip" value="${app.base}/builds" />
-	<property name="app.build.zip.name" value="${app.build.zip}/${app.short-name}-${version/apm}.zip" />
 
 	<property name="app.lib" value="${basedir}/libs" />
 
 	<property name="app.lib.adb-helper" value="${app.lib}/adb-helper.jar" />
-	<property name="app.libs" value="${app.lib.adb-helper}" />
+	<property name="app.libs" value="" />
 
 	<property name="app.src" value="${app.base}/${name.src}" />
+	<property name="app.src-gui" value="${app.base}/${name.src}-gui" />
+	<property name="app.src-core" value="${app.base}/${name.src}-core" />
 	<property name="app.src-jtatoo" value="${app.base}/${name.src}-jtatoo" />
 	<property name="app.src-data" value="${app.base}/${name.src}-data" />
 
@@ -36,6 +41,14 @@
 	<property name="app.build.src" value="${app.build}/${name.src}" />
 	<property name="app.build.bin" value="${app.build}/${name.bin}" />
 
+	<property name="app.build.jar" value="${app.base}/${name.builds}/${name.apm-gui}" />
+	<property name="app.build.jar.name" value="${app.build.jar}/${app.short-name}-${version.apm}.jar" />
+
+	<property name="app.build.zip" value="${app.base}/${name.builds}/${name.apm-gui}" />
+	<property name="app.build.zip.name" value="${app.build.zip}/${app.short-name}-${version.apm}" />
+	<property name="app.build.zip.name.nix" value="${app.build.zip.name}-nix.zip" />
+	<property name="app.build.zip.name.win" value="${app.build.zip.name}-win.zip" />
+	<property name="app.build.zip.name.mac" value="${app.build.zip.name}-mac.zip" />
 
 	<target name="release" depends="compile,build-jar,build-zip,clean">
 		<echo>Finished</echo>
@@ -53,7 +66,8 @@
 
 	<target name="copy">
 		<copy todir="${app.build.src}" overwrite="true">
-			<fileset dir="${app.src}" includes="**/*" />
+			<fileset dir="${app.src-gui}" includes="**/*" />
+			<fileset dir="${app.src-core}" includes="**/*" />
 			<fileset dir="${app.src-jtatoo}" includes="**/*" />
 			<fileset dir="${app.src-data}" includes="**/*" />
 		</copy>
@@ -61,7 +75,7 @@
 
 	<target name="precompile" depends="clean,create-dir,copy">
 		<replace dir="${app.build.src}" encoding="UTF-8">
-			<replacefilter token="%%VERSION%%" value="${version/apm}" />
+			<replacefilter token="%%VERSION%%" value="${version.apm}" />
 		</replace>
 
 		<echo>Finished</echo>
@@ -80,8 +94,6 @@
 			<fileset dir="${app.build.bin}" includes="**/*.class" />
 			<fileset dir="${app.build.src}" includes="**/*" excludes="**/*.java" />
 
-			<zipfileset includes="**/*" src="${app.lib.adb-helper}" />
-
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
 				<attribute name="Class-Path" value="." />
@@ -92,47 +104,30 @@
 
 	<target name="build-zip" depends="">
 		<delete file="${app.build.zip.name}" />
+		<delete file="${app.build.zip.name.nix}" />
+		<delete file="${app.build.zip.name.win}" />
+		<delete file="${app.build.zip.name.mac}" />
 
-		<zip destfile="${app.build.zip.name}">
+		<zip destfile="${app.build.zip.name.nix}">
 			<fileset file="${app.build.jar.name}" />
 			<fileset file="${app.icon}" />
 			<fileset dir="${app.prop-default}" includes="*.prop" />
+			<fileset dir="${app.platform-tools.nix}" includes="*" />
 		</zip>
-	</target>
-
-	<target name="obfuscate">
-		<taskdef resource="proguard/ant/task.properties" classpath="${basedir}/proguard/proguard.jar" />
-		<proguard configuration="${app.base}/proguard.cfg" printseeds="on" printmapping="out.map" renamesourcefileattribute="SourceFile">
-			<injar file="${app.build.jar.name}" />
-			<outjar file="${app.base}/out.jar" />
-
-			<libraryjar file="${java.home}/lib/rt.jar" />
-
-			<keepattribute name="LineNumberTable" />
-			<keepattribute name="SourceFile" />
-			<keepattribute name="*Annotation*" />
-			<keepclasseswithmembers access="public">
-				<method access="public static" type="void" name="main" parameters="java.lang.String[]" />
-			</keepclasseswithmembers>
-
-			<keepclasseswithmembernames>
-				<method access="native" />
-			</keepclasseswithmembernames>
-
-			<keepclassmembers extends="java.lang.Enum">
-				<method access="public static" type="**[]" name="values" parameters="" />
-				<method access="public static" type="**" name="valueOf" parameters="java.lang.String" />
-			</keepclassmembers>
-
-			<keepclassmembers implements="java.io.Serializable">
-				<field access="static final" type="long" name="serialVersionUID" />
-				<field access="static final" type="java.io.ObjectStreamField[]" name="serialPersistentFields" />
-				<method access="private" type="void" name="writeObject" parameters="java.io.ObjectOutputStream" />
-				<method access="private" type="void" name="readObject" parameters="java.io.ObjectInputStream" />
-				<method type="java.lang.Object" name="writeReplace" parameters="" />
-				<method type="java.lang.Object" name="readResolve" parameters="" />
-			</keepclassmembers>
-		</proguard>
+		
+		<zip destfile="${app.build.zip.name.win}">
+			<fileset file="${app.build.jar.name}" />
+			<fileset file="${app.icon}" />
+			<fileset dir="${app.prop-default}" includes="*.prop" />
+			<fileset dir="${app.platform-tools.win}" includes="*" />
+		</zip>
+		
+		<zip destfile="${app.build.zip.name.mac}">
+			<fileset file="${app.build.jar.name}" />
+			<fileset file="${app.icon}" />
+			<fileset dir="${app.prop-default}" includes="*.prop" />
+			<fileset dir="${app.platform-tools.mac}" includes="*" />
+		</zip>
 	</target>
 
 </project>

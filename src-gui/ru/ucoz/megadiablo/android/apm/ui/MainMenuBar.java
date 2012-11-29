@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.List;
 
@@ -166,39 +165,25 @@ public class MainMenuBar extends JMenuBar {
 				mKeyBoard.setVisible(mCheckBoxMenuItemKeyBoard.isSelected());
 			}
 		});
+		mKeyBoard.addWindowListener(new CloseWindowListener() {
+
+			@Override
+			public void windowClosing(final WindowEvent pArg0) {
+				mCheckBoxMenuItemKeyBoard.setSelected(false);
+			}
+
+		});
 
 		mMenuView.add(mCheckBoxMenuItemKeyBoard);
 
 		mCheckBoxMenuItemLog = new JCheckBoxMenuItem("Лог");
-		mLogDialog.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowOpened(final WindowEvent pArg0) {
-			}
-
-			@Override
-			public void windowIconified(final WindowEvent pArg0) {
-			}
-
-			@Override
-			public void windowDeiconified(final WindowEvent pArg0) {
-			}
-
-			@Override
-			public void windowDeactivated(final WindowEvent pArg0) {
-			}
+		mLogDialog.addWindowListener(new CloseWindowListener() {
 
 			@Override
 			public void windowClosing(final WindowEvent pArg0) {
 				mCheckBoxMenuItemLog.setSelected(false);
 			}
-			@Override
-			public void windowClosed(final WindowEvent pArg0) {
-			}
 
-			@Override
-			public void windowActivated(final WindowEvent pArg0) {
-			}
 		});
 		mCheckBoxMenuItemLog.addActionListener(new ActionListener() {
 

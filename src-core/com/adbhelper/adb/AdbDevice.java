@@ -62,6 +62,11 @@ public class AdbDevice {
 		return adb.uninstall(name, app);
 	}
 
+	public int clearData(final String app) {
+		return adb.clearData(name, app);
+	}
+
+
 	@Deprecated
 	public String install(String pathApp) throws InstallException {
 		return adb.install(name, pathApp);

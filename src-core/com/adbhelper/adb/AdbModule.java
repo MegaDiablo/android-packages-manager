@@ -48,6 +48,7 @@ public class AdbModule implements AdbConsts {
 	private static final String MASK_TO = "%to%";
 	private static final String MASK_MESSAGE = "%message%";
 	private static final String MASK_COUNT = "%count%";
+	private static final String MASK_ACTIVITY = "%activity%";
 	private static final String CONSOLE_STARTED_ADB = "* daemon started successfully *";
 	private static final String VALID_ADRESS = ".*:[0-9]{1,5}";
 
@@ -85,6 +86,8 @@ public class AdbModule implements AdbConsts {
 	private static final String CMD_DEBUG = "shell am start -D -n %app%/%activity% -a android.intent.action.MAIN -c android.intent.category.LAUNCHER";
 
 	private static final String CMD_GET_PROP = "shell getprop";
+	private static final String CMD_CLEAR_DATA = "shell pm clear %app%";
+
 
 	private static final String LOG_SEND_KEYCODE = "Sending key code ";
 	private static final String LOG_COMPLITE_SEND_KEYCODE = "Sended key code";
@@ -127,6 +130,7 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_GET_PROPERTIES_END = "Completed getting device's properties ";
 
 	private static final String LOG_DEBUG = "Start debug %app%";
+	private static final String LOG_CLEAR_DATA = "Delete all data associated with %app%";
 
 	private final LogAdb logAdb=new LogAdb();
 
@@ -278,6 +282,17 @@ public class AdbModule implements AdbConsts {
 	 *
 	 * @return SUCCESS
 	 */
+	public int clearData(final String device, final String app) {
+		logAdb.info(LOG_CLEAR_DATA.replace(MASK_APP, app));
+		runAdb(device, CMD_CLEAR_DATA.replace(MASK_APP, app));
+		return AdbConsts.SUCCESS;
+	}
+
+
+	/**
+	 *
+	 * @return SUCCESS
+	 */
 	public int downloadFile(final String device, final String fromPath, String toPath) {
 		logAdb.info(LOG_DOWNLOAD_FILE + fromPath);
 
@@ -395,7 +410,7 @@ public class AdbModule implements AdbConsts {
 		logAdb.info(LOG_START.replace(MASK_APP, app));
 		runAdb(device,
 				CMD_START.replace(MASK_APP, app)
-						.replace("%activity%", activity).split(" "),
+						.replace(MASK_ACTIVITY, activity).split(" "),
 				new StartFormatLog(logAdb));
 	}
 
@@ -403,7 +418,7 @@ public class AdbModule implements AdbConsts {
 		logAdb.info(LOG_DEBUG.replace(MASK_APP, app));
 		runAdb(device,
 				CMD_DEBUG.replace(MASK_APP, app)
-						.replace("%activity%", activity).split(" "),
+						.replace(MASK_ACTIVITY, activity).split(" "),
 				new StartFormatLog(logAdb));
 	}
 

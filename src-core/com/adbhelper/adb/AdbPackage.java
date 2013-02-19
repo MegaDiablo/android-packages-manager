@@ -110,6 +110,9 @@ public class AdbPackage {
 	public void uninstall() {
 		adb.uninstall(device, name);
 	}
+	public void clearData() {
+		adb.clearData(device, name);
+	}
 
 	@Deprecated
 	public void reinstall(String activity, String pathApp)

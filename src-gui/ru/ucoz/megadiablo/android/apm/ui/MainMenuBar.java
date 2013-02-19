@@ -3,6 +3,7 @@ package ru.ucoz.megadiablo.android.apm.ui;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
 
@@ -164,11 +165,28 @@ public class MainMenuBar extends JMenuBar {
 				mKeyBoard.setVisible(mCheckBoxMenuItemKeyBoard.isSelected());
 			}
 		});
+		mKeyBoard.addWindowListener(new CloseWindowListener() {
+
+			@Override
+			public void windowClosing(final WindowEvent pArg0) {
+				mCheckBoxMenuItemKeyBoard.setSelected(false);
+			}
+
+		});
 
 		mMenuView.add(mCheckBoxMenuItemKeyBoard);
 
 		mCheckBoxMenuItemLog = new JCheckBoxMenuItem("Лог");
+		mLogDialog.addWindowListener(new CloseWindowListener() {
+
+			@Override
+			public void windowClosing(final WindowEvent pArg0) {
+				mCheckBoxMenuItemLog.setSelected(false);
+			}
+
+		});
 		mCheckBoxMenuItemLog.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				mLogDialog.setVisible(mCheckBoxMenuItemLog.isSelected());

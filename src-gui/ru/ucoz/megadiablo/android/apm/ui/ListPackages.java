@@ -58,6 +58,7 @@ public class ListPackages extends JPanel {
 	private JMenuItem mMenuItemRun;
 	private JMenuItem mMenuItemRefresh;
 	private JSeparator separator;
+	private JMenuItem mMenuItemClearData;
 
 	public ListPackages(final Core pCore) {
 		mCore = pCore;
@@ -98,6 +99,19 @@ public class ListPackages extends JPanel {
 		// });
 		// popupMenu.add(mMenuItemRun);
 		// }
+
+		{
+			mMenuItemClearData = new JMenuItem("Очистить");
+			mMenuItemClearData.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					clearDataPackages();
+				}
+			});
+			mMenuItemClearData
+			.setToolTipText("Позволяет очистить данные приложения");
+			popupMenu.add(mMenuItemClearData);
+		}
 
 		{
 			mMenuItemDelete = new JMenuItem("Удалить");
@@ -371,6 +385,13 @@ public class ListPackages extends JPanel {
 		}
 	}
 
+	public void clearDataPackages() {
+		int[] selected = table.getSelectedRows();
+		for (int index : selected) {
+			clearDataPackage(index);
+		}
+	}
+
 	public void downloadPackages(final String pTo) {
 		String to = pTo;
 		if (to != null && to.length() > 1 && !to.endsWith(File.separator)) {
@@ -394,6 +415,14 @@ public class ListPackages extends JPanel {
 		AdbPackage item = getAdbPackageByIndex(index);
 		if (item != null) {
 			mCore.startApp(item, pDebug);
+		}
+		return true;
+	}
+
+	private boolean clearDataPackage(final int index) {
+		AdbPackage item = getAdbPackageByIndex(index);
+		if (item != null) {
+			mCore.clearDataApp(item);
 		}
 		return true;
 	}

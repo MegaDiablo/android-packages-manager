@@ -39,8 +39,6 @@ public class KeyBoard extends JDialog {
 
 	public KeyBoard(final Core pCore) {
 		setResizable(false);
-		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-
 		mCode = pCore;
 
 		setMinimumSize(new Dimension(320, 240));
@@ -61,7 +59,7 @@ public class KeyBoard extends JDialog {
 		textArea.setBorder(new LineBorder(new Color(0, 0, 0)));
 		textArea.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(final KeyEvent e) {
 				sendKey(e.getKeyCode());
 			}
 		});
@@ -72,7 +70,8 @@ public class KeyBoard extends JDialog {
 		mButtonMenu.setFocusable(false);
 		mButtonMenu.setFocusPainted(false);
 		mButtonMenu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				sendKey(KeyEvent.VK_F2);
 			}
 		});
@@ -83,7 +82,8 @@ public class KeyBoard extends JDialog {
 		mButtonHome.setFocusable(false);
 		mButtonHome.setFocusPainted(false);
 		mButtonHome.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				sendKey(KeyEvent.VK_HOME);
 			}
 		});
@@ -104,7 +104,8 @@ public class KeyBoard extends JDialog {
 		btnBack.setFocusable(false);
 		btnBack.setFocusPainted(false);
 		btnBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				sendKey(KeyEvent.VK_ESCAPE);
 			}
 		});
@@ -120,7 +121,8 @@ public class KeyBoard extends JDialog {
 		btnSearch.setFocusable(false);
 		btnSearch.setFocusPainted(false);
 		btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				sendKey(KeyEvent.VK_F5);
 			}
 		});
@@ -141,7 +143,7 @@ public class KeyBoard extends JDialog {
 		panel.add(textArea, gbc_textArea);
 	}
 
-	public void sendKey(int pKey) {
+	public void sendKey(final int pKey) {
 		Integer newKey = mMapKey.get(pKey);
 		if (newKey != null) {
 			// System.out

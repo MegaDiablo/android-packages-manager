@@ -9,6 +9,7 @@ public final class Consts {
 	}
 
 	public static final String VERSION_APP = "%%VERSION%%";
+	public static final String YEAR_APP = "%%YEAR%%";
 
 	/**
 	 * Класс с константами настроек.

@@ -31,7 +31,7 @@ import com.adbhelper.adb.log.StartFormatLog;
 
 public class AdbModule implements AdbConsts {
 
-	public static final String VERSION_ADB_HELPER = "%%VERSION%%";
+	public static final String VERSION_ADB_HELPER = "%%VERSION_CORE%%";
 	private static final String NAME_RESOURCE_LABELS_PERMISSIONS = "com.adbhelper.adb.permissions";
 	private static final long CONSOLE_TIMEOUT = 5000;
 	private static final boolean DEFAULT_AUTOSTART_AFTER_INSTALL = false;
@@ -48,6 +48,7 @@ public class AdbModule implements AdbConsts {
 	private static final String MASK_TO = "%to%";
 	private static final String MASK_MESSAGE = "%message%";
 	private static final String MASK_COUNT = "%count%";
+	private static final String MASK_ACTIVITY = "%activity%";
 	private static final String CONSOLE_STARTED_ADB = "* daemon started successfully *";
 	private static final String VALID_ADRESS = ".*:[0-9]{1,5}";
 
@@ -85,6 +86,8 @@ public class AdbModule implements AdbConsts {
 	private static final String CMD_DEBUG = "shell am start -D -n %app%/%activity% -a android.intent.action.MAIN -c android.intent.category.LAUNCHER";
 
 	private static final String CMD_GET_PROP = "shell getprop";
+	private static final String CMD_CLEAR_DATA = "shell pm clear %app%";
+
 
 	private static final String LOG_SEND_KEYCODE = "Sending key code ";
 	private static final String LOG_COMPLITE_SEND_KEYCODE = "Sended key code";
@@ -127,10 +130,11 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_GET_PROPERTIES_END = "Completed getting device's properties ";
 
 	private static final String LOG_DEBUG = "Start debug %app%";
+	private static final String LOG_CLEAR_DATA = "Delete all data associated with %app%";
 
 	private final LogAdb logAdb=new LogAdb();
 
-	public AdbModule(String fileAdb, String fileAapt, Properties listActivities) {
+	public AdbModule(final String fileAdb, String fileAapt, final Properties listActivities) {
 		super();
 		this.fileAdb = fileAdb;
 		if ((fileAapt == null) || ("".equals(fileAapt))) {
@@ -149,17 +153,17 @@ public class AdbModule implements AdbConsts {
 
 	}
 
-	public AdbModule(String fileAdb) {
+	public AdbModule(final String fileAdb) {
 		this(fileAdb, null, (Properties) null);
 	}
 
-	public AdbModule(String fileAdb, String fileAapt,
-			String fileNameListActivities) throws IOException {
+	public AdbModule(final String fileAdb, final String fileAapt,
+			final String fileNameListActivities) throws IOException {
 		this(fileAdb, fileAapt, new File(fileNameListActivities));
 
 	}
 
-	public AdbModule(String fileAdb, String fileAapt, File fileListActivities)
+	public AdbModule(final String fileAdb, final String fileAapt, final File fileListActivities)
 			throws IOException {
 		this(fileAdb, fileAapt, new Properties());
 		loadListActivities(fileListActivities);
@@ -167,32 +171,32 @@ public class AdbModule implements AdbConsts {
 	}
 
 	@Deprecated
-	public AdbModule(String fileAdb, String fileNameListActivities)
+	public AdbModule(final String fileAdb, final String fileNameListActivities)
 			throws IOException {
 		this(fileAdb, null, new File(fileNameListActivities));
 
 	}
 
 	@Deprecated
-	public AdbModule(String fileAdb, File fileListActivities)
+	public AdbModule(final String fileAdb, final File fileListActivities)
 			throws IOException {
 		this(fileAdb, null, fileListActivities);
 
 	}
 
-	public String runCmd(String path, String device, String[] cmd) {
+	public String runCmd(final String path, final String device, final String[] cmd) {
 		return runCmd(path, device, cmd, null);
 	}
 
-	public String runAdb(String device, String string) {
+	public String runAdb(final String device, final String string) {
 		return runAdb(device, string.split(" "), new DefaultFormatLog(logAdb));
 	}
 
-	public String runAdb(String device, String[] string) {
+	public String runAdb(final String device, final String[] string) {
 		return runAdb(device, string, new DefaultFormatLog(logAdb));
 	}
 
-	public String runCmd(String pathAdb, String device, String[] cmd,
+	public String runCmd(final String pathAdb, final String device, final String[] cmd,
 			FormatLog formatLog) {
 		String[] shellCmd;
 		int k = 1;
@@ -222,7 +226,7 @@ public class AdbModule implements AdbConsts {
 		return exec(shellCmd, formatLog);
 	}
 
-	public void loadListActivities(File file) throws IOException {
+	public void loadListActivities(final File file) throws IOException {
 		if (!file.exists()) {
 			file.createNewFile();
 		}
@@ -230,12 +234,12 @@ public class AdbModule implements AdbConsts {
 		propertiesActivities.load(new FileInputStream(file));
 	}
 
-	public AdbModule loadFilterActivities(String fileName) throws IOException {
+	public AdbModule loadFilterActivities(final String fileName) throws IOException {
 		return loadFilterActivities(new File(fileName));
 
 	}
 
-	public AdbModule loadFilterActivities(File file) throws IOException {
+	public AdbModule loadFilterActivities(final File file) throws IOException {
 		if (file.exists()) {
 			Properties prop = new Properties();
 			prop.load(new FileInputStream(file));
@@ -248,19 +252,19 @@ public class AdbModule implements AdbConsts {
 		this(DEFAULT_PATH_ABD);
 	}
 
-	public String runAdb(String device, String[] cmd, FormatLog formatLog) {
+	public String runAdb(final String device, final String[] cmd, final FormatLog formatLog) {
 		return runCmd(fileAdb, device, cmd, formatLog);
 	}
 
-	public String runAapt(String[] cmd, FormatLog formatLog) {
+	public String runAapt(final String[] cmd, final FormatLog formatLog) {
 		return runCmd(fileAapt, null, cmd, formatLog);
 	}
 
-	public String runAapt(String[] cmd) {
+	public String runAapt(final String[] cmd) {
 		return runCmd(fileAapt, null, cmd);
 	}
 
-	public String runAapt(String cmd) {
+	public String runAapt(final String cmd) {
 		return runCmd(fileAapt, null, cmd.split(" "));
 	}
 
@@ -268,7 +272,7 @@ public class AdbModule implements AdbConsts {
 	 *
 	 * @return SUCCESS
 	 */
-	public int uninstall(String device, String app) {
+	public int uninstall(final String device, final String app) {
 		logAdb.info(LOG_UNINSTALL.replace(MASK_APP, app));
 		runAdb(device, CMD_UNINSTALL + app);
 		return AdbConsts.SUCCESS;
@@ -278,7 +282,18 @@ public class AdbModule implements AdbConsts {
 	 *
 	 * @return SUCCESS
 	 */
-	public int downloadFile(String device, String fromPath, String toPath) {
+	public int clearData(final String device, final String app) {
+		logAdb.info(LOG_CLEAR_DATA.replace(MASK_APP, app));
+		runAdb(device, CMD_CLEAR_DATA.replace(MASK_APP, app));
+		return AdbConsts.SUCCESS;
+	}
+
+
+	/**
+	 *
+	 * @return SUCCESS
+	 */
+	public int downloadFile(final String device, final String fromPath, String toPath) {
 		logAdb.info(LOG_DOWNLOAD_FILE + fromPath);
 
 		if (toPath == null) {
@@ -294,12 +309,12 @@ public class AdbModule implements AdbConsts {
 		return AdbConsts.SUCCESS;
 	}
 
-	public String reinstall(String device, String pathApp)
+	public String reinstall(final String device, final String pathApp)
 			throws InstallException {
 		return reinstall(device, pathApp, DEFAULT_AUTOSTART_AFTER_INSTALL);
 	}
 
-	public String reinstall(String device, String pathApp, boolean autoStart)
+	public String reinstall(final String device, final String pathApp, final boolean autoStart)
 			throws InstallException {
 		return install(CMD_REINSTALL, device, pathApp, autoStart);
 	}
@@ -315,7 +330,7 @@ public class AdbModule implements AdbConsts {
 	 * @return Name of installed package
 	 */
 	@Deprecated
-	public String install(String device, String pathApp)
+	public String install(final String device, final String pathApp)
 			throws InstallException {
 		return install(device, pathApp, DEFAULT_AUTOSTART_AFTER_INSTALL);
 	}
@@ -331,13 +346,13 @@ public class AdbModule implements AdbConsts {
 	 *            - start package after install
 	 * @return Name of installed package
 	 */
-	public String install(String device, String pathApp, boolean autoStart)
+	public String install(final String device, final String pathApp, final boolean autoStart)
 			throws InstallException {
 		return install(CMD_INSTALL, device, pathApp, autoStart);
 	}
 
-	protected String install(String cmd, String device, String pathApp,
-			boolean autoStart) throws InstallException {
+	protected String install(final String cmd, final String device, final String pathApp,
+			final boolean autoStart) throws InstallException {
 		logAdb.info(LOG_INSTALL.replace(MASK_FILE, pathApp));
 		logAdb.info(LOG_UPLOAD.replace(MASK_FILE, pathApp));
 		String[] cmds = cmd.split(" ");
@@ -384,26 +399,26 @@ public class AdbModule implements AdbConsts {
 	 * Use {@link AdbModule#reinstall(String, String, boolean)}
 	 */
 	@Deprecated
-	public void reinstall(String device, String app, String activity,
-			String pathApp) throws InstallException {
+	public void reinstall(final String device, final String app, final String activity,
+			final String pathApp) throws InstallException {
 		uninstall(device, app);
 		install(device, pathApp);
 		startActivity(device, app, activity);
 	}
 
-	public void startActivity(String device, String app, String activity) {
+	public void startActivity(final String device, final String app, final String activity) {
 		logAdb.info(LOG_START.replace(MASK_APP, app));
 		runAdb(device,
 				CMD_START.replace(MASK_APP, app)
-						.replace("%activity%", activity).split(" "),
+						.replace(MASK_ACTIVITY, activity).split(" "),
 				new StartFormatLog(logAdb));
 	}
 
-	public void debugActivity(String device, String app, String activity) {
+	public void debugActivity(final String device, final String app, final String activity) {
 		logAdb.info(LOG_DEBUG.replace(MASK_APP, app));
 		runAdb(device,
 				CMD_DEBUG.replace(MASK_APP, app)
-						.replace("%activity%", activity).split(" "),
+						.replace(MASK_ACTIVITY, activity).split(" "),
 				new StartFormatLog(logAdb));
 	}
 
@@ -428,24 +443,24 @@ public class AdbModule implements AdbConsts {
 		return devices;
 	}
 
-	public List<AdbPackage> getPackages(String device)
+	public List<AdbPackage> getPackages(final String device)
 			throws NotAccessPackageManager {
 
 		return getPackages(device, false);
 	}
 
-	public List<AdbPackage> getPackagesWithSystem(String device)
+	public List<AdbPackage> getPackagesWithSystem(final String device)
 			throws NotAccessPackageManager {
 
 		return getPackages(device, null);
 	}
 
-	public List<AdbPackage> getPackagesNonSystem(String device)
+	public List<AdbPackage> getPackagesNonSystem(final String device)
 			throws NotAccessPackageManager {
 		return getPackages(device, SYSTEM_FILTER);
 	}
 
-	public List<AdbPackage> getPackages(String device, boolean withSystem)
+	public List<AdbPackage> getPackages(final String device, final boolean withSystem)
 			throws NotAccessPackageManager {
 		if (withSystem) {
 			return getPackagesWithSystem(device);
@@ -454,7 +469,7 @@ public class AdbModule implements AdbConsts {
 		}
 	}
 
-	public List<AdbPackage> getPackages(String device, String fileIgnoreFilter)
+	public List<AdbPackage> getPackages(final String device, final String fileIgnoreFilter)
 			throws NotAccessPackageManager {
 		// logAdb.info(LOG_LIST_PACKAGES);
 		logAdb.info(LOG_START_GET_PACKAGES);
@@ -484,22 +499,22 @@ public class AdbModule implements AdbConsts {
 		return packages;
 	}
 
-	public void reboot(String device) {
+	public void reboot(final String device) {
 		logAdb.info(LOG_REBOOT);
 		runAdb(device, CMD_REBOOT.split(" "));
 	}
 
-	public void reboot(AdbDevice device) {
+	public void reboot(final AdbDevice device) {
 		reboot(device.getName());
 	}
 
-	public void sendKeyCode(String device, int keyCode) {
+	public void sendKeyCode(final String device, final int keyCode) {
 		logAdb.info(LOG_SEND_KEYCODE + keyCode);
 		runAdb(device, CMD_SEND_KEYCODE + keyCode);
 		logAdb.info(LOG_COMPLITE_SEND_KEYCODE);
 	}
 
-	public void sendKeyCode(AdbDevice device, int keyCode) {
+	public void sendKeyCode(final AdbDevice device, final int keyCode) {
 		sendKeyCode(device.getName(), keyCode);
 	}
 
@@ -529,7 +544,7 @@ public class AdbModule implements AdbConsts {
 
 	}
 
-	public void disconnet(String address) {
+	public void disconnet(final String address) {
 		logAdb.info(LOG_START_DISCONNECT.replace(MASK_FROM, address));
 		runAdb(null, CMD_DISCONNECT.replace(MASK_FROM, address));
 		logAdb.info(LOG_END_DISCONNECT.replace(MASK_FROM, address));
@@ -557,7 +572,7 @@ public class AdbModule implements AdbConsts {
 	 * @param count
 	 *            - count events
 	 */
-	public void monkey(String device, String app, int count) {
+	public void monkey(final String device, final String app, final int count) {
 		logAdb.info(LOG_MONKEY.replace(MASK_APP, app));
 		String cmd = CMD_MONKEY.replace(MASK_APP, app);
 		cmd = cmd.replace(MASK_COUNT, String.valueOf(count));
@@ -565,17 +580,17 @@ public class AdbModule implements AdbConsts {
 
 	}
 
-	public void clearTemp(String device) {
+	public void clearTemp(final String device) {
 		logAdb.info(LOG_CLEAR_TMP_START);
 		runAdb(device, CMD_CLEAR_TMP.split(" "));
 		logAdb.info(LOG_CLEAR_TMP_END);
 	}
 
-	public void clearTemp(AdbDevice device) {
+	public void clearTemp(final AdbDevice device) {
 		clearTemp(device.getName());
 	}
 
-	public Map<String, String> getPropertiesDevice(String device) {
+	public Map<String, String> getPropertiesDevice(final String device) {
 
 		logAdb.info(String.format(LOG_GET_PROPERTIES_START, device));
 		String[] res = runAdb(device, CMD_GET_PROP.split(" "),
@@ -596,11 +611,11 @@ public class AdbModule implements AdbConsts {
 
 	}
 
-	public Map<String, String> getPropertiesDevice(AdbDevice device) {
+	public Map<String, String> getPropertiesDevice(final AdbDevice device) {
 		return getPropertiesDevice(device.getName());
 	}
 
-	public AdbPackage getInfoPackage(AdbPackage adbPackage) {
+	public AdbPackage getInfoPackage(final AdbPackage adbPackage) {
 		AdbPackage info = null;
 
 		File tmpFile = AdbUtils.generateTempFile("apm_package", ".apk");
@@ -614,22 +629,22 @@ public class AdbModule implements AdbConsts {
 		return info;
 	}
 
-	public void updatePackages(List<AdbPackage> adbPackages) {
+	public void updatePackages(final List<AdbPackage> adbPackages) {
 		updatePackages(adbPackages, false);
 	}
 
-	public void updatePackages(List<AdbPackage> adbPackages,
-			boolean alwaysUpdate) {
+	public void updatePackages(final List<AdbPackage> adbPackages,
+			final boolean alwaysUpdate) {
 		for (AdbPackage adbPackage : adbPackages) {
 			updatePackage(adbPackage, alwaysUpdate);
 		}
 	}
 
-	public void updatePackage(AdbPackage adbPackage) {
+	public void updatePackage(final AdbPackage adbPackage) {
 		updatePackage(adbPackage, true);
 	}
 
-	public void updatePackage(AdbPackage adbPackage, boolean alwaysUpdate) {
+	public void updatePackage(final AdbPackage adbPackage, final boolean alwaysUpdate) {
 		if (alwaysUpdate || (adbPackage.getLabel() == null)
 				|| (adbPackage.getDefaultActivity() == null)) {
 			try {
@@ -642,7 +657,7 @@ public class AdbModule implements AdbConsts {
 
 	}
 
-	public String exec(String[] cmds, FormatLog formatLog) {
+	public String exec(final String[] cmds, final FormatLog formatLog) {
 		Runtime run = Runtime.getRuntime();
 		String res = "";
 
@@ -718,7 +733,7 @@ public class AdbModule implements AdbConsts {
 
 	}
 
-	public String getNameActivity(String packageName) {
+	public String getNameActivity(final String packageName) {
 		String activity = getNameActivityPropperty(packageName);
 
 		if (activity == null) {
@@ -727,7 +742,7 @@ public class AdbModule implements AdbConsts {
 		return activity;
 	}
 
-	public String getNameActivityPropperty(String packageName) {
+	public String getNameActivityPropperty(final String packageName) {
 		if (propertiesActivities == null) {
 			return null;
 		}
@@ -737,7 +752,7 @@ public class AdbModule implements AdbConsts {
 		return propertiesActivities.getProperty(packageName);
 	}
 
-	public String getLabelActivityPropperty(String packageName) {
+	public String getLabelActivityPropperty(final String packageName) {
 		if (propertiesActivities == null) {
 			return null;
 		}
@@ -745,15 +760,15 @@ public class AdbModule implements AdbConsts {
 				.getProperty(getNamePropertyLabel(packageName));
 	}
 
-	public String getLabelActivity(String packageName) {
+	public String getLabelActivity(final String packageName) {
 		return getLabelActivityPropperty(packageName);
 	}
 
-	private String getNamePropertyLabel(String name) {
+	private String getNamePropertyLabel(final String name) {
 		return String.format(MASK_RPOPERTY_NAME_LABEL, name);
 	}
 
-	public void setNameActivity(String packageName, String nameActivity)
+	public void setNameActivity(final String packageName, final String nameActivity)
 			throws IOException {
 		if (propertiesActivities == null) {
 			return;
@@ -770,7 +785,7 @@ public class AdbModule implements AdbConsts {
 		}
 	}
 
-	public void setLabelActivity(String packageName, String labelActivity)
+	public void setLabelActivity(final String packageName, final String labelActivity)
 			throws IOException {
 		if (propertiesActivities == null) {
 			return;
@@ -781,7 +796,7 @@ public class AdbModule implements AdbConsts {
 		storeFileActivities();
 	}
 
-	public String getFilterValue(String name) {
+	public String getFilterValue(final String name) {
 		if (filterActivities == null) {
 			return null;
 		}
@@ -803,7 +818,7 @@ public class AdbModule implements AdbConsts {
 		return filterActivities;
 	}
 
-	public void setFilterActivities(Properties filterActivities) {
+	public void setFilterActivities(final Properties filterActivities) {
 		this.filterActivities = filterActivities;
 	}
 
@@ -828,12 +843,12 @@ public class AdbModule implements AdbConsts {
 		return labelsPermissions;
 	}
 
-	public void setLocale(Control locale) {
+	public void setLocale(final Control locale) {
 		labelsPermissions = ResourceBundle.getBundle(
 				NAME_RESOURCE_LABELS_PERMISSIONS, locale);
 	}
 
-	public AdbPackage getInfoApk(String pathApp) {
+	public AdbPackage getInfoApk(final String pathApp) {
 		logAdb.info(LOG_GET_INFO_APK.replace(MASK_FILE, pathApp));
 		String[] cmds = CMD_GET_INFO_APK.split(" ");
 		for (int i = 0; i < cmds.length; i++) {
@@ -852,7 +867,7 @@ public class AdbModule implements AdbConsts {
 		return formatLog.getPackage(this);
 	}
 
-	public String formatInfoPackage(AdbPackage adbPackage) {
+	public String formatInfoPackage(final AdbPackage adbPackage) {
 		String strInfo = DEFAULT_FORMAT_INFO_PACKAGE;
 		String label = adbPackage.getLabel();
 		if (label == null) {
@@ -871,7 +886,7 @@ public class AdbModule implements AdbConsts {
 				adbPackage.getLabel());
 	}
 
-	public String getLabelPermisssion(String string) {
+	public String getLabelPermisssion(final String string) {
 		ResourceBundle labelsPermissions = getLabelsPermissions();
 		if (labelsPermissions.containsKey(string)) {
 			return labelsPermissions.getString(string);
@@ -879,5 +894,11 @@ public class AdbModule implements AdbConsts {
 			return string;
 		}
 	}
+
+	public void setLogListener(final ILogListener pLogListener) {
+		logAdb.setLogListener(pLogListener);
+	}
+
+
 
 }

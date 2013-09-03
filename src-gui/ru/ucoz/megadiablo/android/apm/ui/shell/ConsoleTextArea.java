@@ -40,12 +40,20 @@ public class ConsoleTextArea extends JTextArea {
 
 	}
 
+	public void removeLastCharacter() throws BadLocationException{
+		if (mPossition > mLineOffset) {
+			mPossition--;
+			getDocument().remove(mPossition, 1);
+		}
+	}
 	public void addCharacter(final char c) throws BadLocationException {
 		Document doc = getDocument();
 		if (mEscMode) {
 			addCharacterEskMode(c);
 			return;
 		}
+//		System.out
+//		.println(c + "=" + (int) (c) + "-" + Character.getType(c));
 		if (c == BELL_CODE) {
 
 		} else

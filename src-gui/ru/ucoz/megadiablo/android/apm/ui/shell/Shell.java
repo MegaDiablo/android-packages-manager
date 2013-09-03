@@ -103,13 +103,13 @@ public class Shell extends JDialog implements Runnable {
 
 							if (ConsoleUtils.hasKeyCommand(e)) {
 								pushKeys(ConsoleUtils.getKeyCommand(e));
-							}  else if (Character.isDefined(c)) {
+							} else if (Character.isDefined(c)) {
 								pushKeys(c);
 							} else {
-//								System.out.println(String.format(
-//										"bad key '%s'= %s",
-//										e.getKeyChar(),
-//										e.getKeyCode()));
+								// System.out.println(String.format(
+								// "bad key '%s'= %s",
+								// e.getKeyChar(),
+								// e.getKeyCode()));
 							}
 						} catch (IOException e1) {
 							e1.printStackTrace();
@@ -117,7 +117,6 @@ public class Shell extends JDialog implements Runnable {
 					}
 					e.consume();
 				}
-
 
 			});
 
@@ -135,6 +134,7 @@ public class Shell extends JDialog implements Runnable {
 		mWriter.write(ds);
 		mWriter.flush();
 	}
+
 	public void close() {
 		if (mExec != null) {
 			mExec.destroy();
@@ -148,8 +148,14 @@ public class Shell extends JDialog implements Runnable {
 			char[] buffer = new char[CHAR_BUFFER_SIZE];
 			int len = 0;
 			while ((len = mReader.read(buffer)) > 0) {
-
-				for (int i = 0; i < len; i++) {
+				//System.out.println(String.valueOf(buffer, 0, len));
+				int start = 0;
+				while ((start < len) && (buffer[0] == '^')
+						&& (buffer[start + 1] == 'H')) {
+					mTextPane.removeLastCharacter();
+					start += 2;
+				}
+				for (int i = start; i < len; i++) {
 					char c = buffer[i];
 					mTextPane.addCharacter(c);
 				}

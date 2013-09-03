@@ -100,21 +100,9 @@ public class Shell extends JDialog implements Runnable {
 					char c = e.getKeyChar();
 					if (mWriter != null) {
 						try {
-							if (e.getKeyCode() == 127) {
-								//delete
-								pushKeys((char) 27, '[', 'C' ,c);
-							} else if (e.getKeyCode() == 37) {
-								//left
-								pushKeys((char) 27, '[', 'D' );
-							} else if (e.getKeyCode() == 39) {
-								//right
-								pushKeys((char) 27, '[', 'C' );
-							} else if (e.getKeyCode() == 35) {
-								//end
-								pushKeys((char) 27, '[', 'F' );
-							}  else if (e.getKeyCode() == 36) {
-								//home
-								pushKeys((char) 27, '[', 'H' );
+
+							if (ConsoleUtils.hasKeyCommand(e)) {
+								pushKeys(ConsoleUtils.getKeyCommand(e));
 							}  else if (Character.isDefined(c)) {
 								pushKeys(c);
 							} else {

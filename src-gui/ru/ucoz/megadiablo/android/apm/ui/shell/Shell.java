@@ -100,26 +100,23 @@ public class Shell extends JDialog implements Runnable {
 					char c = e.getKeyChar();
 					if (mWriter != null) {
 						try {
-
-							if (e.getKeyCode() == 37) {
+							if (e.getKeyCode() == 127) {
+								//delete
+								pushKeys((char) 27, '[', 'C' ,c);
+							} else if (e.getKeyCode() == 37) {
 								//left
-								mWriter.write(new char[] { 27, '[', 'D' });
-								mWriter.flush();
+								pushKeys((char) 27, '[', 'D' );
 							} else if (e.getKeyCode() == 39) {
 								//right
-								mWriter.write(new char[] { 27, '[', 'C' });
-								mWriter.flush();
+								pushKeys((char) 27, '[', 'C' );
 							} else if (e.getKeyCode() == 35) {
 								//end
-								mWriter.write(new char[] { 27, '[', 'F' });
-								mWriter.flush();
+								pushKeys((char) 27, '[', 'F' );
 							}  else if (e.getKeyCode() == 36) {
 								//home
-								mWriter.write(new char[] { 27, '[', 'H' });
-								mWriter.flush();
+								pushKeys((char) 27, '[', 'H' );
 							}  else if (Character.isDefined(c)) {
-								mWriter.write(new char[] { c });
-								mWriter.flush();
+								pushKeys(c);
 							} else {
 								System.out.println(String.format(
 										"bad key '%s'= %s",
@@ -132,6 +129,8 @@ public class Shell extends JDialog implements Runnable {
 					}
 					e.consume();
 				}
+
+
 			});
 
 			mContentScroll.setViewportView(mTextPane);
@@ -144,6 +143,10 @@ public class Shell extends JDialog implements Runnable {
 		}
 	}
 
+	public void pushKeys(final char... ds) throws IOException {
+		mWriter.write(ds);
+		mWriter.flush();
+	}
 	public void close() {
 		if (mExec != null) {
 			mExec.destroy();

@@ -16,10 +16,8 @@ import java.io.OutputStreamWriter;
 
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 
 public class Shell extends JDialog implements Runnable {
 
@@ -29,7 +27,7 @@ public class Shell extends JDialog implements Runnable {
 	private InputStream mInputStream;
 	private OutputStream mOutputStream;
 	private OutputStreamWriter mWriter;
-	private JTextArea mTextPane;
+	private ConsoleTextArea mTextPane;
 	private InputStreamReader mReader;
 
 	/**
@@ -54,7 +52,7 @@ public class Shell extends JDialog implements Runnable {
 		mContentScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
 		getContentPane().add(mContentScroll, BorderLayout.CENTER);
 		{
-			mTextPane = new JTextArea();
+			mTextPane = new ConsoleTextArea();
 			mTextPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 			mTextPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 			mTextPane.setFont(new Font("Courier New", Font.PLAIN, 12));
@@ -66,7 +64,6 @@ public class Shell extends JDialog implements Runnable {
 			});
 			mTextPane.setWrapStyleWord(true);
 			mTextPane.setLineWrap(true);
-			mTextPane.setEditable(false);
 			mTextPane.setFocusTraversalKeysEnabled(false);
 			mTextPane.setFocusCycleRoot(false);
 			mTextPane.setForeground(Color.LIGHT_GRAY);
@@ -89,6 +86,16 @@ public class Shell extends JDialog implements Runnable {
 			mTextPane.addKeyListener(new KeyAdapter() {
 
 				@Override
+				public void keyTyped(final KeyEvent pE) {
+					pE.consume();
+				}
+
+				@Override
+				public void keyReleased(final KeyEvent pE) {
+					pE.consume();
+				}
+
+				@Override
 				public void keyPressed(final KeyEvent e) {
 					char c = e.getKeyChar();
 					if (mWriter != null) {
@@ -103,6 +110,7 @@ public class Shell extends JDialog implements Runnable {
 							e1.printStackTrace();
 						}
 					}
+					e.consume();
 				}
 			});
 
@@ -111,7 +119,6 @@ public class Shell extends JDialog implements Runnable {
 			Thread thread = new Thread(this);
 			thread.setDaemon(true);
 			thread.start();
-			mTextPane.getCaret().setVisible(true);
 			mTextPane.setCaretColor(mTextPane.getForeground());
 
 		}
@@ -125,13 +132,7 @@ public class Shell extends JDialog implements Runnable {
 
 	@Override
 	public void run() {
-
-		mTextPane.getCaret().setVisible(true);
-
 		System.out.println(mReader.getEncoding());
-		Document doc = mTextPane.getDocument();
-		int pos = 0;
-		int lineOffset = 0;
 		try {
 			char[] buffer = new char[CHAR_BUFFER_SIZE];
 			int len = 0;
@@ -139,43 +140,14 @@ public class Shell extends JDialog implements Runnable {
 
 				for (int i = 0; i < len; i++) {
 					char c = buffer[i];
-					if (c == '\b') {
-						if (pos > lineOffset) {
-							doc.remove(doc.getLength() - 1, 1);
-							pos--;
-						}
-					} else if (c == '\r') {
-						pos = lineOffset;
-					} else if (c == '\n') {
-						doc.insertString(doc.getLength(), "\n", null);
-						lineOffset = doc.getLength();
-						pos = lineOffset;
-					} else if (Character.isDefined(c)
-							&& (Character.isLetterOrDigit(c)
-							|| Character.isJavaIdentifierPart(c)
-							|| Character.isSpaceChar(c)
-							|| Character.isWhitespace(c)
-							|| (c == ':'))
-							) {
-						if (pos < doc.getLength()) {
-							doc.remove(pos, 1);
-						}
-						doc.insertString(pos, String.valueOf(c), null);
-						pos++;
-					} else {
-						System.out.println(c + "=" + (int) (c));
-					}
+					mTextPane.addCharacter(c);
 				}
-				mTextPane.setCaretPosition(pos);
-				mTextPane.getCaret().setVisible(true);
+				mTextPane.updateCaretPosition();
 			}
 
-
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

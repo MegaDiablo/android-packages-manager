@@ -15,7 +15,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import javax.swing.JDialog;
-import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
@@ -24,7 +24,7 @@ import javax.swing.text.Document;
 public class Shell extends JDialog implements Runnable {
 
 	private static final int CHAR_BUFFER_SIZE = 1024;
-	private final JPanel contentPanel = new JPanel();
+	private final JScrollPane mContentScroll = new JScrollPane();
 	private Process mExec;
 	private InputStream mInputStream;
 	private OutputStream mOutputStream;
@@ -51,11 +51,8 @@ public class Shell extends JDialog implements Runnable {
 	public Shell() {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-		contentPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		contentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new BorderLayout(0, 0));
+		mContentScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
+		getContentPane().add(mContentScroll, BorderLayout.CENTER);
 		{
 			mTextPane = new JTextArea();
 			mTextPane.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -109,7 +106,7 @@ public class Shell extends JDialog implements Runnable {
 				}
 			});
 
-			contentPanel.add(mTextPane);
+			mContentScroll.setViewportView(mTextPane);
 
 			Thread thread = new Thread(this);
 			thread.setDaemon(true);

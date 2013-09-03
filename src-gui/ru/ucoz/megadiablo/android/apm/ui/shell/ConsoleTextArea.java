@@ -14,6 +14,7 @@ import javax.swing.text.Document;
 public class ConsoleTextArea extends JTextArea {
 
 	private static final int ESC_CODE = 27;
+	private static final int BELL_CODE = 7;
 	private int mPossition = 0;
 	private int mLineOffset = 0;
 	private boolean mEscMode = false;
@@ -45,6 +46,9 @@ public class ConsoleTextArea extends JTextArea {
 			addCharacterEskMode(c);
 			return;
 		}
+		if (c == BELL_CODE) {
+
+		} else
 		if (c == ESC_CODE) {
 			mEscMode = true;
 		} else if (c == '\b') {
@@ -71,7 +75,6 @@ public class ConsoleTextArea extends JTextArea {
 	}
 
 	private void addCharacterEskMode(final char c) throws BadLocationException {
-		// System.out.println(c + "=" + (int) (c));
 		mEscString.append(c);
 		if (Character.isLetter(c)) {
 			String command = mEscString.toString();

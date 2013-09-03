@@ -106,10 +106,10 @@ public class Shell extends JDialog implements Runnable {
 							}  else if (Character.isDefined(c)) {
 								pushKeys(c);
 							} else {
-								System.out.println(String.format(
-										"bad key '%s'= %s",
-										e.getKeyChar(),
-										e.getKeyCode()));
+//								System.out.println(String.format(
+//										"bad key '%s'= %s",
+//										e.getKeyChar(),
+//										e.getKeyCode()));
 							}
 						} catch (IOException e1) {
 							e1.printStackTrace();

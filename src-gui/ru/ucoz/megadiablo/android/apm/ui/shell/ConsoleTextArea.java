@@ -13,8 +13,11 @@ import javax.swing.text.Document;
  */
 public class ConsoleTextArea extends JTextArea {
 
+	private static final int ESC_CODE = 27;
 	private int mPossition = 0;
 	private int mLineOffset = 0;
+	private boolean mEscMode = false;
+	private StringBuilder mEscString = new StringBuilder();
 
 	static boolean iShowCharacter(final char c) {
 		int type = Character.getType(c);
@@ -38,9 +41,14 @@ public class ConsoleTextArea extends JTextArea {
 
 	public void addCharacter(final char c) throws BadLocationException {
 		Document doc = getDocument();
-		if (c == '\b') {
+		if (mEscMode) {
+			addCharacterEskMode(c);
+			return;
+		}
+		if (c == ESC_CODE) {
+			mEscMode = true;
+		} else if (c == '\b') {
 			if (mPossition > mLineOffset) {
-				doc.remove(doc.getLength() - 1, 1);
 				mPossition--;
 			}
 		} else if (c == '\r') {
@@ -58,7 +66,56 @@ public class ConsoleTextArea extends JTextArea {
 		} else {
 			System.out
 					.println(c + "=" + (int) (c) + "-" + Character.getType(c));
+
 		}
+	}
+
+	private void addCharacterEskMode(final char c) throws BadLocationException {
+		// System.out.println(c + "=" + (int) (c));
+		mEscString.append(c);
+		if (Character.isLetter(c)) {
+			String command = mEscString.toString();
+			execEscCommand(command);
+			mEscMode = false;
+			mEscString = new StringBuilder();
+		}
+
+	}
+
+	/**
+	 * Выболнение Esc комманд
+	 *
+	 * @see <a
+	 *      href="http://en.wikipedia.org/wiki/ANSI_escape_code">http://en.wikipedia.org/wiki/ANSI_escape_code</a>
+	 * @see <a
+	 *      href="http://ascii-table.com/ansi-escape-sequences-vt-100.php">http://ascii-table.com/ansi-escape-sequences-vt-100.php</a>
+	 *
+	 */
+	private void execEscCommand(final String command)
+			throws BadLocationException {
+		Document doc = getDocument();
+		if (command.matches("\\[\\d+G")) {
+			int value = getNumberFromEsc(command);
+			mPossition = mLineOffset + value;
+		} else if (command.matches("\\[\\d+K")) {
+			int value = getNumberFromEsc(command);
+			int count = value;
+			if (value == 0) {
+				count = doc.getLength() - mPossition;
+			}
+			doc.remove(mPossition, count);
+		} else if (command.matches("\\[\\d+C")) {
+			int value = getNumberFromEsc(command);
+			mPossition = mPossition + value;
+		} else {
+			System.out.println("esc=" + command);
+		}
+	}
+
+	private int getNumberFromEsc(final String command) {
+		String strNumber = command.substring(1, command.length() - 1);
+		int value = Integer.parseInt(strNumber);
+		return value;
 	}
 
 	public void updateCaretPosition() {

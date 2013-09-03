@@ -101,12 +101,32 @@ public class Shell extends JDialog implements Runnable {
 					if (mWriter != null) {
 						try {
 
-							if (Character.isDefined(c)) {
+							if (e.getKeyCode() == 37) {
+								//left
+								mWriter.write(new char[] { 27, '[', 'D' });
+								mWriter.flush();
+							} else if (e.getKeyCode() == 39) {
+								//right
+								mWriter.write(new char[] { 27, '[', 'C' });
+								mWriter.flush();
+							} else if (e.getKeyCode() == 35) {
+								//end
+								mWriter.write(new char[] { 27, '[', 'F' });
+								mWriter.flush();
+							}  else if (e.getKeyCode() == 36) {
+								//home
+								mWriter.write(new char[] { 27, '[', 'H' });
+								mWriter.flush();
+							}  else if (Character.isDefined(c)) {
 								mWriter.write(new char[] { c });
 								mWriter.flush();
+							} else {
+								System.out.println(String.format(
+										"bad key '%s'= %s",
+										e.getKeyChar(),
+										e.getKeyCode()));
 							}
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					}

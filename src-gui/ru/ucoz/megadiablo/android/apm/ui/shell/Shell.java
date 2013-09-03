@@ -82,8 +82,8 @@ public class Shell extends JDialog implements Runnable {
 										"/home/vbaraznovsky/android/android-sdk-linux/platform-tools/adb shell");
 				mInputStream = mExec.getInputStream();
 				mOutputStream = mExec.getOutputStream();
-				mWriter = new OutputStreamWriter(mOutputStream,"ascii");
-				mReader = new InputStreamReader(mInputStream,"ascii");
+				mWriter = new OutputStreamWriter(mOutputStream);
+				mReader = new InputStreamReader(mInputStream);
 
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -142,7 +142,6 @@ public class Shell extends JDialog implements Runnable {
 
 				for (int i = 0; i < len; i++) {
 					char c = buffer[i];
-					System.out.println(c + "=" + (int) (c));
 					if (c == '\b') {
 						if (pos > lineOffset) {
 							doc.remove(doc.getLength() - 1, 1);
@@ -155,11 +154,11 @@ public class Shell extends JDialog implements Runnable {
 						lineOffset = doc.getLength();
 						pos = lineOffset;
 					} else if (Character.isDefined(c)
-							&&( Character.isLetterOrDigit(c)
+							&& (Character.isLetterOrDigit(c)
 							|| Character.isJavaIdentifierPart(c)
 							|| Character.isSpaceChar(c)
 							|| Character.isWhitespace(c)
-							|| (c==':'))
+							|| (c == ':'))
 							) {
 						if (pos < doc.getLength()) {
 							doc.remove(pos, 1);
@@ -167,7 +166,7 @@ public class Shell extends JDialog implements Runnable {
 						doc.insertString(pos, String.valueOf(c), null);
 						pos++;
 					} else {
-
+						System.out.println(c + "=" + (int) (c));
 					}
 				}
 				mTextPane.setCaretPosition(pos);

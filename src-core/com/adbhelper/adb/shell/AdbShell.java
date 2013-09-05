@@ -11,7 +11,7 @@ import java.io.OutputStream;
 public class AdbShell {
 	private final Process mProcess;
 
-	private AdbShell(final Process pProcess) {
+	public AdbShell(final Process pProcess) {
 		super();
 		mProcess = pProcess;
 	}

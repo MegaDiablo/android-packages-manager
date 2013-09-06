@@ -3,8 +3,11 @@
 	<property file="build.properties"/>
 	<property name="version.core"  value="${app.build.verision}.${app.build.number}"/>
 	<property name="app.short-name" value="apm" />
+	
 	<property name="version" value="0.6.0" />
 	<property name="version.apm" value="${version}" />
+	<property name="year" value="2011-2013" />
+	
 	<property name="name.src" value="src" />
 	<property name="name.dest" value="dest" />
 	<property name="name.bin" value="bin" />
@@ -82,6 +85,7 @@
 		<replace dir="${app.build.src}" encoding="UTF-8">
 			<replacefilter token="%%VERSION%%" value="${version.apm}" />
 			<replacefilter token="%%VERSION_CORE%%" value="${version.core}" />
+			<replacefilter token="%%YEAR%%" value="${year}" />
 		</replace>
 
 		<echo>Finished</echo>

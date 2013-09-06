@@ -227,6 +227,16 @@ public class MainMenuBar extends JMenuBar {
 			}
 		});
 
+		JMenuItem mMenuItemShell = new JMenuItem("Консоль");
+		mMenuItemShell.setToolTipText("Запускает консоль для текущего устройство");
+		mMenuItemShell.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				mCore.runShell();
+			}
+		});
+
+
 		mMenuAdbConnect = new JMenu("Подключить");
 		mMenuDevices.add(mMenuAdbConnect);
 
@@ -270,6 +280,7 @@ public class MainMenuBar extends JMenuBar {
 		JSeparator separatorRebootDevice = new JSeparator();
 		mMenuDevices.add(separatorRebootDevice);
 		mMenuDevices.add(mMenuItemReboot);
+		mMenuDevices.add(mMenuItemShell);
 
 		JMenu mMenuSettings = new JMenu("Настройки");
 		add(mMenuSettings);

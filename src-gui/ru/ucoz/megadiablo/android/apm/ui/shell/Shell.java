@@ -19,34 +19,24 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 
+import com.adbhelper.adb.shell.AdbShell;
+
 public class Shell extends JDialog implements Runnable {
 
 	private static final int CHAR_BUFFER_SIZE = 1024;
 	private final JScrollPane mContentScroll = new JScrollPane();
-	private Process mExec;
 	private InputStream mInputStream;
 	private OutputStream mOutputStream;
 	private OutputStreamWriter mWriter;
 	private ConsoleTextArea mTextPane;
 	private InputStreamReader mReader;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(final String[] args) {
-		try {
-			Shell dialog = new Shell();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	private AdbShell mAdbShell;
 
 	/**
 	 * Create the dialog.
 	 */
-	public Shell() {
+	public Shell(final AdbShell pAdbShell) {
+		mAdbShell = pAdbShell;
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		mContentScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -68,21 +58,10 @@ public class Shell extends JDialog implements Runnable {
 			mTextPane.setFocusCycleRoot(false);
 			mTextPane.setForeground(Color.LIGHT_GRAY);
 			mTextPane.setBackground(Color.BLACK);
-			try {
-				mExec =
-						Runtime
-								.getRuntime()
-								.exec(
-										"/home/vbaraznovsky/android/android-sdk-linux/platform-tools/adb shell");
-				mInputStream = mExec.getInputStream();
-				mOutputStream = mExec.getOutputStream();
-				mWriter = new OutputStreamWriter(mOutputStream);
-				mReader = new InputStreamReader(mInputStream);
-
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-
+			mInputStream = mAdbShell.getInputStream();
+			mOutputStream = mAdbShell.getOutputStream();
+			mWriter = new OutputStreamWriter(mOutputStream);
+			mReader = new InputStreamReader(mInputStream);
 			mTextPane.addKeyListener(new KeyAdapter() {
 
 				@Override
@@ -136,8 +115,8 @@ public class Shell extends JDialog implements Runnable {
 	}
 
 	public void close() {
-		if (mExec != null) {
-			mExec.destroy();
+		if (mAdbShell != null) {
+			mAdbShell.destroy();
 		}
 	}
 

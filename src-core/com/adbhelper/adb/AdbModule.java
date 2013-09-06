@@ -679,19 +679,25 @@ public class AdbModule implements AdbConsts {
 	public AdbShell createShellRunAs(final String device,
 			final String packageName,
 			final String... cmd) {
+		AdbShell shell = createShell(device);
 
 		String[] cmdRunAs = CMD_RUN_AS.split(" ");
-		for (int i = 0; i < cmdRunAs.length; i++) {
-			cmdRunAs[i] = cmdRunAs[i].replace(MASK_APP, packageName);
+		try {
+			for (int i = 0; i < cmdRunAs.length; i++) {
+				shell.write(cmdRunAs[i].replace(MASK_APP, packageName));
+				shell.write(" ");
+			}
+			for (int i = 0; i < cmd.length; i++) {
+				shell.write(cmd[i]);
+				shell.write(cmd[i]);
+			}
+			shell.postString("\n");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		String[] shellCmd = new String[cmd.length + cmdRunAs.length];
-		for (int i = 0; i < cmdRunAs.length; i++) {
-			shellCmd[i] = cmdRunAs[i];
-		}
-		for (int i = 0; i < cmd.length; i++) {
-			shellCmd[cmdRunAs.length + i] = cmd[i];
-		}
-		return createShell(device, shellCmd);
+
+		return shell;
 	}
 
 	public AdbShell createShell(final String device,

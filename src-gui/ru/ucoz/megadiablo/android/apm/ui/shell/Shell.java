@@ -9,9 +9,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import javax.swing.JDialog;
@@ -25,8 +23,6 @@ public class Shell extends JDialog implements Runnable {
 
 	private static final int CHAR_BUFFER_SIZE = 1024;
 	private final JScrollPane mContentScroll = new JScrollPane();
-	private InputStream mInputStream;
-	private OutputStream mOutputStream;
 	private OutputStreamWriter mWriter;
 	private ConsoleTextArea mTextPane;
 	private InputStreamReader mReader;
@@ -58,10 +54,8 @@ public class Shell extends JDialog implements Runnable {
 			mTextPane.setFocusCycleRoot(false);
 			mTextPane.setForeground(Color.LIGHT_GRAY);
 			mTextPane.setBackground(Color.BLACK);
-			mInputStream = mAdbShell.getInputStream();
-		mOutputStream = mAdbShell.getOutputStream();
-				mWriter = new OutputStreamWriter(mOutputStream);
-				mReader = new InputStreamReader(mInputStream);
+			mWriter = mAdbShell.getWriter();
+			mReader = mAdbShell.getReader();
 			mTextPane.addKeyListener(new KeyAdapter() {
 
 				@Override

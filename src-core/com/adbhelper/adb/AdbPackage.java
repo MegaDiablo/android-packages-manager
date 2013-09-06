@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.adbhelper.adb.exceptions.NotFoundActivityException;
 import com.adbhelper.adb.exceptions.install.InstallException;
+import com.adbhelper.adb.shell.AdbShell;
 
 /**
  * @author Uladzimir Baraznouski
@@ -26,14 +27,14 @@ public class AdbPackage {
 	private String versionName;
 	private List<Permission> permissions;
 
-	public AdbPackage(String namePackage) {
+	public AdbPackage(final String namePackage) {
 	this(null, namePackage,null, null);
 
 
 	}
 
-	public AdbPackage(AdbModule adb, String namePackage, String file,
-			String device) {
+	public AdbPackage(final AdbModule adb, final String namePackage, final String file,
+			final String device) {
 		this.name = namePackage;
 		this.device = device;
 		this.fileName = file;
@@ -54,12 +55,12 @@ public class AdbPackage {
 		return device;
 	}
 
-	public void setTempDefaultActivity(String defaultActivity) {
+	public void setTempDefaultActivity(final String defaultActivity) {
 		this.defaultActivity = defaultActivity;
 
 	}
 
-	public void setDefaultActivity(String defaultActivity) throws IOException {
+	public void setDefaultActivity(final String defaultActivity) throws IOException {
 		setTempDefaultActivity(defaultActivity);
 		if (defaultActivity != null) {
 			adb.setNameActivity(name, defaultActivity);
@@ -82,7 +83,7 @@ public class AdbPackage {
 		return label;
 	}
 
-	public void setLabel(String label) throws IOException {
+	public void setLabel(final String label) throws IOException {
 		this.label = label;
 		if (this.label != null) {
 			adb.setLabelActivity(name, this.label);
@@ -94,11 +95,11 @@ public class AdbPackage {
 		return device;
 	}
 
-	public void setDevice(String device) {
+	public void setDevice(final String device) {
 		this.device = device;
 	}
 
-	public void setFileName(String fileName) {
+	public void setFileName(final String fileName) {
 		this.fileName = fileName;
 	}
 
@@ -115,16 +116,16 @@ public class AdbPackage {
 	}
 
 	@Deprecated
-	public void reinstall(String activity, String pathApp)
+	public void reinstall(final String activity, final String pathApp)
 			throws InstallException {
 		adb.reinstall(device, name, activity, pathApp);
 	}
 
-	public void reinstall(String pathApp) throws InstallException {
+	public void reinstall(final String pathApp) throws InstallException {
 		adb.reinstall(device, pathApp);
 	}
 
-	public void start(String activity) {
+	public void start(final String activity) {
 		adb.startActivity(device, name, activity);
 	}
 
@@ -135,7 +136,7 @@ public class AdbPackage {
 		adb.startActivity(device, name, defaultActivity);
 	}
 
-	public void debug(String activity) {
+	public void debug(final String activity) {
 		adb.debugActivity(device, name, activity);
 	}
 
@@ -146,7 +147,7 @@ public class AdbPackage {
 		adb.debugActivity(device, name, defaultActivity);
 	}
 
-	public void download(String toPath) {
+	public void download(final String toPath) {
 		adb.downloadFile(device, fileName, toPath);
 	}
 
@@ -161,29 +162,29 @@ public class AdbPackage {
 	 * @param count
 	 *            - count events
 	 */
-	public void monkey(int count) {
+	public void monkey(final int count) {
 		adb.monkey(device, name, count);
 	}
 
-	public void setPerrmissons(List<String> permissions) {
+	public void setPerrmissons(final List<String> permissions) {
 		this.permissions = new LinkedList<Permission>();
 		for (String string : permissions) {
 			this.permissions.add(new Permission(adb,string));
 		}
 	}
 
-	public void setListPerrmissons(List<Permission> permissions) {
+	public void setListPerrmissons(final List<Permission> permissions) {
 		this.permissions = permissions;
 
 	}
 
 
-	public void setVersionName(String versionName) {
+	public void setVersionName(final String versionName) {
 		this.versionName = versionName;
 
 	}
 
-	public void setVersionCode(String versionCode) {
+	public void setVersionCode(final String versionCode) {
 		this.versionCode = versionCode;
 	}
 
@@ -203,7 +204,7 @@ public class AdbPackage {
 		adb.updatePackage(this);
 	}
 
-	public void updateInfo(AdbPackage adbPackage) throws IOException
+	public void updateInfo(final AdbPackage adbPackage) throws IOException
 	{
 		this.setDefaultActivity(adbPackage.getDefaultActivity());
 		this.setLabel(adbPackage.getLabel());
@@ -213,8 +214,16 @@ public class AdbPackage {
 
 	}
 
+	public AdbShell createShellRunAs(final String... cmd) {
+		return adb.createShellRunAs(device, name, cmd);
+	}
+
+	public AdbShell createShellRunAs(final String cmd) {
+		return adb.createShellRunAs(device, name, cmd);
+	}
+
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == null) {
 			return false;
 		}

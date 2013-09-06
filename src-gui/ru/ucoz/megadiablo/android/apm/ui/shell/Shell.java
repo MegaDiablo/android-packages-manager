@@ -3,6 +3,7 @@ package ru.ucoz.megadiablo.android.apm.ui.shell;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -37,7 +38,9 @@ public class Shell extends JDialog implements Runnable {
 	 */
 	public Shell(final AdbShell pAdbShell) {
 		mAdbShell = pAdbShell;
-		setBounds(100, 100, 450, 300);
+		setLocation(100, 100);
+		setMinimumSize(new Dimension(320, 240));
+		setSize(new Dimension(640, 480));
 		getContentPane().setLayout(new BorderLayout());
 		mContentScroll.setBorder(new EmptyBorder(0, 0, 0, 0));
 		getContentPane().add(mContentScroll, BorderLayout.CENTER);

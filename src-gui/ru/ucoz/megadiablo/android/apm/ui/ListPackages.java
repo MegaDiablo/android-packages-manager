@@ -60,6 +60,7 @@ public class ListPackages extends JPanel {
 	private JMenuItem mMenuItemShellRunAs;
 	private JSeparator separator;
 	private JMenuItem mMenuItemClearData;
+	private JMenuItem mMenuItemMonkey;
 
 	public ListPackages(final Core pCore) {
 		mCore = pCore;
@@ -182,6 +183,18 @@ public class ListPackages extends JPanel {
 			popupMenu.add(mMenuItemShellRunAs);
 		}
 
+		{
+			mMenuItemMonkey = new JMenuItem("Monkey");
+			mMenuItemMonkey.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					monkeyPackages();
+				}
+			});
+			mMenuItemMonkey
+					.setToolTipText("Позволяет запустить консоль с правами приложения");
+			popupMenu.add(mMenuItemMonkey);
+		}
 		{
 			separator = new JSeparator();
 			popupMenu.add(separator);
@@ -408,6 +421,13 @@ public class ListPackages extends JPanel {
 			startPackage(index, pDebug);
 		}
 	}
+	public void monkeyPackages() {
+		int[] selected = table.getSelectedRows();
+		for (int index : selected) {
+			monkeyPackage(index);
+		}
+	}
+
 
 	public void clearDataPackages() {
 		int[] selected = table.getSelectedRows();
@@ -439,6 +459,14 @@ public class ListPackages extends JPanel {
 		AdbPackage item = getAdbPackageByIndex(index);
 		if (item != null) {
 			mCore.startApp(item, pDebug);
+		}
+		return true;
+	}
+
+	private boolean monkeyPackage(final int index) {
+		AdbPackage item = getAdbPackageByIndex(index);
+		if (item != null) {
+			mCore.monkeyApp(item, 1000);
 		}
 		return true;
 	}

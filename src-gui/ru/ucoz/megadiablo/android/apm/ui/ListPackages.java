@@ -345,6 +345,7 @@ public class ListPackages extends JPanel {
 		mMenuItemDelete.setEnabled(enabled);
 		mMenuItemDownload.setEnabled(enabled);
 		mMenuItemShellRunAs.setEnabled(enabled);
+		mMenuItemMonkey.setEnabled(enabled);
 	}
 
 	static class FilterByText extends RowFilter<TableModel, Integer> {

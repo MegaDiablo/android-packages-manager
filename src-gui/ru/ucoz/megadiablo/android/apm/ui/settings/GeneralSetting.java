@@ -41,7 +41,7 @@ public class GeneralSetting extends JPanel {
 	private JCheckBox mSettingAutorefreshDevices;
 	private JSpinner mSettingTimeAutorefreshDevices;
 	private JLabel mSettingLabelMonkeyCount;
-	private JSpinner mSettinMonkeyCount;
+	private JSpinner mSettingMonkeyCount;
 
 	public GeneralSetting(final Window pOwner) {
 		setBorder(new EmptyBorder(3, 3, 3, 3));
@@ -174,8 +174,8 @@ public class GeneralSetting extends JPanel {
 		gbc_SettingMonkeyCount.gridy = 7;
 		add(mSettingLabelMonkeyCount, gbc_SettingMonkeyCount);
 
-		mSettinMonkeyCount = new JSpinner();
-		mSettinMonkeyCount.setModel(new SpinnerNumberModel(
+		mSettingMonkeyCount = new JSpinner();
+		mSettingMonkeyCount.setModel(new SpinnerNumberModel(
 				mSettings.getMonkeyCount(),
 				100,
 				86400000,
@@ -186,7 +186,7 @@ public class GeneralSetting extends JPanel {
 		gbc_spinnerMonkey.insets = new Insets(0, 0, 5, 5);
 		gbc_spinnerMonkey.gridx = 3;
 		gbc_spinnerMonkey.gridy = 7;
-		add(mSettinMonkeyCount, gbc_spinnerMonkey);
+		add(mSettingMonkeyCount, gbc_spinnerMonkey);
 
 
 
@@ -259,6 +259,8 @@ public class GeneralSetting extends JPanel {
 						.isAutorefreshListDevices());
 				mSettingTimeAutorefreshDevices.getModel().setValue(
 						mSettings.getTimeAutoRefreshDevices());
+				mSettingMonkeyCount.getModel().setValue(
+						mSettings.getMonkeyCount());
 			}
 		});
 	}
@@ -275,6 +277,7 @@ public class GeneralSetting extends JPanel {
 		mSettings
 				.setTimeAutoRefreshDevices((Integer) mSettingTimeAutorefreshDevices
 						.getValue());
+		mSettings.setMonkeyCount((Integer) mSettingMonkeyCount.getValue());
 		// mSettings.setAutorefreshListDevices(mSettingAutorefreshDevices.isSelected());
 	}
 

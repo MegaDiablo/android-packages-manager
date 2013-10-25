@@ -27,7 +27,8 @@ public enum EnumEvents {
 	CLEAR_FOLDER_TEMP(10014),
 	CLEAR_DATA(10015),
 	SHELL(10016),
-	RUN_AS(10017);
+	RUN_AS(10017),
+	MONKEY(10018);
 	// STOP_ADB(10011),
 	// ;
 

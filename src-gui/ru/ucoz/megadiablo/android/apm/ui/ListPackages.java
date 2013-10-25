@@ -30,6 +30,7 @@ import ru.ucoz.megadiablo.android.apm.Core;
 import ru.ucoz.megadiablo.android.apm.FileDrop;
 import ru.ucoz.megadiablo.android.apm.iface.PackagesListener;
 import ru.ucoz.megadiablo.android.apm.impl.PackagesListenerDefault;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 import com.adbhelper.adb.AdbPackage;
 
@@ -60,10 +61,12 @@ public class ListPackages extends JPanel {
 	private JMenuItem mMenuItemShellRunAs;
 	private JSeparator separator;
 	private JMenuItem mMenuItemClearData;
+	private JMenuItem mMenuItemMonkey;
+	private Settings mSettings;
 
 	public ListPackages(final Core pCore) {
 		mCore = pCore;
-
+		mSettings = Settings.getInstance();
 		setLayout(new BorderLayout(0, 0));
 
 		sorter = new TableRowSorter<TableModel>();
@@ -182,6 +185,18 @@ public class ListPackages extends JPanel {
 			popupMenu.add(mMenuItemShellRunAs);
 		}
 
+		{
+			mMenuItemMonkey = new JMenuItem("Monkey");
+			mMenuItemMonkey.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					monkeyPackages();
+				}
+			});
+			mMenuItemMonkey
+					.setToolTipText("Позволяет запустить консоль с правами приложения");
+			popupMenu.add(mMenuItemMonkey);
+		}
 		{
 			separator = new JSeparator();
 			popupMenu.add(separator);
@@ -408,6 +423,13 @@ public class ListPackages extends JPanel {
 			startPackage(index, pDebug);
 		}
 	}
+	public void monkeyPackages() {
+		int[] selected = table.getSelectedRows();
+		for (int index : selected) {
+			monkeyPackage(index);
+		}
+	}
+
 
 	public void clearDataPackages() {
 		int[] selected = table.getSelectedRows();
@@ -439,6 +461,15 @@ public class ListPackages extends JPanel {
 		AdbPackage item = getAdbPackageByIndex(index);
 		if (item != null) {
 			mCore.startApp(item, pDebug);
+		}
+		return true;
+	}
+
+	private boolean monkeyPackage(final int index) {
+		AdbPackage item = getAdbPackageByIndex(index);
+		if (item != null) {
+			int count = mSettings.getMonkeyCount();
+			mCore.monkeyApp(item, count);
 		}
 		return true;
 	}

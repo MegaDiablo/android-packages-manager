@@ -20,6 +20,8 @@ public final class Consts {
 		public static final String FILTER_TEXT = "filter.text";
 		public static final String DEVICE_AUTO_REFRESH_TIME =
 				"device.auto.refresh";
+		public static final String MONKEY_COUNT =
+				"monkey.count";
 
 		public static final String CONNECT_DEVICE_COUNT =
 				"connect.device.count";
@@ -55,6 +57,7 @@ public final class Consts {
 
 		public static final int DELAY_EVENT_UPDATER = 5000;
 		public static final int AUTO_REFRESH_DEVICES = 5000;
+		public static final int MONKEY_COUNT = 1000;
 		public static final int CONNECT_DEVICE_MAX_COUNT = 5;
 
 		private Default() {

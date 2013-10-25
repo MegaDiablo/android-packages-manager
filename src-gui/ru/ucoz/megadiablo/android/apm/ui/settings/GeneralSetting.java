@@ -21,12 +21,12 @@ import javax.swing.event.ChangeListener;
 
 /**
  * The Class SettingsPanel.
- * 
+ *
  * @author Alexander Gromyko
  */
 public class GeneralSetting extends JPanel {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 171436532649840052L;
 	private Settings mSettings = Settings.getInstance();
@@ -40,16 +40,19 @@ public class GeneralSetting extends JPanel {
 	private JButton mButtonOk;
 	private JCheckBox mSettingAutorefreshDevices;
 	private JSpinner mSettingTimeAutorefreshDevices;
+	private JLabel mSettingLabelMonkeyCount;
+	private JSpinner mSettinMonkeyCount;
 
 	public GeneralSetting(final Window pOwner) {
 		setBorder(new EmptyBorder(3, 3, 3, 3));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 103, 0, 103, 72, 0, 0 };
-		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 };
 		gridBagLayout.columnWeights =
 				new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights =
 				new double[] {
+						0.0,
 						0.0,
 						0.0,
 						0.0,
@@ -158,10 +161,39 @@ public class GeneralSetting extends JPanel {
 		gbc_spinner.gridx = 3;
 		gbc_spinner.gridy = 6;
 		add(mSettingTimeAutorefreshDevices, gbc_spinner);
+
+
+		mSettingLabelMonkeyCount =
+				new JLabel("Количество событий Monkey");
+		GridBagConstraints gbc_SettingMonkeyCount =
+				new GridBagConstraints();
+		gbc_SettingMonkeyCount.anchor = GridBagConstraints.WEST;
+		gbc_SettingMonkeyCount.gridwidth = 3;
+		gbc_SettingMonkeyCount.insets = new Insets(0, 0, 5, 5);
+		gbc_SettingMonkeyCount.gridx = 0;
+		gbc_SettingMonkeyCount.gridy = 7;
+		add(mSettingLabelMonkeyCount, gbc_SettingMonkeyCount);
+
+		mSettinMonkeyCount = new JSpinner();
+		mSettinMonkeyCount.setModel(new SpinnerNumberModel(
+				mSettings.getMonkeyCount(),
+				100,
+				86400000,
+				100));
+
+		GridBagConstraints gbc_spinnerMonkey = new GridBagConstraints();
+		gbc_spinnerMonkey.gridwidth = 2;
+		gbc_spinnerMonkey.insets = new Insets(0, 0, 5, 5);
+		gbc_spinnerMonkey.gridx = 3;
+		gbc_spinnerMonkey.gridy = 7;
+		add(mSettinMonkeyCount, gbc_spinnerMonkey);
+
+
+
 		GridBagConstraints gbcButtonRestore = new GridBagConstraints();
 		gbcButtonRestore.insets = new Insets(0, 0, 0, 5);
 		gbcButtonRestore.gridx = 0;
-		gbcButtonRestore.gridy = 8;
+		gbcButtonRestore.gridy = 9;
 		add(mButtonReset, gbcButtonRestore);
 
 		mButtonApplay = new JButton("Применить");
@@ -174,7 +206,7 @@ public class GeneralSetting extends JPanel {
 		GridBagConstraints gbcButtonApplay = new GridBagConstraints();
 		gbcButtonApplay.insets = new Insets(0, 0, 0, 5);
 		gbcButtonApplay.gridx = 1;
-		gbcButtonApplay.gridy = 8;
+		gbcButtonApplay.gridy = 9;
 		add(mButtonApplay, gbcButtonApplay);
 
 		mButtonOk = new JButton("Ok");
@@ -190,7 +222,7 @@ public class GeneralSetting extends JPanel {
 		gbc_ButtonOk.fill = GridBagConstraints.HORIZONTAL;
 		gbc_ButtonOk.insets = new Insets(0, 0, 0, 5);
 		gbc_ButtonOk.gridx = 3;
-		gbc_ButtonOk.gridy = 8;
+		gbc_ButtonOk.gridy = 9;
 		add(mButtonOk, gbc_ButtonOk);
 
 		mButtonCancel = new JButton("Отмена");
@@ -204,7 +236,7 @@ public class GeneralSetting extends JPanel {
 		GridBagConstraints gbc_ButtonCancel = new GridBagConstraints();
 		gbc_ButtonCancel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_ButtonCancel.gridx = 4;
-		gbc_ButtonCancel.gridy = 8;
+		gbc_ButtonCancel.gridy = 9;
 		add(mButtonCancel, gbc_ButtonCancel);
 
 		loadSettings();

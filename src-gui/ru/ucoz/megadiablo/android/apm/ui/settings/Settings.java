@@ -38,11 +38,13 @@ public final class Settings {
 	private int mTimeAutoRefreshDevices = Consts.Default.AUTO_REFRESH_DEVICES;
 	private int mConnectDeviceMaxCount =
 			Consts.Default.CONNECT_DEVICE_MAX_COUNT;
-
+	private int mMonkeyCount = Consts.Default.MONKEY_COUNT;
 	// CONNECT_DEVICE_MAX_COUNT
 	private EnumPLAF mLookAndFeel;
 
 	private final Properties mProperties = new Properties();
+
+
 
 	private static void init() {
 		mSettings = new Settings();
@@ -55,6 +57,10 @@ public final class Settings {
 				parsePropToInt(
 						Consts.Settings.DEVICE_AUTO_REFRESH_TIME,
 						Consts.Default.AUTO_REFRESH_DEVICES);
+		mSettings.mMonkeyCount =
+				parsePropToInt(
+						Consts.Settings.MONKEY_COUNT,
+						Consts.Default.MONKEY_COUNT);
 
 		mSettings.mConnectDeviceMaxCount =
 				parsePropToInt(
@@ -227,6 +233,18 @@ public final class Settings {
 			mLookAndFeel = EnumPLAF.AERO;
 		}
 		return mLookAndFeel;
+	}
+
+	public int getMonkeyCount() {
+		return mMonkeyCount;
+	}
+
+	public void setMonkeyCount(final int pMonkeyCount) {
+		mMonkeyCount = pMonkeyCount;
+				mProperties.setProperty(
+				Consts.Settings.MONKEY_COUNT,
+				String.valueOf(pMonkeyCount));
+		fireChangedListener(Consts.Settings.MONKEY_COUNT);
 	}
 
 	public void load() {

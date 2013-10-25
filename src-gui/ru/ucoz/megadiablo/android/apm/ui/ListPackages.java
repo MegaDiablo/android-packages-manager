@@ -30,6 +30,7 @@ import ru.ucoz.megadiablo.android.apm.Core;
 import ru.ucoz.megadiablo.android.apm.FileDrop;
 import ru.ucoz.megadiablo.android.apm.iface.PackagesListener;
 import ru.ucoz.megadiablo.android.apm.impl.PackagesListenerDefault;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 import com.adbhelper.adb.AdbPackage;
 
@@ -61,10 +62,11 @@ public class ListPackages extends JPanel {
 	private JSeparator separator;
 	private JMenuItem mMenuItemClearData;
 	private JMenuItem mMenuItemMonkey;
+	private Settings mSettings;
 
 	public ListPackages(final Core pCore) {
 		mCore = pCore;
-
+		mSettings = Settings.getInstance();
 		setLayout(new BorderLayout(0, 0));
 
 		sorter = new TableRowSorter<TableModel>();
@@ -466,7 +468,8 @@ public class ListPackages extends JPanel {
 	private boolean monkeyPackage(final int index) {
 		AdbPackage item = getAdbPackageByIndex(index);
 		if (item != null) {
-			mCore.monkeyApp(item, 1000);
+			int count = mSettings.getMonkeyCount();
+			mCore.monkeyApp(item, count);
 		}
 		return true;
 	}

@@ -1,2 +1,4 @@
 /bin
 /apm.prop
+*.iml
+/.idea

@@ -204,8 +204,9 @@ public class AdbModule implements AdbConsts {
 			FormatLog formatLog) {
 		String[] shellCmd = createShellCmd(pathAdb, device, cmd);
 
-		if (formatLog == null)
+		if (formatLog == null) {
 			formatLog = new DefaultFormatLog(logAdb);
+		}
 
 		return exec(shellCmd, formatLog);
 	}
@@ -601,7 +602,7 @@ public class AdbModule implements AdbConsts {
 		clearTemp(device.getName());
 	}
 
-	public Map<String, String> getPropertiesDevice(final String device) {
+	public synchronized Map<String, String> getPropertiesDevice(final String device) {
 
 		logAdb.info(String.format(LOG_GET_PROPERTIES_START, device));
 		String[] res = runAdb(device, CMD_GET_PROP.split(" "),

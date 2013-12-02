@@ -41,6 +41,9 @@ public final class Consts {
 
 		public static final String SETTINGS_DEVICES_AUTOREFRESH =
 				"settings.devices.autorefresh";
+		
+		public static final String SETTINGS_ADB_CONSOLE_CHARSET =
+				"settings.adb.console.charset";
 
 		public static final String FILE_PROP = "apm.prop";
 		public static final String FILE_PROP_APP = "app.prop";

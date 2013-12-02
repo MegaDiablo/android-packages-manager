@@ -10,3 +10,4 @@ settings.package.autostart=false
 settings.devices.autorefresh=true
 settings.package.use.reinstall=false
 system.packages.visible=false
+settings.adb.console.charset=UTF-8

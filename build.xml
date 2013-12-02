@@ -124,21 +124,24 @@
 		<zip destfile="${app.build.zip.name.nix}">
 			<fileset file="${app.build.jar.name}" />
 			<fileset file="${app.icon}" />
-			<fileset dir="${app.prop-default}" includes="*.prop" />
-			<fileset dir="${app.platform-tools.nix}" includes="*" />
-		</zip>
-		
-		<zip destfile="${app.build.zip.name.win}">
-			<fileset file="${app.build.jar.name}" />
-			<fileset file="${app.icon}" />
-			<fileset dir="${app.prop-default}" includes="*.prop" />
-			<fileset dir="${app.platform-tools.win}" includes="*" />
-		</zip>
-		
-		<zip destfile="${app.build.zip.name.mac}">
-			<fileset file="${app.build.jar.name}" />
-			<fileset file="${app.icon}" />
-			<fileset dir="${app.prop-default}" includes="*.prop" />
+            <fileset file="${app.license.file}" />
+            <fileset dir="${app.prop-default}" includes="*.prop" />
+            <fileset dir="${app.platform-tools.nix}" includes="*" />
+        </zip>
+
+        <zip destfile="${app.build.zip.name.win}">
+            <fileset file="${app.build.jar.name}" />
+            <fileset file="${app.icon}" />
+            <fileset file="${app.license.file}" />
+            <fileset dir="${app.prop-default}" includes="*.prop" />
+            <fileset dir="${app.platform-tools.win}" includes="*" />
+        </zip>
+
+        <zip destfile="${app.build.zip.name.mac}">
+            <fileset file="${app.build.jar.name}" />
+            <fileset file="${app.icon}" />
+            <fileset file="${app.license.file}" />
+            <fileset dir="${app.prop-default}" includes="*.prop" />
 			<fileset dir="${app.platform-tools.mac}" includes="*" />
 		</zip>
 	</target>

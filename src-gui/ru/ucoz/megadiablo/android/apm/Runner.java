@@ -41,6 +41,7 @@ public final class Runner {
 						settings.getAAPTPath(),
 						Consts.Settings.FILE_PROP_APP);
 		adb.loadFilterActivities(Consts.Settings.FILE_PROP_FILTER);
+		adb.setCharset(settings.getAdbConsoleCharset());
 
 		final Core core = new Core(adb, events);
 

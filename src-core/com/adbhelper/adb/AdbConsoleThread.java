@@ -3,6 +3,7 @@ package com.adbhelper.adb;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 import com.adbhelper.adb.log.FormatLog;
 import com.adbhelper.adb.log.LogAdb;
@@ -13,12 +14,21 @@ public class AdbConsoleThread extends Thread {
 	private StringBuffer console;
 	private FormatLog formatLog;
 	private boolean live = true;
+	private String charset = null;
 
 	public AdbConsoleThread(Process currentProcess, FormatLog formatLog) {
 		super("AdbConsoleThread");
 		this.currentProcess = currentProcess;
 		this.console = new StringBuffer();
 		this.formatLog = formatLog;
+	}
+	
+	public AdbConsoleThread(Process currentProcess, FormatLog formatLog, String charset) {
+		super("AdbConsoleThread");
+		this.currentProcess = currentProcess;
+		this.console = new StringBuffer();
+		this.formatLog = formatLog;
+		this.charset = charset;
 	}
 
 	private BufferedReader bufferedReader;
@@ -83,23 +93,37 @@ public class AdbConsoleThread extends Thread {
 
 	@Override
 	public void run() {
-		bufferedReader = new BufferedReader(new InputStreamReader(
-				currentProcess.getInputStream()));
+		if (this.charset != null) {
+			try {
+				bufferedReader = 
+					new BufferedReader(
+						new InputStreamReader(currentProcess.getInputStream(), this.charset));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				formatLog.error(e.getMessage());
+				bufferedReader = 
+					new BufferedReader(
+						new InputStreamReader(currentProcess.getInputStream()));
+			}
+		} else {
+			bufferedReader = 
+				new BufferedReader(
+					new InputStreamReader(currentProcess.getInputStream()));
+		}
+
 		String line = "";
 		try {
 			while ((isLive()) && ((line = bufferedReader.readLine()) != null)) {
 				if (!line.equals("")) {
 					console.append(line).append("\n");
 					formatLog.info(formatLog.changeLine(line));
-
 				}
-
 			}
-
 			// LogAdb.info("endConsole");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		endConsole();
 	}
 

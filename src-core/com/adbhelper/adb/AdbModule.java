@@ -59,6 +59,7 @@ public class AdbModule implements AdbConsts {
 	private Properties filterActivities;
 	private File fileActivities;
 	private Process currentProcess;
+	private String charset;
 
 	private ResourceBundle labelsPermissions;
 
@@ -154,7 +155,6 @@ public class AdbModule implements AdbConsts {
 		this.fileAapt = fileAapt;
 		this.propertiesActivities = listActivities;
 		logAdb.printInfo(LOG_INIT_ADBMODULE, VERSION_ADB_HELPER);
-
 	}
 
 	public AdbModule(final String fileAdb) {
@@ -743,8 +743,8 @@ public class AdbModule implements AdbConsts {
 			// logAdb.info("Exec " + cmd);
 			// logAdb.info("start process");
 			currentProcess = run.exec(cmds);
-			AdbConsoleThread consoleThread = new AdbConsoleThread(
-					currentProcess, formatLog);
+			AdbConsoleThread consoleThread = 
+				new AdbConsoleThread(currentProcess, formatLog, this.charset);
 
 			consoleThread.start();
 
@@ -920,6 +920,14 @@ public class AdbModule implements AdbConsts {
 	public void setLocale(final Control locale) {
 		labelsPermissions = ResourceBundle.getBundle(
 				NAME_RESOURCE_LABELS_PERMISSIONS, locale);
+	}
+
+	public void setCharset(final String pCharset) {
+		this.charset = pCharset;
+	}
+
+	public String getCharset() {
+		return this.charset;
 	}
 
 	public AdbPackage getInfoApk(final String pathApp) {

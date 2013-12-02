@@ -161,11 +161,11 @@ public class SearchPackages extends JPanel {
 
 			public void changeSelectDevice(final AdbDevice pAdbDevice) {
 				updateSelectDevice(pAdbDevice);
-			};
+			}
 
 			public void updateListDevices(final List<AdbDevice> pAdbDevices) {
 				updateDevices(pAdbDevices);
-			};
+			}
 		};
 
 		mCore.addDevicesListener(mDevicesListener);

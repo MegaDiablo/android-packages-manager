@@ -28,6 +28,7 @@ import com.adbhelper.adb.log.InstallFormatLog;
 import com.adbhelper.adb.log.LogAdb;
 import com.adbhelper.adb.log.PackagesFormatLog;
 import com.adbhelper.adb.log.StartFormatLog;
+import com.adbhelper.adb.shell.AdbShell;
 
 public class AdbModule implements AdbConsts {
 
@@ -58,6 +59,7 @@ public class AdbModule implements AdbConsts {
 	private Properties filterActivities;
 	private File fileActivities;
 	private Process currentProcess;
+	private String charset;
 
 	private ResourceBundle labelsPermissions;
 
@@ -87,6 +89,8 @@ public class AdbModule implements AdbConsts {
 
 	private static final String CMD_GET_PROP = "shell getprop";
 	private static final String CMD_CLEAR_DATA = "shell pm clear %app%";
+	private static final String CMD_SHELL = "shell";
+	private static final String CMD_RUN_AS = "run-as %app%";
 
 
 	private static final String LOG_SEND_KEYCODE = "Sending key code ";
@@ -131,6 +135,7 @@ public class AdbModule implements AdbConsts {
 
 	private static final String LOG_DEBUG = "Start debug %app%";
 	private static final String LOG_CLEAR_DATA = "Delete all data associated with %app%";
+	private static final String LOG_START_SHELL = "Start shell";
 
 	private final LogAdb logAdb=new LogAdb();
 
@@ -150,7 +155,6 @@ public class AdbModule implements AdbConsts {
 		this.fileAapt = fileAapt;
 		this.propertiesActivities = listActivities;
 		logAdb.printInfo(LOG_INIT_ADBMODULE, VERSION_ADB_HELPER);
-
 	}
 
 	public AdbModule(final String fileAdb) {
@@ -198,6 +202,18 @@ public class AdbModule implements AdbConsts {
 
 	public String runCmd(final String pathAdb, final String device, final String[] cmd,
 			FormatLog formatLog) {
+		String[] shellCmd = createShellCmd(pathAdb, device, cmd);
+
+		if (formatLog == null) {
+			formatLog = new DefaultFormatLog(logAdb);
+		}
+
+		return exec(shellCmd, formatLog);
+	}
+
+	private String[] createShellCmd(final String pathAdb,
+			final String device,
+			final String[] cmd) {
 		String[] shellCmd;
 		int k = 1;
 		String[] firstCmds = {};
@@ -219,11 +235,7 @@ public class AdbModule implements AdbConsts {
 		for (int i = 0; i < cmd.length; i++) {
 			shellCmd[i + k + news] = cmd[i];
 		}
-
-		if (formatLog == null)
-			formatLog = new DefaultFormatLog(logAdb);
-
-		return exec(shellCmd, formatLog);
+		return shellCmd;
 	}
 
 	public void loadListActivities(final File file) throws IOException {
@@ -590,7 +602,7 @@ public class AdbModule implements AdbConsts {
 		clearTemp(device.getName());
 	}
 
-	public Map<String, String> getPropertiesDevice(final String device) {
+	public synchronized Map<String, String> getPropertiesDevice(final String device) {
 
 		logAdb.info(String.format(LOG_GET_PROPERTIES_START, device));
 		String[] res = runAdb(device, CMD_GET_PROP.split(" "),
@@ -657,6 +669,68 @@ public class AdbModule implements AdbConsts {
 
 	}
 
+
+	public AdbShell createShellRunAs(final String device,
+			final String packageName,
+			final String cmd) {
+		String[] cmds = cmd.split(" ");
+		return createShellRunAs(device, packageName, cmds);
+	}
+
+	public AdbShell createShellRunAs(final String device,
+			final String packageName,
+			final String... cmd) {
+		AdbShell shell = createShell(device);
+
+		String[] cmdRunAs = CMD_RUN_AS.split(" ");
+		try {
+			for (int i = 0; i < cmdRunAs.length; i++) {
+				shell.write(cmdRunAs[i].replace(MASK_APP, packageName));
+				shell.write(" ");
+			}
+			for (int i = 0; i < cmd.length; i++) {
+				shell.write(cmd[i]);
+				shell.write(cmd[i]);
+			}
+			shell.postString("\n");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return shell;
+	}
+
+	public AdbShell createShell(final String device,
+			final String cmd) {
+		String[] cmds = cmd.split(" ");
+		return createShell(device, cmds);
+	}
+	public AdbShell createShell(final String device, final String... cmd) {
+		String[] shellCmd = new String[cmd.length + 1];
+		shellCmd[0] = CMD_SHELL;
+		for (int i = 0; i < cmd.length; i++) {
+			shellCmd[i + 1] = cmd[i];
+		}
+		return runProcess(fileAdb, device, shellCmd);
+	}
+	public AdbShell runProcess(final String pathAdb, final String device, final String[] cmd) {
+		String[] shellCmd = createShellCmd(pathAdb, device, cmd);
+		return execShellProcess(shellCmd);
+	}
+
+	public AdbShell execShellProcess(final String[] cmds) {
+		Runtime run = Runtime.getRuntime();
+		logAdb.debug(LOG_START_SHELL);
+		Process process;
+		try {
+			process = run.exec(cmds);
+			return new AdbShell(process);
+		} catch (IOException e) {
+			throw new AdbError(e);
+		}
+	}
+
 	public String exec(final String[] cmds, final FormatLog formatLog) {
 		Runtime run = Runtime.getRuntime();
 		String res = "";
@@ -669,8 +743,8 @@ public class AdbModule implements AdbConsts {
 			// logAdb.info("Exec " + cmd);
 			// logAdb.info("start process");
 			currentProcess = run.exec(cmds);
-			AdbConsoleThread consoleThread = new AdbConsoleThread(
-					currentProcess, formatLog);
+			AdbConsoleThread consoleThread = 
+				new AdbConsoleThread(currentProcess, formatLog, this.charset);
 
 			consoleThread.start();
 
@@ -846,6 +920,14 @@ public class AdbModule implements AdbConsts {
 	public void setLocale(final Control locale) {
 		labelsPermissions = ResourceBundle.getBundle(
 				NAME_RESOURCE_LABELS_PERMISSIONS, locale);
+	}
+
+	public void setCharset(final String pCharset) {
+		this.charset = pCharset;
+	}
+
+	public String getCharset() {
+		return this.charset;
 	}
 
 	public AdbPackage getInfoApk(final String pathApp) {

@@ -30,6 +30,7 @@ import ru.ucoz.megadiablo.android.apm.Core;
 import ru.ucoz.megadiablo.android.apm.FileDrop;
 import ru.ucoz.megadiablo.android.apm.iface.PackagesListener;
 import ru.ucoz.megadiablo.android.apm.impl.PackagesListenerDefault;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 import com.adbhelper.adb.AdbPackage;
 
@@ -57,12 +58,15 @@ public class ListPackages extends JPanel {
 	private JMenuItem mMenuItemDelete;
 	private JMenuItem mMenuItemRun;
 	private JMenuItem mMenuItemRefresh;
+	private JMenuItem mMenuItemShellRunAs;
 	private JSeparator separator;
 	private JMenuItem mMenuItemClearData;
+	private JMenuItem mMenuItemMonkey;
+	private Settings mSettings;
 
 	public ListPackages(final Core pCore) {
 		mCore = pCore;
-
+		mSettings = Settings.getInstance();
 		setLayout(new BorderLayout(0, 0));
 
 		sorter = new TableRowSorter<TableModel>();
@@ -168,6 +172,31 @@ public class ListPackages extends JPanel {
 			popupMenu.add(mMenuItemRun);
 		}
 
+		{
+			mMenuItemShellRunAs = new JMenuItem("Консоль приложения");
+			mMenuItemShellRunAs.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					runShellRunAsPackages();
+				}
+			});
+			mMenuItemShellRunAs
+					.setToolTipText("Позволяет запустить консоль с правами приложения");
+			popupMenu.add(mMenuItemShellRunAs);
+		}
+
+		{
+			mMenuItemMonkey = new JMenuItem("Monkey");
+			mMenuItemMonkey.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					monkeyPackages();
+				}
+			});
+			mMenuItemMonkey
+					.setToolTipText("Позволяет запустить консоль с правами приложения");
+			popupMenu.add(mMenuItemMonkey);
+		}
 		{
 			separator = new JSeparator();
 			popupMenu.add(separator);
@@ -315,6 +344,8 @@ public class ListPackages extends JPanel {
 		mMenuItemRun.setEnabled(enabled);
 		mMenuItemDelete.setEnabled(enabled);
 		mMenuItemDownload.setEnabled(enabled);
+		mMenuItemShellRunAs.setEnabled(enabled);
+		mMenuItemMonkey.setEnabled(enabled);
 	}
 
 	static class FilterByText extends RowFilter<TableModel, Integer> {
@@ -378,12 +409,28 @@ public class ListPackages extends JPanel {
 		mCore.refreshPackages();
 	}
 
+	public void runShellRunAsPackages() {
+		int[] selected = table.getSelectedRows();
+		for (int index : selected) {
+			runShellRunAsPackage(index);
+		}
+
+		mCore.refreshPackages();
+	}
+
 	public void startPackages(final boolean pDebug) {
 		int[] selected = table.getSelectedRows();
 		for (int index : selected) {
 			startPackage(index, pDebug);
 		}
 	}
+	public void monkeyPackages() {
+		int[] selected = table.getSelectedRows();
+		for (int index : selected) {
+			monkeyPackage(index);
+		}
+	}
+
 
 	public void clearDataPackages() {
 		int[] selected = table.getSelectedRows();
@@ -419,6 +466,15 @@ public class ListPackages extends JPanel {
 		return true;
 	}
 
+	private boolean monkeyPackage(final int index) {
+		AdbPackage item = getAdbPackageByIndex(index);
+		if (item != null) {
+			int count = mSettings.getMonkeyCount();
+			mCore.monkeyApp(item, count);
+		}
+		return true;
+	}
+
 	private boolean clearDataPackage(final int index) {
 		AdbPackage item = getAdbPackageByIndex(index);
 		if (item != null) {
@@ -431,6 +487,14 @@ public class ListPackages extends JPanel {
 		AdbPackage item = getAdbPackageByIndex(index);
 		if (item != null) {
 			mCore.updateInforamtionApplication(item);
+		}
+		return true;
+	}
+
+	private boolean runShellRunAsPackage(final int index) {
+		AdbPackage item = getAdbPackageByIndex(index);
+		if (item != null) {
+			mCore.runShellRunAs(item);
 		}
 		return true;
 	}

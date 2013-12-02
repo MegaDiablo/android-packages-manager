@@ -6,6 +6,7 @@ import java.util.Map;
 import com.adbhelper.adb.exceptions.DeviceIsEmulatorRebootException;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
 import com.adbhelper.adb.exceptions.install.InstallException;
+import com.adbhelper.adb.shell.AdbShell;
 
 public class AdbDevice {
 
@@ -21,7 +22,7 @@ public class AdbDevice {
 	private List<AdbPackage> listPackges;
 	private Map<String, String> properties;
 
-	public AdbDevice(String name, String type, AdbModule adb) {
+	public AdbDevice(final String name, final String type, final AdbModule adb) {
 		super();
 		this.setName(name);
 		this.setType(type);
@@ -32,7 +33,7 @@ public class AdbDevice {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -47,7 +48,7 @@ public class AdbDevice {
 	 * @param type
 	 *            the type to set
 	 */
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -58,7 +59,7 @@ public class AdbDevice {
 		return type;
 	}
 
-	public int uninstall(String app) {
+	public int uninstall(final String app) {
 		return adb.uninstall(name, app);
 	}
 
@@ -68,31 +69,31 @@ public class AdbDevice {
 
 
 	@Deprecated
-	public String install(String pathApp) throws InstallException {
+	public String install(final String pathApp) throws InstallException {
 		return adb.install(name, pathApp);
 	}
 
-	public String install(String pathApp, boolean autostart)
+	public String install(final String pathApp, final boolean autostart)
 			throws InstallException {
 		return adb.install(name, pathApp, autostart);
 	}
 
-	public void reinstall(String pathApp) throws InstallException {
+	public void reinstall(final String pathApp) throws InstallException {
 		adb.reinstall(name, pathApp);
 	}
 
-	public void reinstall(String pathApp, boolean autoStart)
+	public void reinstall(final String pathApp, final boolean autoStart)
 			throws InstallException {
 		adb.reinstall(name, pathApp, autoStart);
 	}
 
 	@Deprecated
-	public void reinstall(String app, String activity, String pathApp)
+	public void reinstall(final String app, final String activity, final String pathApp)
 			throws InstallException {
 		adb.reinstall(name, app, activity, pathApp);
 	}
 
-	public void start(String app, String activity) {
+	public void start(final String app, final String activity) {
 		adb.startActivity(name, app, activity);
 	}
 
@@ -108,13 +109,13 @@ public class AdbDevice {
 		return refreshListPackages(false);
 	}
 
-	public List<AdbPackage> refreshListPackages(boolean withSystem)
+	public List<AdbPackage> refreshListPackages(final boolean withSystem)
 			throws NotAccessPackageManager {
 		listPackges = adb.getPackages(name, withSystem);
 		return listPackges;
 	}
 
-	public List<AdbPackage> getPackagesNonSystem(boolean refreshList)
+	public List<AdbPackage> getPackagesNonSystem(final boolean refreshList)
 			throws NotAccessPackageManager {
 		List<AdbPackage> packges = adb.getPackagesNonSystem(name);
 		if (refreshList) {
@@ -132,7 +133,7 @@ public class AdbDevice {
 		return getPackages(DEFAULT_OPTIONS_WITH_SYSTEM);
 	}
 
-	public List<AdbPackage> getPackages(boolean withSystem)
+	public List<AdbPackage> getPackages(final boolean withSystem)
 			throws NotAccessPackageManager {
 		if (listPackges == null) {
 			refreshListPackages(withSystem);
@@ -150,7 +151,7 @@ public class AdbDevice {
 		return name.matches(EMULATOR_NAME);
 	}
 
-	public void sendKeyCode(int keyCode) {
+	public void sendKeyCode(final int keyCode) {
 		adb.sendKeyCode(this, keyCode);
 	}
 
@@ -165,7 +166,7 @@ public class AdbDevice {
 		return properties;
 	}
 
-	public String getProperty(String key) {
+	public String getProperty(final String key) {
 		return getProperties().get(key);
 	}
 
@@ -226,7 +227,7 @@ public class AdbDevice {
 
 	}
 
-	public void updatePackages(boolean withSystem) throws NotAccessPackageManager{
+	public void updatePackages(final boolean withSystem) throws NotAccessPackageManager{
 		adb.updatePackages(getPackages(withSystem));
 	}
 
@@ -234,8 +235,15 @@ public class AdbDevice {
 		adb.updatePackages(getPackages(DEFAULT_OPTIONS_WITH_SYSTEM));
 	}
 
+	public AdbShell createShell(final String cmd) {
+		return adb.createShell(name, cmd);
+	}
+
+	public AdbShell createShell(final String... cmd) {
+		return adb.createShell(name, cmd);
+	}
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == this) {
 			return true;
 		}

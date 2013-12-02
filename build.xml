@@ -4,7 +4,7 @@
 	<property name="version.core"  value="${app.build.verision}.${app.build.number}"/>
 	<property name="app.short-name" value="apm" />
 	
-	<property name="version" value="0.6.0" />
+	<property name="version" value="0.7.0" />
 	<property name="version.apm" value="${version}" />
 	<property name="year" value="2011-2013" />
 	
@@ -40,6 +40,7 @@
 	<property name="app.src-core" value="${app.base}/${name.src}-core" />
 	<property name="app.src-jtatoo" value="${app.base}/${name.src}-jtatoo" />
 	<property name="app.src-data" value="${app.base}/${name.src}-data" />
+	<property name="app.license.file" value="${app.base}/LICENSE" />
 
 	<property name="app.build" value="${app.base}/${name.bin}/${name.build}" />
 	<property name="app.build.src" value="${app.build}/${name.src}" />
@@ -103,11 +104,13 @@
 
 			<fileset dir="${app.build.bin}" includes="**/*.class" excludes="com/adbhelper/*.class" />
 			<fileset dir="${app.build.src}" includes="**/*" excludes="**/*.java" />
+			<fileset file="${app.license.file}"/>
 
 			<manifest>
-				<attribute name="Manifest-Version" value="1.0" />
+				<attribute name="Manifest-Version" value="1.1" />
 				<attribute name="Class-Path" value="." />
 				<attribute name="Main-Class" value="${app.java.main-class}" />
+				<attribute name="LICENSE" value="GNU GPLv3" />
 			</manifest>
 		</jar>
 	</target>
@@ -121,21 +124,24 @@
 		<zip destfile="${app.build.zip.name.nix}">
 			<fileset file="${app.build.jar.name}" />
 			<fileset file="${app.icon}" />
-			<fileset dir="${app.prop-default}" includes="*.prop" />
-			<fileset dir="${app.platform-tools.nix}" includes="*" />
-		</zip>
-		
-		<zip destfile="${app.build.zip.name.win}">
-			<fileset file="${app.build.jar.name}" />
-			<fileset file="${app.icon}" />
-			<fileset dir="${app.prop-default}" includes="*.prop" />
-			<fileset dir="${app.platform-tools.win}" includes="*" />
-		</zip>
-		
-		<zip destfile="${app.build.zip.name.mac}">
-			<fileset file="${app.build.jar.name}" />
-			<fileset file="${app.icon}" />
-			<fileset dir="${app.prop-default}" includes="*.prop" />
+            <fileset file="${app.license.file}" />
+            <fileset dir="${app.prop-default}" includes="*.prop" />
+            <fileset dir="${app.platform-tools.nix}" includes="*" />
+        </zip>
+
+        <zip destfile="${app.build.zip.name.win}">
+            <fileset file="${app.build.jar.name}" />
+            <fileset file="${app.icon}" />
+            <fileset file="${app.license.file}" />
+            <fileset dir="${app.prop-default}" includes="*.prop" />
+            <fileset dir="${app.platform-tools.win}" includes="*" />
+        </zip>
+
+        <zip destfile="${app.build.zip.name.mac}">
+            <fileset file="${app.build.jar.name}" />
+            <fileset file="${app.icon}" />
+            <fileset file="${app.license.file}" />
+            <fileset dir="${app.prop-default}" includes="*.prop" />
 			<fileset dir="${app.platform-tools.mac}" includes="*" />
 		</zip>
 	</target>

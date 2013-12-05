@@ -1,66 +1,76 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
-
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.aero;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.text.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
+import javax.swing.text.View;
 
 /**
  * @author Michael Hagen
  */
 public class AeroTabbedPaneUI extends BaseTabbedPaneUI {
     private Color sepColors[] = null;
-    
-    public static ComponentUI createUI(JComponent c) { 
-        return new AeroTabbedPaneUI(); 
+
+    public static ComponentUI createUI(JComponent c) {
+        return new AeroTabbedPaneUI();
     }
-    
+
     protected void installComponents() {
         simpleButtonBorder = true;
         super.installComponents();
     }
-    
+
     protected Color[] getContentBorderColors(int tabPlacement) {
         if (sepColors == null) {
             sepColors = new Color[5];
-            sepColors[0] = ColorHelper.brighter(AeroLookAndFeel.getControlColorDark(), 40);
-            sepColors[1] = ColorHelper.brighter(AeroLookAndFeel.getControlColorLight(), 40);
-            sepColors[2] = ColorHelper.brighter(AeroLookAndFeel.getControlColorLight(), 60);
-            sepColors[3] = ColorHelper.brighter(AeroLookAndFeel.getControlColorLight(), 20);
-            sepColors[4] = ColorHelper.brighter(AeroLookAndFeel.getControlColorDark(), 30);
+            sepColors[0] = ColorHelper.brighter(AbstractLookAndFeel.getControlColorDark(), 40);
+            sepColors[1] = ColorHelper.brighter(AbstractLookAndFeel.getControlColorLight(), 40);
+            sepColors[2] = ColorHelper.brighter(AbstractLookAndFeel.getControlColorLight(), 60);
+            sepColors[3] = ColorHelper.brighter(AbstractLookAndFeel.getControlColorLight(), 20);
+            sepColors[4] = ColorHelper.brighter(AbstractLookAndFeel.getControlColorDark(), 30);
         }
         return sepColors;
     }
-    
-    protected Font getTabFont(boolean isSelected) {
-        if (isSelected)
-            return super.getTabFont(isSelected).deriveFont(Font.BOLD);
-        else
-            return super.getTabFont(isSelected);
-    }
 
-    protected void paintContentBorder(Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h) {
-        g.setColor(AbstractLookAndFeel.getTabAreaBackgroundColor());
-        int tabAreaHeight = calculateTabAreaHeight(tabPlacement, runCount, maxTabHeight);
-        int tabAreaWidth = calculateTabAreaWidth(tabPlacement, runCount, maxTabWidth);
-        if (tabPlacement == JTabbedPane.TOP || tabPlacement == JTabbedPane.LEFT) {
-            g.fillRect(x, y, tabAreaWidth, tabAreaHeight);
-        } else if (tabPlacement == JTabbedPane.BOTTOM) {
-            g.fillRect(x, h - tabAreaHeight + 1, w, tabAreaHeight);
+    protected Font getTabFont(boolean isSelected) {
+        if (isSelected) {
+            return super.getTabFont(isSelected).deriveFont(Font.BOLD);
         } else {
-            g.fillRect(w - tabAreaWidth + 1, y, tabAreaWidth, h);
+            return super.getTabFont(isSelected);
         }
-        super.paintContentBorder(g, tabPlacement, selectedIndex, x, y, w, h);
     }
 
     protected void paintText(Graphics g, int tabPlacement, Font font, FontMetrics metrics, int tabIndex, String title, Rectangle textRect, boolean isSelected) {
+        Color backColor = tabPane.getBackgroundAt(tabIndex);
+        if (!(backColor instanceof UIResource)) {
+            super.paintText(g, tabPlacement, font, metrics, tabIndex, title, textRect, isSelected);
+            return;
+        }
         g.setFont(font);
         View v = getTextViewForTab(tabIndex);
         if (v != null) {
@@ -78,16 +88,18 @@ public class AeroTabbedPaneUI extends BaseTabbedPaneUI {
         } else {
             // plain text
             int mnemIndex = -1;
-            if (JTattooUtilities.getJavaVersion() >= 1.4) 
+            if (JTattooUtilities.getJavaVersion() >= 1.4) {
                 mnemIndex = tabPane.getDisplayedMnemonicIndexAt(tabIndex);
+            }
 
             if (tabPane.isEnabled() && tabPane.isEnabledAt(tabIndex)) {
                 if (isSelected ) {
-                    Color titleColor = AbstractLookAndFeel.getWindowTitleForegroundColor();
-                    if (ColorHelper.getGrayValue(titleColor) > 164)
+                    Color titleColor = AbstractLookAndFeel.getTabSelectionForegroundColor();
+                    if (ColorHelper.getGrayValue(titleColor) > 164) {
                         g.setColor(Color.black);
-                    else
+                    } else {
                         g.setColor(Color.white);
+                    }
                     JTattooUtilities.drawStringUnderlineCharAt(tabPane, g, title, mnemIndex, textRect.x + 1, textRect.y + 1 + metrics.getAscent());
                     g.setColor(titleColor);
                 } else {
@@ -103,5 +115,5 @@ public class AeroTabbedPaneUI extends BaseTabbedPaneUI {
             }
         }
     }
-    
+
 }

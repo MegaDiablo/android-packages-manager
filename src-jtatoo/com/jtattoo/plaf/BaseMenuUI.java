@@ -1,20 +1,42 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+
 package com.jtattoo.plaf;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicMenuUI;
 
 /**
  * @author Michael Hagen
  */
 public class BaseMenuUI extends BasicMenuUI {
+
+    protected boolean paintRolloverBorder = true;
 
     public static ComponentUI createUI(JComponent c) {
         return new BaseMenuUI();
@@ -53,43 +75,51 @@ public class BaseMenuUI extends BasicMenuUI {
 
     protected void paintBackground(Graphics g, JComponent c, int x, int y, int w, int h) {
         JMenuItem mi = (JMenuItem) c;
+        Color backColor = mi.getBackground();
+        if (backColor instanceof UIResource) {
+            backColor = AbstractLookAndFeel.getMenuBackgroundColor();
+        }
         ButtonModel model = mi.getModel();
         if (c.getParent() instanceof JMenuBar) {
            if (model.isRollover() || model.isArmed() || (c instanceof JMenu && model.isSelected())) {
-                Color backColor = AbstractLookAndFeel.getMenuSelectionBackgroundColor();
+                backColor = AbstractLookAndFeel.getMenuSelectionBackgroundColor();
                 if (model.isRollover()) {
                     backColor = ColorHelper.brighter(backColor, 10);
                 }
                 g.setColor(backColor);
                 g.fillRect(x, y, w, h);
-                if (model.isRollover()) {
+                if (paintRolloverBorder && model.isRollover() && !model.isSelected()) {
                     backColor = ColorHelper.darker(backColor, 20);
                     g.setColor(backColor);
                     g.drawRect(x, y, w - 1, h - 1);
                 }
+                g.setColor(AbstractLookAndFeel.getMenuSelectionForegroundColor());
             }
         } else {
             if (model.isArmed() || (c instanceof JMenu && model.isSelected())) {
                 g.setColor(AbstractLookAndFeel.getMenuSelectionBackgroundColor());
                 g.fillRect(x, y, w, h);
+                g.setColor(AbstractLookAndFeel.getMenuSelectionForegroundColor());
             } else if (!AbstractLookAndFeel.getTheme().isMenuOpaque()) {
                 Graphics2D g2D = (Graphics2D) g;
-                Composite composite = g2D.getComposite();
+                Composite savedComposite = g2D.getComposite();
                 AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, AbstractLookAndFeel.getTheme().getMenuAlpha());
                 g2D.setComposite(alpha);
-                g.setColor(AbstractLookAndFeel.getMenuBackgroundColor());
-                g.fillRect(x, y, w, h);
-                g2D.setComposite(composite);
+                g2D.setColor(backColor);
+                g2D.fillRect(x, y, w, h);
+                g2D.setColor(AbstractLookAndFeel.getMenuForegroundColor());
+                g2D.setComposite(savedComposite);
             } else {
-                g.setColor(AbstractLookAndFeel.getMenuBackgroundColor());
+                g.setColor(backColor);
                 g.fillRect(x, y, w, h);
+                g.setColor(AbstractLookAndFeel.getMenuForegroundColor());
             }
         }
-        if (menuItem.isSelected() && menuItem.isArmed()) {
-            g.setColor(AbstractLookAndFeel.getMenuSelectionForegroundColor());
-        } else {
-            g.setColor(AbstractLookAndFeel.getMenuForegroundColor());
-        }
+//        if (menuItem.isSelected() && menuItem.isArmed()) {
+//            g.setColor(AbstractLookAndFeel.getMenuSelectionForegroundColor());
+//        } else {
+//            g.setColor(AbstractLookAndFeel.getMenuForegroundColor());
+//        }
     }
 
     protected void paintText(Graphics g, JMenuItem menuItem, Rectangle textRect, String text) {
@@ -100,13 +130,18 @@ public class BaseMenuUI extends BasicMenuUI {
             savedRenderingHint = g2D.getRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING);
             g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, AbstractLookAndFeel.getTheme().getTextAntiAliasingHint());
         }
-        g.setColor(AbstractLookAndFeel.getMenuForegroundColor());
         if (menuItem.getParent() instanceof JMenuBar) {
             if (model.isRollover() || model.isArmed() || (menuItem instanceof JMenu && model.isSelected())) {
                 g.setColor(AbstractLookAndFeel.getMenuSelectionForegroundColor());
             }
         } else if(menuItem.isSelected() && menuItem.isArmed()) {
             g.setColor(AbstractLookAndFeel.getMenuSelectionForegroundColor());
+        } else {
+            Color foreColor = menuItem.getForeground();
+            if (foreColor instanceof UIResource) {
+                foreColor = AbstractLookAndFeel.getMenuForegroundColor();
+            }
+            g.setColor(foreColor);
         }
         super.paintText(g, menuItem, textRect, text);
         if (AbstractLookAndFeel.getTheme().isTextAntiAliasingOn()) {

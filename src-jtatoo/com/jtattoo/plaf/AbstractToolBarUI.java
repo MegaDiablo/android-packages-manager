@@ -1,24 +1,45 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+
 package com.jtattoo.plaf;
 
-import java.beans.*;
-import java.util.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Hashtable;
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.Border;
 import javax.swing.plaf.UIResource;
-import javax.swing.plaf.basic.*;
+import javax.swing.plaf.basic.BasicToolBarUI;
 
 public abstract class AbstractToolBarUI extends BasicToolBarUI {
 
     private final static String IS_ROLLOVER = "JToolBar.isRollover";
     private final static Insets BUTTON_MARGIN = new Insets(1, 1, 1, 1);
     private final static Border INNER_BORDER = BorderFactory.createEmptyBorder(2, 2, 2, 2);
-    private boolean isRolloverEnabled = true;
+    private boolean rolloverEnabled = true;
     private MyPropertyChangeListener propertyChangeListener = null;
     private MyContainerListener containerListener = null;
     private Hashtable orgBorders = new Hashtable();
@@ -34,7 +55,7 @@ public abstract class AbstractToolBarUI extends BasicToolBarUI {
         super.installUI(c);
         Boolean isRollover = (Boolean) UIManager.get(IS_ROLLOVER);
         if (isRollover != null) {
-            isRolloverEnabled = isRollover.booleanValue();
+            rolloverEnabled = isRollover.booleanValue();
         }
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -72,6 +93,10 @@ public abstract class AbstractToolBarUI extends BasicToolBarUI {
         super.uninstallListeners();
     }
 
+    protected boolean isRolloverEnabled() {
+        return rolloverEnabled;
+    }
+    
     protected void setBorderToNormal(Component c) {
     }
 
@@ -122,7 +147,7 @@ public abstract class AbstractToolBarUI extends BasicToolBarUI {
         }
 
         if (b.getBorder() != null) {
-            if (isRolloverEnabled) {
+            if (isRolloverEnabled()) {
                 b.setBorderPainted(true);
                 b.setBorder(BorderFactory.createCompoundBorder(getRolloverBorder(), INNER_BORDER));
                 b.setMargin(BUTTON_MARGIN);
@@ -179,13 +204,17 @@ public abstract class AbstractToolBarUI extends BasicToolBarUI {
         }
         return false;
     }
+    
+    protected boolean isToolbarDecorated() {
+        return AbstractLookAndFeel.getTheme().isToolbarDecorated();
+    }
 
     protected class MyPropertyChangeListener implements PropertyChangeListener {
 
         public void propertyChange(PropertyChangeEvent e) {
             if (e.getPropertyName().equals(IS_ROLLOVER)) {
                 if (e.getNewValue() != null) {
-                    isRolloverEnabled = ((Boolean) e.getNewValue()).booleanValue();
+                    rolloverEnabled = ((Boolean) e.getNewValue()).booleanValue();
                     changeBorders();
                 }
             } else if ("componentOrientation".equals(e.getPropertyName())) {

@@ -1,17 +1,34 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+
 package com.jtattoo.plaf;
 
 import java.awt.*;
-
 import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.plaf.*;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.*;
-
-import sun.font.FontFamily;
+import javax.swing.text.View;
 
 public class BaseToggleButtonUI extends BasicToggleButtonUI {
 
@@ -27,6 +44,7 @@ public class BaseToggleButtonUI extends BasicToggleButtonUI {
     public void installDefaults(AbstractButton b) {
         super.installDefaults(b);
         b.setOpaque(false);
+        b.setRolloverEnabled(true);
         Color cArr[] = AbstractLookAndFeel.getTheme().getPressedColors();
         rolloverPressedColors = new Color[cArr.length];
         for (int i = 0; i < cArr.length; i++) {
@@ -37,6 +55,7 @@ public class BaseToggleButtonUI extends BasicToggleButtonUI {
     public void uninstallDefaults(AbstractButton b) {
         super.uninstallDefaults(b);
         b.setOpaque(true);
+        b.setRolloverEnabled(false);
     }
 
     protected BasicButtonListener createButtonListener(AbstractButton b) {
@@ -50,13 +69,15 @@ public class BaseToggleButtonUI extends BasicToggleButtonUI {
 
         int width = b.getWidth();
         int height = b.getHeight();
+        
         ButtonModel model = b.getModel();
-        Color colors[] = null;
+        Color colors[];
         if (b.isEnabled()) {
-            if (b.getBackground() instanceof ColorUIResource) {
+            Color background = b.getBackground();
+            if (background instanceof ColorUIResource) {
                 if (model.isPressed() && model.isArmed()) {
                     colors = AbstractLookAndFeel.getTheme().getPressedColors();
-                } else  if (model.isRollover()) {
+                } else  if (b.isRolloverEnabled() && model.isRollover()) {
                     if (model.isSelected()) {
                         colors = rolloverPressedColors;
                     } else {
@@ -73,13 +94,17 @@ public class BaseToggleButtonUI extends BasicToggleButtonUI {
                 }
             } else {
                 if (model.isPressed() && model.isArmed()) {
-                    colors = ColorHelper.createColorArr(b.getBackground(), ColorHelper.darker(b.getBackground(), 50), 20);
-                } else  if (model.isRollover()) {
-                    colors = ColorHelper.createColorArr(ColorHelper.brighter(b.getBackground(), 80), ColorHelper.brighter(b.getBackground(), 20), 20);
+                    colors = ColorHelper.createColorArr(ColorHelper.darker(background, 30), ColorHelper.darker(background, 10), 20);
+                } else if (b.isRolloverEnabled() && model.isRollover()) {
+                    if (model.isSelected()) {
+                        colors = ColorHelper.createColorArr(ColorHelper.darker(background, 20), background, 20);
+                    } else {
+                        colors = ColorHelper.createColorArr(ColorHelper.brighter(background, 50), ColorHelper.brighter(background, 10), 20);
+                    }
                 } else if (model.isSelected()) {
-                    colors = ColorHelper.createColorArr(b.getBackground(), ColorHelper.darker(b.getBackground(), 50), 20);
+                    colors = ColorHelper.createColorArr(ColorHelper.darker(background, 40), ColorHelper.darker(background, 20), 20);
                 } else {
-                    colors = ColorHelper.createColorArr(ColorHelper.brighter(b.getBackground(), 40), ColorHelper.darker(b.getBackground(), 20), 20);
+                    colors = ColorHelper.createColorArr(ColorHelper.brighter(background, 30), ColorHelper.darker(background, 10), 20);
                 }
             }
         } else { // disabled
@@ -91,7 +116,7 @@ public class BaseToggleButtonUI extends BasicToggleButtonUI {
     protected void paintText(Graphics g, AbstractButton b, Rectangle textRect, String text) {
         ButtonModel model = b.getModel();
         FontMetrics fm = g.getFontMetrics();
-        int mnemIndex = -1;
+        int mnemIndex;
         if (JTattooUtilities.getJavaVersion() >= 1.4) {
             mnemIndex = b.getDisplayedMnemonicIndex();
         } else {
@@ -99,11 +124,20 @@ public class BaseToggleButtonUI extends BasicToggleButtonUI {
         }
 
         if (model.isEnabled()) {
+            Color foreground = b.getForeground();
             int offs = 0;
             if ((model.isArmed() && model.isPressed()) || model.isSelected()) {
                 offs = 1;
             }
-            g.setColor(b.getForeground());
+            if (foreground instanceof ColorUIResource) {
+                if (model.isRollover()) {
+                    g.setColor(AbstractLookAndFeel.getTheme().getRolloverForegroundColor());
+                } else {
+                    g.setColor(b.getForeground());
+                }
+            } else {
+                g.setColor(b.getForeground());
+            }
             JTattooUtilities.drawStringUnderlineCharAt(b, g, text, mnemIndex, textRect.x + offs, textRect.y + offs + fm.getAscent());
         } else {
             g.setColor(Color.white);
@@ -119,9 +153,6 @@ public class BaseToggleButtonUI extends BasicToggleButtonUI {
     }
 
     public void paint(Graphics g, JComponent c) {
-    	if (c == null) {
-    		return;
-    	}
         Graphics2D g2D = (Graphics2D) g;
 
         AbstractButton b = (AbstractButton) c;
@@ -135,41 +166,25 @@ public class BaseToggleButtonUI extends BasicToggleButtonUI {
         viewRect.width = b.getWidth() - (insets.right + viewRect.x);
         viewRect.height = b.getHeight() - (insets.bottom + viewRect.y);
 
-		if (textRect != null) {
-			textRect.x = textRect.y = textRect.width = textRect.height = 0;
-		}
-		if (iconRect != null) {
-			iconRect.x = iconRect.y = iconRect.width = iconRect.height = 0;
-		}
+        textRect.x = textRect.y = textRect.width = textRect.height = 0;
+        iconRect.x = iconRect.y = iconRect.width = iconRect.height = 0;
 
-		int iconNum = b.getText() == null ? 0 : defaultTextIconGap;
-		String text = "";
-		if (b != null) {
-			text =
-					SwingUtilities.layoutCompoundLabel(
-							c,
-							fm,
-							b.getText(),
-							b.getIcon(),
-							b.getVerticalAlignment(),
-							b.getHorizontalAlignment(),
-							b.getVerticalTextPosition(),
-							b.getHorizontalTextPosition(),
-							viewRect,
-							iconRect,
-							textRect,
-							iconNum);
-		}
+        String text = SwingUtilities.layoutCompoundLabel(
+                c, fm, b.getText(), b.getIcon(),
+                b.getVerticalAlignment(), b.getHorizontalAlignment(),
+                b.getVerticalTextPosition(), b.getHorizontalTextPosition(),
+                viewRect, iconRect, textRect,
+                b.getText() == null ? 0 : defaultTextIconGap);
 
         paintBackground(g, b);
 
         if (b.getIcon() != null) {
             if (!b.isEnabled()) {
-                Composite composite = g2D.getComposite();
+                Composite savedComposite = g2D.getComposite();
                 AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
                 g2D.setComposite(alpha);
                 paintIcon(g, c, iconRect);
-                g2D.setComposite(composite);
+                g2D.setComposite(savedComposite);
             } else {
                 paintIcon(g, c, iconRect);
             }

@@ -1,14 +1,32 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.luna;
 
+import com.jtattoo.plaf.*;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.plaf.*;
-
-import com.jtattoo.plaf.*;
+import javax.swing.plaf.ComponentUI;
 
 public class LunaComboBoxUI extends BaseComboBoxUI {
 
@@ -25,8 +43,6 @@ public class LunaComboBoxUI extends BaseComboBoxUI {
 
 //--------------------------------------------------------------------------------------------------    
     static class ArrowButton extends NoFocusButton {
-
-        private static final Color loFrameColor = new Color(240, 240, 244);
 
         public ArrowButton() {
             setBorder(BorderFactory.createEmptyBorder());
@@ -58,10 +74,11 @@ public class LunaComboBoxUI extends BaseComboBoxUI {
             g2D.setPaint(new GradientPaint(0, 0, c1, width, height, c2));
             g.fillRect(0, 0, width, height);
             g2D.setPaint(null);
+            g2D.setColor(Color.white);
             if (JTattooUtilities.isLeftToRight(this)) {
-                JTattooUtilities.draw3DBorder(g, Color.white, loFrameColor, 1, 0, width - 1, height);
+                g2D.drawRect(1, 0, width - 2, height - 1);
             } else {
-                JTattooUtilities.draw3DBorder(g, Color.white, loFrameColor, 0, 0, width - 1, height);
+                g2D.drawRect(0, 0, width - 2, height - 1);
             }
 
             Composite composite = g2D.getComposite();
@@ -81,10 +98,11 @@ public class LunaComboBoxUI extends BaseComboBoxUI {
             Icon icon = LunaIcons.getComboBoxIcon();
             int x = (width - icon.getIconWidth()) / 2;
             int y = (height - icon.getIconHeight()) / 2;
+            int dx = (JTattooUtilities.isLeftToRight(this)) ? 0 : -1;
             if (getModel().isPressed() && getModel().isArmed()) {
-                icon.paintIcon(this, g, x + 2, y + 1);
+                icon.paintIcon(this, g, x + dx + 2, y + 1);
             } else {
-                icon.paintIcon(this, g, x + 1, y);
+                icon.paintIcon(this, g, x + dx + 1, y);
             }
         }
     } // end class ArrowButton

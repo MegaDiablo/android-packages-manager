@@ -1,13 +1,32 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.luna;
 
-import javax.swing.plaf.*;
-import java.awt.*;
-
-import com.jtattoo.plaf.*;
+import com.jtattoo.plaf.AbstractTheme;
+import com.jtattoo.plaf.ColorHelper;
+import java.awt.Color;
+import javax.swing.plaf.ColorUIResource;
 
 public class LunaDefaultTheme extends AbstractTheme {
 
@@ -28,12 +47,12 @@ public class LunaDefaultTheme extends AbstractTheme {
     public void setUpColor() {
         super.setUpColor();
 
-        // Defaults for LunaLookAndFeel
+        // Defaults for AbstractLookAndFeel
         backgroundColor = new ColorUIResource(240, 238, 225);
         backgroundColorLight = new ColorUIResource(255, 255, 255);
         backgroundColorDark = new ColorUIResource(232, 228, 208);
         alterBackgroundColor = new ColorUIResource(232, 228, 208);
-        
+
         selectionForegroundColor = black;
         selectionBackgroundColor = new ColorUIResource(194, 208, 243);//new ColorUIResource(200, 210, 240);
 
@@ -52,13 +71,13 @@ public class LunaDefaultTheme extends AbstractTheme {
         controlColorDark = new ColorUIResource(214, 208, 197);
 
         windowTitleForegroundColor = white;
-        windowTitleBackgroundColor = new ColorUIResource(194, 208, 243); //new ColorUIResource(139, 185, 254);
+        windowTitleBackgroundColor = new ColorUIResource(2, 100, 247);
         windowTitleColorLight = new ColorUIResource(139, 185, 254);
         windowTitleColorDark = new ColorUIResource(2, 80, 196);
         windowBorderColor = new ColorUIResource(2, 80, 196);
 
         windowInactiveTitleForegroundColor = white;
-        windowInactiveTitleBackgroundColor = new ColorUIResource(240, 238, 225); // new ColorUIResource(141, 186, 253);
+        windowInactiveTitleBackgroundColor = new ColorUIResource(39, 106, 204); 
         windowInactiveTitleColorLight = new ColorUIResource(141, 186, 253);
         windowInactiveTitleColorDark = new ColorUIResource(39, 106, 204);
         windowInactiveBorderColor = new ColorUIResource(39, 106, 204);
@@ -94,19 +113,15 @@ public class LunaDefaultTheme extends AbstractTheme {
 
         // Generate the color arrays
         Color topHi = windowTitleColorLight;
-        Color topLo = ColorHelper.darker(windowTitleColorLight, 10);//new Color(81, 150, 253);
-        Color bottomHi = ColorHelper.brighter(windowTitleColorDark, 15);//new Color(3, 101, 241);
+        Color topLo = ColorHelper.darker(windowTitleColorLight, 10);
+        Color bottomHi = ColorHelper.brighter(windowTitleColorDark, 15);
         Color bottomLo = windowTitleColorDark;
 
         WINDOW_TITLE_COLORS = new Color[20];
         Color[] topColors = ColorHelper.createColorArr(topHi, topLo, 8);
-        for (int i = 0; i < 8; i++) {
-            WINDOW_TITLE_COLORS[i] = topColors[i];
-        }
+        System.arraycopy(topColors, 0, WINDOW_TITLE_COLORS, 0, 8);
         Color[] bottomColors = ColorHelper.createColorArr(bottomHi, bottomLo, 12);
-        for (int i = 0; i < 12; i++) {
-            WINDOW_TITLE_COLORS[i + 8] = bottomColors[i];
-        }
+        System.arraycopy(bottomColors, 0, WINDOW_TITLE_COLORS, 8, 12);
 
         WINDOW_INACTIVE_TITLE_COLORS = new Color[WINDOW_TITLE_COLORS.length];
         for (int i = 0; i < WINDOW_INACTIVE_TITLE_COLORS.length; i++) {
@@ -137,6 +152,7 @@ public class LunaDefaultTheme extends AbstractTheme {
                     new Color(214, 208, 197),};
         TAB_COLORS = ColorHelper.createColorArr(Color.white, new Color(236, 235, 230), 20);
         COL_HEADER_COLORS = TAB_COLORS;
+        CHECKBOX_COLORS = TAB_COLORS;
         TRACK_COLORS = ColorHelper.createColorArr(new Color(243, 241, 236), new Color(254, 254, 251), 20);
         THUMB_COLORS = ColorHelper.createColorArr(new Color(218, 230, 254), new Color(180, 197, 240), 20);
         //SLIDER_COLORS = ColorHelper.createColorArr(new Color(218, 230, 254), new Color(180, 197, 240), 20);

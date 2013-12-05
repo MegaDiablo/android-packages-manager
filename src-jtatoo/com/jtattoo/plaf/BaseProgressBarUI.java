@@ -1,15 +1,35 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+
 package com.jtattoo.plaf;
 
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicProgressBarUI;
 
 /**
  * @author Michael Hagen
@@ -32,10 +52,6 @@ public class BaseProgressBarUI extends BasicProgressBarUI {
     public void uninstallUI(JComponent c) {
         c.removePropertyChangeListener(propertyChangeListener);
         super.uninstallUI(c);
-    }
-
-    protected void installDefaults() {
-        super.installDefaults();
     }
 
     /**
@@ -91,11 +107,15 @@ public class BaseProgressBarUI extends BasicProgressBarUI {
         Color cLo = ColorHelper.darker(colors[colors.length - 1], 10);
 
         // Paint the bouncing box.
-        Rectangle boxRect = getBox(null);
-        if (boxRect != null) {
+        Rectangle box = getBox(null);
+        if (box != null) {
             g2D.setColor(progressBar.getForeground());
-            JTattooUtilities.draw3DBorder(g, cHi, cLo, boxRect.x + 1, boxRect.y + 1, boxRect.width - 2, boxRect.height - 2);
-            JTattooUtilities.fillHorGradient(g, colors, boxRect.x + 2, boxRect.y + 2, boxRect.width - 4, boxRect.height - 4);
+            JTattooUtilities.draw3DBorder(g, cHi, cLo, box.x + 1, box.y + 1, box.width - 2, box.height - 2);
+            if (progressBar.getOrientation() == JProgressBar.HORIZONTAL) {
+                JTattooUtilities.fillHorGradient(g, colors, box.x + 2, box.y + 2, box.width - 4, box.height - 4);
+            } else {
+                JTattooUtilities.fillVerGradient(g, colors, box.x + 2, box.y + 2, box.width - 4, box.height - 4);
+            }
         }
 
         // Deal with possible text painting
@@ -106,9 +126,9 @@ public class BaseProgressBarUI extends BasicProgressBarUI {
                 g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, AbstractLookAndFeel.getTheme().getTextAntiAliasingHint());
             }
             if (progressBar.getOrientation() == JProgressBar.HORIZONTAL) {
-                paintString(g2D, b.left, b.top, barRectWidth, barRectHeight, boxRect.width, b);
+                paintString(g2D, b.left, b.top, barRectWidth, barRectHeight, box.width, b);
             } else {
-                paintString(g2D, b.left, b.top, barRectWidth, barRectHeight, boxRect.height, b);
+                paintString(g2D, b.left, b.top, barRectWidth, barRectHeight, box.height, b);
             }
             if (AbstractLookAndFeel.getTheme().isTextAntiAliasingOn()) {
                 g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, savedRenderingHint);
@@ -153,8 +173,8 @@ public class BaseProgressBarUI extends BasicProgressBarUI {
                 JTattooUtilities.fillHorGradient(g, colors, w - amountFull + 3, 3, w - 4, h - 4);
             }
         } else { // VERTICAL
-            JTattooUtilities.draw3DBorder(g, cHi, cLo, 2, 2, w - 2, amountFull - 2);
-            JTattooUtilities.fillVerGradient(g, colors, 3, 3, w - 4, amountFull - 4);
+            JTattooUtilities.draw3DBorder(g, cHi, cLo, 2, h - amountFull + 2, w - 2, amountFull - 2);
+            JTattooUtilities.fillVerGradient(g, colors, 3, h - amountFull + 3, w - 4, amountFull - 4);
         }
 
         // Deal with possible text painting

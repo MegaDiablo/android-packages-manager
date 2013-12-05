@@ -1,12 +1,31 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.mcwin;
 
-import java.util.*;
-import javax.swing.*;
 import com.jtattoo.plaf.*;
+import java.util.*;
+import javax.swing.UIDefaults;
 import javax.swing.plaf.InsetsUIResource;
 
 /**
@@ -58,25 +77,28 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
         modernProps.setProperty("backgroundPattern", "off");
         modernProps.setProperty("drawSquareButtons", "on");
         modernProps.setProperty("windowTitleForegroundColor", "54 68 84");
-        modernProps.setProperty("windowTitleColorLight", "201 210 220");
-        modernProps.setProperty("windowTitleColorDark", "170 185 202");
-        modernProps.setProperty("windowBorderColor", "150 168 188");
+        modernProps.setProperty("windowTitleBackgroundColor", "172 179 185");
+        modernProps.setProperty("windowTitleColorLight", "204 208 212");
+        modernProps.setProperty("windowTitleColorDark", "172 179 185");
+        modernProps.setProperty("windowBorderColor", "150 158 167");
         modernProps.setProperty("windowInactiveTitleForegroundColor", "67 84 103");
-        modernProps.setProperty("windowInactiveTitleColorLight", "218 224 231");
-        modernProps.setProperty("windowInactiveTitleColorDark", "194 205 216");
-        modernProps.setProperty("windowInactiveBorderColor", "172 186 202");
-        modernProps.setProperty("backgroundColor", "220 226 233");
-        modernProps.setProperty("selectionBackgroundColor", "200 215 240");
-        modernProps.setProperty("rolloverColor", "208 208 145");
+        modernProps.setProperty("windowInactiveTitleBackgroundColor", "221 223 225");
+        modernProps.setProperty("windowInactiveTitleColorLight", "232 234 236");
+        modernProps.setProperty("windowInactiveTitleColorDark", "221 223 225");
+        modernProps.setProperty("windowInactiveBorderColor", "172 179 185");
+        modernProps.setProperty("backgroundColor", "226 228 231");
+        modernProps.setProperty("selectionBackgroundColor", "201 205 240");
+        modernProps.setProperty("rolloverColor", "228 228 192");
         modernProps.setProperty("rolloverColorLight", "248 248 184");
         modernProps.setProperty("rolloverColorDark", "220 220 172");
         modernProps.setProperty("controlColorLight", "194 204 216");
         modernProps.setProperty("controlColorDark", "160 177 197");
         modernProps.setProperty("menuBackgroundColor", "242 244 247");
         modernProps.setProperty("menuColorLight", "242 244 247");
-        modernProps.setProperty("menuColorDark", "220 226 233");
+        modernProps.setProperty("menuColorDark", "226 228 231");
         modernProps.setProperty("menuSelectionBackgroundColor", "220 220 172");
-        modernProps.setProperty("toolbarBackgroundColor", "220 226 233");
+        modernProps.setProperty("toolbarBackgroundColor", "226 228 231");
+        modernProps.setProperty("desktopColor", "208 211 216");
 
         pinkProps.setProperty("backgroundColorLight", "248 244 248");
         pinkProps.setProperty("backgroundColorDark", "255 255 255");
@@ -94,10 +116,10 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
         pinkProps.setProperty("windowBorderColor", "200 120 200");
         pinkProps.setProperty("menuSelectionForegroundColor", "0 0 0");
         pinkProps.setProperty("menuSelectionBackgroundColor", "248 202 248");
-        pinkProps.setProperty("desktopColor", "255 255 255");
+        pinkProps.setProperty("desktopColor", "242 242 242");
 
-        String key = null;
-        String value = null;
+        String key;
+        String value;
         Iterator iter = smallFontProps.keySet().iterator();
         while (iter.hasNext()) {
             key = (String) iter.next();
@@ -177,23 +199,26 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
     }
 
     public static void setTheme(String name) {
-        if (myTheme != null) {
-            myTheme.setInternalName(name);
-        }
         setTheme((Properties) themesMap.get(name));
+        if (myTheme != null) {
+            AbstractTheme.setInternalName(name);
+        }
     }
 
     public static void setTheme(String name, String licenseKey, String logoString) {
         Properties props = (Properties) themesMap.get(name);
-        props.put("licenseKey", licenseKey);
-        props.put("logoString", logoString);
-        if (myTheme != null) {
-            myTheme.setInternalName(name);
+        if (props != null) {
+            props.put("licenseKey", licenseKey);
+            props.put("logoString", logoString);
+            setTheme(props);
+            if (myTheme != null) {
+                AbstractTheme.setInternalName(name);
+            }
         }
-        setTheme(props);
     }
 
     public static void setTheme(Properties themesProps) {
+        currentThemeName = "mcwinTheme";
         if (myTheme == null) {
             myTheme = new McWinDefaultTheme();
         }
@@ -245,6 +270,9 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
     }
 
     protected void initClassDefaults(UIDefaults table) {
+        if (!"mcwinTheme".equals(currentThemeName)) {
+            setTheme("Default");
+        }
         super.initClassDefaults(table);
         Object[] uiDefaults = {
             // BaseLookAndFeel classes
@@ -267,6 +295,8 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
             "CheckBoxMenuItemUI", BaseCheckBoxMenuItemUI.class.getName(),
             "RadioButtonMenuItemUI", BaseRadioButtonMenuItemUI.class.getName(),
             "PopupMenuSeparatorUI", BaseSeparatorUI.class.getName(),
+            "DesktopPaneUI", BaseDesktopPaneUI.class.getName(),
+            
             // McWinLookAndFeel classes
             "CheckBoxUI", McWinCheckBoxUI.class.getName(),
             "RadioButtonUI", McWinRadioButtonUI.class.getName(),

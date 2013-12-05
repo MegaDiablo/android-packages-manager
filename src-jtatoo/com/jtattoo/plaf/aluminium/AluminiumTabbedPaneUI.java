@@ -1,23 +1,42 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.aluminium;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 
 /**
  * @author Michael Hagen
  */
 public class AluminiumTabbedPaneUI extends BaseTabbedPaneUI {
 
-    private static final Color TOP_SELECTED_TAB_COLORS[] = ColorHelper.createColorArr(new Color(204, 206, 202), new Color(220, 222, 218), 20);
-    private static final Color BOTTOM_SELECTED_TAB_COLORS[] = ColorHelper.createColorArr(new Color(220, 222, 218), new Color(204, 206, 202), 20);
-
+    private static Color TOP_SELECTED_TAB_COLORS[] = null;
+    private static Color BOTTOM_SELECTED_TAB_COLORS[] = null;
+    
     public static ComponentUI createUI(JComponent c) {
         return new AluminiumTabbedPaneUI();
     }
@@ -25,7 +44,12 @@ public class AluminiumTabbedPaneUI extends BaseTabbedPaneUI {
     public void installDefaults() {
         super.installDefaults();
         tabAreaInsets = new Insets(2, 6, 2, 6);
-        contentBorderInsets = new Insets(1, 1, 0, 0);
+        contentBorderInsets = new Insets(0, 0, 0, 0);
+        Color c = AbstractLookAndFeel.getTheme().getBackgroundColor();
+        Color cHi = ColorHelper.brighter(c, 20);
+        Color cLo = ColorHelper.darker(c, 10);
+        TOP_SELECTED_TAB_COLORS = ColorHelper.createColorArr(cHi, c, 20);
+        BOTTOM_SELECTED_TAB_COLORS = ColorHelper.createColorArr(c, cLo, 20);
     }
 
     protected Font getTabFont(boolean isSelected) {
@@ -36,130 +60,31 @@ public class AluminiumTabbedPaneUI extends BaseTabbedPaneUI {
         }
     }
 
-    protected Color[] getTabColors(int tabIndex, boolean isSelected) {
-        if (isSelected) {
+    protected Color[] getTabColors(int tabIndex, boolean isSelected, boolean isRollover) {
+        Color backColor = tabPane.getBackgroundAt(tabIndex);
+        if ((backColor instanceof UIResource) && isSelected) {
             if (tabPane.getTabPlacement() == BOTTOM) {
                 return BOTTOM_SELECTED_TAB_COLORS;
             } else {
                 return TOP_SELECTED_TAB_COLORS;
             }
-        } else {
-            return super.getTabColors(tabIndex, isSelected);
         }
+        return super.getTabColors(tabIndex, isSelected, isRollover);
     }
 
-    protected void paintContentBorder(Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h) {
-        Color loColor = AbstractLookAndFeel.getControlDarkShadow();
-        Color hiColor = AbstractLookAndFeel.getControlHighlight();
-        g.setColor(loColor);
-        switch (tabPlacement) {
-            case TOP: {
-                int tabAreaHeight = calculateTabAreaHeight(tabPlacement, runCount, maxTabHeight);
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + 1, y + tabAreaHeight - 2, w - 2, y + tabAreaHeight - 2);
-                } else {
-                    g.drawRect(x, y + tabAreaHeight - 1, w - 1, h - tabAreaHeight);
-                    g.setColor(hiColor);
-                    g.drawLine(x + 1, y + tabAreaHeight, x + w - 2, y + tabAreaHeight);
-                    g.drawLine(x + 1, y + tabAreaHeight, x + 1, y + h - 2);
-                }
-                break;
-            }
-            case LEFT: {
-                int tabAreaWidth = calculateTabAreaWidth(tabPlacement, runCount, maxTabWidth);
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + tabAreaWidth - 2, y + 1, x + tabAreaWidth - 2, y + h - 2);
-                } else {
-                    g.drawRect(x + tabAreaWidth - 1, y, w - tabAreaWidth, h - 1);
-                    g.setColor(hiColor);
-                    g.drawLine(x + tabAreaWidth, y + 1, x + tabAreaWidth, y + h - 2);
-                    g.drawLine(x + tabAreaWidth, y + 1, x + w - 2, y + 1);
-                }
-                break;
-            }
-            case BOTTOM: {
-                int tabAreaHeight = calculateTabAreaHeight(tabPlacement, runCount, maxTabHeight);
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + 1, y + h - tabAreaHeight + 1, w - 2, y + h - tabAreaHeight + 1);
-                } else {
-                    g.drawRect(x, y, w - 1, h - tabAreaHeight);
-                    g.setColor(hiColor);
-                    g.drawLine(x + 1, y + 1, x + w - 2, y + 1);
-                    g.drawLine(x + 1, y + 1, x + 1, y + h - tabAreaHeight - 1);
-                }
-                break;
-            }
-            case RIGHT: {
-                int tabAreaWidth = calculateTabAreaWidth(tabPlacement, runCount, maxTabWidth);
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + w - tabAreaWidth + 2, y + 1, x + w - tabAreaWidth + 2, y + h - 2);
-                } else {
-                    g.drawRect(x, y, w - tabAreaWidth, h - 1);
-                    g.setColor(hiColor);
-                    g.drawLine(x + 1, y + 1, x + 1, y + h - 2);
-                    g.drawLine(x + 1, y + 1, x + w - tabAreaWidth - 1, y + 1);
-                }
-                break;
-            }
-        }
-    }
-
-    protected void paintScrollContentBorder(Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h) {
-        Insets bi = new Insets(0, 0, 0, 0);
-        if (tabPane.getBorder() != null) {
-            bi = tabPane.getBorder().getBorderInsets(tabPane);
-        }
-        Color loColor = AbstractLookAndFeel.getControlDarkShadow();
-        Color hiColor = AbstractLookAndFeel.getControlHighlight();
-        g.setColor(loColor);
-        switch (tabPlacement) {
-            case TOP: {
-                int tabAreaHeight = calculateTabAreaHeight(tabPlacement, runCount, maxTabHeight);
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x, y + tabAreaHeight - 2, w, y + tabAreaHeight - 2);
-                } else {
-                    g.drawLine(x, y + tabAreaHeight - 1 - bi.top, w, y + tabAreaHeight - 1 - bi.top);
-                    g.setColor(hiColor);
-                    g.drawLine(x, y + tabAreaHeight - bi.top, w - 1, y + tabAreaHeight - bi.top);
-                }
-                break;
-            }
-            case LEFT: {
-                int tabAreaWidth = calculateTabAreaWidth(tabPlacement, runCount, maxTabWidth);
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + tabAreaWidth - 2, y + 1, x + tabAreaWidth - 2, y + h - 2);
-                } else {
-                    g.drawLine(x + tabAreaWidth - 1 - bi.left, y, x + tabAreaWidth - 1 - bi.left, h);
-                    g.setColor(hiColor);
-                    g.drawLine(x + tabAreaWidth - bi.left, y, x + tabAreaWidth - bi.left, h);
-                }
-                break;
-            }
-            case BOTTOM: {
-                int tabAreaHeight = calculateTabAreaHeight(tabPlacement, runCount, maxTabHeight);
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + 1, y + h - tabAreaHeight + 1, w - 2, y + h - tabAreaHeight + 1);
-                } else {
-                    g.drawLine(x, h - tabAreaHeight + bi.bottom, w, h - tabAreaHeight + bi.bottom);
-                }
-                break;
-            }
-            case RIGHT: {
-                int tabAreaWidth = calculateTabAreaWidth(tabPlacement, runCount, maxTabWidth);
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + w - tabAreaWidth + 2, y + 1, x + w - tabAreaWidth + 2, y + h - 2);
-                } else {
-                    g.drawLine(w - tabAreaWidth + bi.right, y, w - tabAreaWidth + bi.right, h);
-                }
-                break;
-            }
-        }
+    protected boolean hasInnerBorder() {
+        return true;
     }
 
     protected void paintTabBackground(Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h, boolean isSelected) {
-        if (JTattooUtilities.isMac()) {
+        Color backColor = tabPane.getBackgroundAt(tabIndex);
+        if (!(backColor instanceof UIResource)) {
+            super.paintTabBackground(g, tabPlacement, tabIndex, x, y, w, h, isSelected);
+            return;
+        }
+        if (JTattooUtilities.isMac() || !AbstractLookAndFeel.getTheme().isBackgroundPatternOn()) {
             if (isSelected) {
-                Color colorArr[] = getTabColors(tabIndex, isSelected);
+                Color colorArr[] = getTabColors(tabIndex, isSelected, tabIndex == rolloverIndex);
                 switch (tabPlacement) {
                     case LEFT:
                         JTattooUtilities.fillHorGradient(g, colorArr, x + 1, y + 1, w + 1, h - 1);
@@ -181,20 +106,20 @@ public class AluminiumTabbedPaneUI extends BaseTabbedPaneUI {
         } else {
             if (isSelected) {
                 if (tabPane.getBackgroundAt(tabIndex) instanceof UIResource) {
-                    g.setColor(AluminiumLookAndFeel.getBackgroundColor());
-                    if (tabPlacement == TOP)
+                    g.setColor(AbstractLookAndFeel.getBackgroundColor());
+                    if (tabPlacement == TOP) {
                         AluminiumUtils.fillComponent(g, tabPane, x + 1, y + 1, w - 1, h + 1);
-                    else if (tabPlacement == LEFT)
+                    } else if (tabPlacement == LEFT) {
                         AluminiumUtils.fillComponent(g, tabPane, x + 1, y + 1, w + 1, h - 1);
-                    else if (tabPlacement == BOTTOM)
-                        AluminiumUtils.fillComponent(g, tabPane, x + 1, y - 1, w - 1, h + 1);
-                    else
+                    } else if (tabPlacement == BOTTOM) {
+                        AluminiumUtils.fillComponent(g, tabPane, x + 1, y - 2, w - 1, h + 1);
+                    } else {
                         AluminiumUtils.fillComponent(g, tabPane, x - 1, y + 1, w + 1, h - 1);
-                }
-                else
+                    }
+                } else {
                     super.paintTabBackground(g, tabPlacement, tabIndex, x, y, w, h, isSelected);
-            }
-            else {
+                }
+            } else {
                 super.paintTabBackground(g, tabPlacement, tabIndex, x, y, w, h, isSelected);
             }
         }

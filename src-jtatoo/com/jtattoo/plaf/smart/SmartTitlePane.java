@@ -1,13 +1,32 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.smart;
 
-import java.awt.*;
-import javax.swing.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.JDialog;
+import javax.swing.JRootPane;
 
 /**
  * @author  Michael Hagen
@@ -33,67 +52,47 @@ public class SmartTitlePane extends BaseTitlePane {
         g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
     }
 
-    public void paintComponent(Graphics g) {
+    public void paintBackground(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
-
-        if (getFrame() != null) {
-            setState(DecorationHelper.getExtendedState(getFrame()));
-        }
-
-        paintBackground(g);
-
-        boolean leftToRight = (window == null) ? getRootPane().getComponentOrientation().isLeftToRight() : window.getComponentOrientation().isLeftToRight();
-        boolean isSelected = (window == null) ? true : JTattooUtilities.isWindowActive(window);
-
-        Color foreground = AbstractLookAndFeel.getWindowInactiveTitleForegroundColor();
-        Color backColor = SmartLookAndFeel.getTheme().getWindowInactiveTitleColors()[10];
-        if (isSelected) {
-            foreground = AbstractLookAndFeel.getWindowTitleForegroundColor();
-            backColor = SmartLookAndFeel.getTheme().getWindowTitleColors()[10];
-        }
-
         int width = getWidth();
         int height = getHeight();
-        int titleWidth = width - buttonsWidth - 4;
-        int xOffset = leftToRight ? 2 : width - 2;
-        if (getWindowDecorationStyle() == BaseRootPaneUI.FRAME) {
-            int mw = menuBar.getWidth() + 2;
-            xOffset += leftToRight ? mw : -mw;
-            titleWidth -= height;
+        Color backColor = null;
+        Color frameColor = null;
+        if (JTattooUtilities.isActive(this)) {
+            backColor = AbstractLookAndFeel.getTheme().getWindowTitleColors()[10];
+            frameColor = AbstractLookAndFeel.getTheme().getFrameColor();
+            JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), 0, 0, width, height);
+        } else {
+            backColor = AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors()[10];
+            frameColor = ColorHelper.brighter(AbstractLookAndFeel.getTheme().getFrameColor(), 40);
+            JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), 0, 0, width, height);
         }
 
-        String theTitle = getTitle();
-        if (theTitle != null) {
+        int iconWidth = 0;
+        if (menuBar != null) {
+            iconWidth = menuBar.getWidth() + 5;
+        }
+
+        int titleWidth = 0;
+        String frameTitle = getTitle();
+        if (frameTitle != null) {
+            Font f = getFont();
+            g.setFont(f);
             FontMetrics fm = g.getFontMetrics();
-            g.setColor(foreground);
-            int yOffset = ((height - fm.getHeight()) / 2) + fm.getAscent() - 1;
-            Rectangle rect = iconifyButton.getBounds();
-
-            int titleW;
-            if (leftToRight) {
-                if (rect.x == 0) {
-                    rect.x = window.getWidth() - window.getInsets().right - 2;
+            titleWidth = fm.stringWidth(JTattooUtilities.getClippedText(getTitle(), fm, getWidth() - iconWidth - buttonsWidth - 15)) + 10;
+            if (getWindow() instanceof JDialog) {
+                Image image = getFrameIconImage();
+                if (image != null) {
+                    titleWidth += getHeight();
                 }
-                titleW = rect.x - xOffset - 4;
-                theTitle = JTattooUtilities.getClippedText(theTitle, fm, titleW);
-            } else {
-                titleW = xOffset - rect.x - rect.width - 4;
-                theTitle = JTattooUtilities.getClippedText(theTitle, fm, titleW);
-                xOffset -= SwingUtilities.computeStringWidth(fm, theTitle);
             }
-            int titleLength = SwingUtilities.computeStringWidth(fm, theTitle);
-
-            if (ColorHelper.getGrayValue(foreground) > 164) {
-                g.setColor(Color.black);
-                JTattooUtilities.drawString(rootPane, g, theTitle, xOffset + 1, yOffset + 1);
-            }
-            g.setColor(foreground);
-            JTattooUtilities.drawString(rootPane, g, theTitle, xOffset, yOffset);
-
-            xOffset += leftToRight ? titleLength + 5 : -5;
         }
+
         int dx;
         int dw;
+        boolean leftToRight = isLeftToRight();
+        int xOffset = leftToRight ? iconWidth + 10 + titleWidth : width - 10 - iconWidth - titleWidth;
+
         if (leftToRight) {
             dw = width - buttonsWidth - xOffset - 10;
             dx = xOffset;
@@ -103,7 +102,7 @@ public class SmartTitlePane extends BaseTitlePane {
         }
         int dy = 3;
 
-        if (dw > 0) {
+        if (!AbstractLookAndFeel.getTheme().isMacStyleWindowDecorationOn() && !AbstractLookAndFeel.getTheme().isCenterWindowTitleOn() && (dw > 0)) {
             Composite composite = g2D.getComposite();
             AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
             g2D.setComposite(alpha);
@@ -125,5 +124,24 @@ public class SmartTitlePane extends BaseTitlePane {
             }
             g2D.setComposite(composite);
         }
+        g.setColor(frameColor);
+        g.drawLine(0, height - 1, width, height - 1);
     }
+
+    public void paintText(Graphics g, int x, int y, String title) {
+        x += paintIcon(g, x, y);
+        if (isActive()) {
+            Color titleColor = AbstractLookAndFeel.getWindowTitleForegroundColor();
+            if (ColorHelper.getGrayValue(titleColor) > 164) {
+                g.setColor(Color.black);
+                JTattooUtilities.drawString(rootPane, g, title, x + 1, y + 1);
+            }
+            g.setColor(titleColor);
+            JTattooUtilities.drawString(rootPane, g, title, x, y);
+        } else {
+            g.setColor(AbstractLookAndFeel.getWindowInactiveTitleForegroundColor());
+            JTattooUtilities.drawString(rootPane, g, title, x, y);
+        }
+    }
+
 }

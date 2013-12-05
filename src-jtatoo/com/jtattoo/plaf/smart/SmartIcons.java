@@ -1,49 +1,80 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.smart;
 
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import java.awt.geom.Area;
+import java.awt.geom.RoundRectangle2D;
+import javax.swing.Icon;
+import javax.swing.JButton;
 
 /**
  * @author Michael Hagen
  */
 public class SmartIcons extends BaseIcons {
 
-    private static Icon iconIcon = null;
-    private static Icon minIcon = null;
-    private static Icon maxIcon = null;
-    private static Icon closeIcon = null;
-
     public static Icon getIconIcon() {
         if (iconIcon == null) {
-            iconIcon = new TitleButtonIcon(TitleButtonIcon.ICON_ICON_TYP);
+            if (AbstractLookAndFeel.getTheme().isMacStyleWindowDecorationOn()) {
+                iconIcon = new MacIconIcon();
+            } else {
+                iconIcon = new TitleButtonIcon(TitleButtonIcon.ICON_ICON_TYP);
+            }
         }
         return iconIcon;
     }
 
     public static Icon getMinIcon() {
         if (minIcon == null) {
-            minIcon = new TitleButtonIcon(TitleButtonIcon.MIN_ICON_TYP);
+            if (AbstractLookAndFeel.getTheme().isMacStyleWindowDecorationOn()) {
+                minIcon = new MacMinIcon();
+            } else {
+                minIcon = new TitleButtonIcon(TitleButtonIcon.MIN_ICON_TYP);
+            }
         }
         return minIcon;
     }
 
     public static Icon getMaxIcon() {
         if (maxIcon == null) {
-            maxIcon = new TitleButtonIcon(TitleButtonIcon.MAX_ICON_TYP);
+            if (AbstractLookAndFeel.getTheme().isMacStyleWindowDecorationOn()) {
+                maxIcon = new MacMaxIcon();
+            } else {
+                maxIcon = new TitleButtonIcon(TitleButtonIcon.MAX_ICON_TYP);
+            }
         }
         return maxIcon;
     }
 
     public static Icon getCloseIcon() {
         if (closeIcon == null) {
-            closeIcon = new TitleButtonIcon(TitleButtonIcon.CLOSE_ICON_TYP);
+            if (AbstractLookAndFeel.getTheme().isMacStyleWindowDecorationOn()) {
+                closeIcon = new MacCloseIcon();
+            } else {
+                closeIcon = new TitleButtonIcon(TitleButtonIcon.CLOSE_ICON_TYP);
+            }
         }
         return closeIcon;
     }

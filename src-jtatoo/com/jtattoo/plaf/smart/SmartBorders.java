@@ -1,26 +1,39 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.smart;
 
+import com.jtattoo.plaf.*;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-
-import com.jtattoo.plaf.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.Border;
+import javax.swing.plaf.UIResource;
 
 /**
  * @author Michael Hagen
  */
 public class SmartBorders extends BaseBorders {
-
-    private static Border buttonBorder = null;
-    private static Border toggleButtonBorder = null;
-    private static Border rolloverToolButtonBorder = null;
-    private static Border internalFrameBorder = null;
-    private static Border paletteBorder = null;
 
     //------------------------------------------------------------------------------------
     // Lazy access methods
@@ -33,10 +46,7 @@ public class SmartBorders extends BaseBorders {
     }
 
     public static Border getToggleButtonBorder() {
-        if (toggleButtonBorder == null) {
-            toggleButtonBorder = new ToggleButtonBorder();
-        }
-        return toggleButtonBorder;
+        return getButtonBorder();
     }
 
     public static Border getRolloverToolButtonBorder() {
@@ -68,7 +78,6 @@ public class SmartBorders extends BaseBorders {
         private static final Color defaultColorHi = new Color(220, 230, 245);
         private static final Color defaultColorMed = new Color(212, 224, 243);
         private static final Color defaultColorLo = new Color(200, 215, 240);
-
         private static final Insets insets = new Insets(3, 6, 3, 6);
 
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
@@ -103,7 +112,7 @@ public class SmartBorders extends BaseBorders {
         }
 
         public Insets getBorderInsets(Component c) {
-            return new Insets(insets.top, insets.left, insets.bottom, insets.right);
+            return insets;
         }
 
         public Insets getBorderInsets(Component c, Insets borderInsets) {
@@ -118,45 +127,6 @@ public class SmartBorders extends BaseBorders {
             return true;
         }
     } // class ButtonBorder
-
-    public static class ToggleButtonBorder implements Border, UIResource {
-
-        private static final Insets insets = new Insets(3, 6, 3, 6);
-
-        public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
-            AbstractButton button = (AbstractButton) c;
-            ButtonModel model = button.getModel();
-            if (model.isEnabled()) {
-                Color frameHiColor1 = Color.white;
-                Color frameHiColor2 = ColorHelper.brighter(SmartLookAndFeel.getFrameColor(), 80);
-                Color frameLoColor1 = ColorHelper.brighter(SmartLookAndFeel.getFrameColor(), 20);
-                if ((model.isPressed() && model.isArmed()) || model.isSelected()) {
-                    JTattooUtilities.draw3DBorder(g, frameLoColor1, frameHiColor1, x + 1, y + 1, w - 1, h - 1);
-                } else {
-                    JTattooUtilities.draw3DBorder(g, frameHiColor2, frameHiColor1, x, y, w, h);
-                    JTattooUtilities.draw3DBorder(g, ColorHelper.brighter(SmartLookAndFeel.getFrameColor(), 20), SmartLookAndFeel.getFrameColor(), x + 1, y + 1, w - 2, h - 2);
-                }
-            } else {
-                JTattooUtilities.drawBorder(g, Color.lightGray, x, y, w, h);
-            }
-        }
-
-        public Insets getBorderInsets(Component c) {
-            return new Insets(insets.top, insets.left, insets.bottom, insets.right);
-        }
-
-        public Insets getBorderInsets(Component c, Insets borderInsets) {
-            borderInsets.left = insets.left;
-            borderInsets.top = insets.top;
-            borderInsets.right = insets.right;
-            borderInsets.bottom = insets.bottom;
-            return borderInsets;
-        }
-
-        public boolean isBorderOpaque() {
-            return true;
-        }
-    } // class ToggleButtonBorder
 
     public static class RolloverToolButtonBorder implements Border, UIResource {
 
@@ -222,7 +192,6 @@ public class SmartBorders extends BaseBorders {
         public boolean isBorderOpaque() {
             return true;
         }
-
     } // class RolloverToolButtonBorder
 
     public static class InternalFrameBorder extends BaseInternalFrameBorder {
@@ -232,11 +201,11 @@ public class SmartBorders extends BaseBorders {
             boolean active = isActive(c);
             boolean resizable = isResizable(c);
             int th = getTitleHeight(c);
-            Color frameColor = SmartLookAndFeel.getWindowInactiveBorderColor();
-            Color titleColor = SmartLookAndFeel.getWindowInactiveTitleColorLight();
+            Color frameColor = AbstractLookAndFeel.getWindowInactiveBorderColor();
+            Color titleColor = AbstractLookAndFeel.getWindowInactiveTitleColorLight();
             if (active) {
-                titleColor = SmartLookAndFeel.getWindowTitleColorLight();
-                frameColor = SmartLookAndFeel.getWindowBorderColor();
+                titleColor = AbstractLookAndFeel.getWindowTitleColorLight();
+                frameColor = AbstractLookAndFeel.getWindowBorderColor();
             }
 
             if (!resizable) {
@@ -244,9 +213,9 @@ public class SmartBorders extends BaseBorders {
                 g.setColor(frameColor);
                 g.drawRect(x, y, w - 1, h - 1);
                 if (active) {
-                    g.setColor(SmartLookAndFeel.getWindowTitleColorDark());
+                    g.setColor(AbstractLookAndFeel.getWindowTitleColorDark());
                 } else {
-                    g.setColor(SmartLookAndFeel.getWindowInactiveTitleColorDark());
+                    g.setColor(AbstractLookAndFeel.getWindowInactiveTitleColorDark());
                 }
                 for (int i = 1; i < bi.left; i++) {
                     g.drawRect(i, i, w - (2 * i) - 1, h - (2 * i) - 1);
@@ -259,12 +228,11 @@ public class SmartBorders extends BaseBorders {
             }
             g.setColor(titleColor);
             g.fillRect(x, y + 1, w, dw - 1);
-            //g.setColor(borderColor);
             g.fillRect(x + 1, y + h - dw, w - 2, dw - 1);
-            Color color = ColorHelper.brighter(SmartLookAndFeel.getWindowTitleColorDark(), 30);
+            Color color = ColorHelper.brighter(AbstractLookAndFeel.getWindowTitleColorDark(), 30);
             if (active) {
-                JTattooUtilities.fillHorGradient(g, SmartLookAndFeel.getTheme().getWindowTitleColors(), 1, dw, dw, th + 1);
-                JTattooUtilities.fillHorGradient(g, SmartLookAndFeel.getTheme().getWindowTitleColors(), w - dw, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), 1, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), w - dw, dw, dw, th + 1);
 
                 Color c1 = AbstractLookAndFeel.getTheme().getWindowTitleColorDark();
                 Color c2 = AbstractLookAndFeel.getTheme().getWindowTitleColorLight();
@@ -273,8 +241,8 @@ public class SmartBorders extends BaseBorders {
                 g.fillRect(w - dw, dw + th + 1, dw - 1, h - th - (2 * dw));
                 g2D.setPaint(null);
             } else {
-                JTattooUtilities.fillHorGradient(g, SmartLookAndFeel.getTheme().getWindowInactiveTitleColors(), 1, dw, dw, th + 1);
-                JTattooUtilities.fillHorGradient(g, SmartLookAndFeel.getTheme().getWindowInactiveTitleColors(), w - dw, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), 1, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), w - dw, dw, dw, th + 1);
 
                 Color c1 = AbstractLookAndFeel.getTheme().getWindowInactiveTitleColorDark();
                 Color c2 = AbstractLookAndFeel.getTheme().getWindowInactiveTitleColorLight();
@@ -286,7 +254,7 @@ public class SmartBorders extends BaseBorders {
             if (active && resizable) {
                 int d = dw + 12;
                 // unten
-                color = SmartLookAndFeel.getWindowTitleColorDark();
+                color = AbstractLookAndFeel.getWindowTitleColorDark();
                 Color cHi = ColorHelper.brighter(color, 30);
                 Color cLo = ColorHelper.darker(color, 20);
 
@@ -356,8 +324,6 @@ public class SmartBorders extends BaseBorders {
             borderInsets.bottom = insets.bottom;
             return borderInsets;
         }
-
     } // class PaletteBorder
-
 } // class SmartBorders
 

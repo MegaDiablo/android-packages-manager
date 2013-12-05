@@ -1,14 +1,32 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
-
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.aero;
 
-import java.awt.*;
-import javax.swing.plaf.*;
-
-import com.jtattoo.plaf.*;
+import com.jtattoo.plaf.AbstractTheme;
+import com.jtattoo.plaf.ColorHelper;
+import java.awt.Color;
+import javax.swing.plaf.ColorUIResource;
 
 public class AeroDefaultTheme extends AbstractTheme {
     
@@ -28,49 +46,52 @@ public class AeroDefaultTheme extends AbstractTheme {
     
     public void setUpColor() {
         super.setUpColor();
-        backgroundColor               = new ColorUIResource(236, 236, 236);
-        backgroundColorLight          = new ColorUIResource(255, 255, 255);
-        backgroundColorDark           = new ColorUIResource(228, 228, 228);
-        alterBackgroundColor          = new ColorUIResource(228, 228, 228);
-        frameColor                    = new ColorUIResource(160, 164, 168);
+        backgroundColor = new ColorUIResource(236, 236, 236);
+        backgroundColorLight = new ColorUIResource(255, 255, 255);
+        backgroundColorDark = new ColorUIResource(228, 228, 228);
+        alterBackgroundColor = new ColorUIResource(228, 228, 228);
+        frameColor = new ColorUIResource(160, 164, 168);
         
-        selectionForegroundColor      = black;
-        selectionBackgroundColor      = new ColorUIResource(176, 196, 222);
-        rolloverColor                 = new ColorUIResource(192, 212, 230);
+        selectionForegroundColor = black;
+        selectionBackgroundColor = new ColorUIResource(176, 196, 222);
+        rolloverColor = new ColorUIResource(192, 212, 230);
         
-        buttonBackgroundColor         = new ColorUIResource(220, 220, 220);
-        buttonColorLight              = new ColorUIResource(240, 240, 240);
-        buttonColorDark               = new ColorUIResource(120, 120, 120);
+        buttonBackgroundColor = new ColorUIResource(220, 220, 220);
+        buttonColorLight = new ColorUIResource(240, 240, 240);
+        buttonColorDark = new ColorUIResource(120, 120, 120);
         
-        controlBackgroundColor        = backgroundColor;
-        controlColorLight             = new ColorUIResource(150, 176, 211);
-        controlColorDark              = new ColorUIResource(60, 95, 142);
-        controlHighlightColor         = white;
-        controlShadowColor            = new ColorUIResource(180, 186, 190);
-        controlDarkShadowColor        = frameColor;
+        controlBackgroundColor = backgroundColor;
+        controlColorLight = new ColorUIResource(150, 176, 211);
+        controlColorDark = new ColorUIResource(60, 95, 142);
+        controlHighlightColor = white;
+        controlShadowColor = new ColorUIResource(180, 186, 190);
+        controlDarkShadowColor = frameColor;
         
-        windowTitleForegroundColor    = white;
-        windowTitleBackgroundColor    = new ColorUIResource(176, 196, 222); // controlBackgroundColor;
-        windowTitleColorLight         = controlColorLight;
-        windowTitleColorDark          = controlColorDark;
-        windowBorderColor             = controlColorDark;
+        windowTitleForegroundColor = white;
+        windowTitleBackgroundColor = new ColorUIResource(176, 196, 222);
+        windowTitleColorLight = new ColorUIResource(ColorHelper.brighter(controlColorLight, 20));
+        windowTitleColorDark = new ColorUIResource(ColorHelper.brighter(controlColorDark, 20));
+        windowBorderColor = controlColorDark;
         
-        windowInactiveTitleBackgroundColor  = new ColorUIResource(236, 236, 236); // new ColorUIResource(210, 210, 210);
-        windowInactiveTitleColorLight       = new ColorUIResource(240, 240, 240);
-        windowInactiveTitleColorDark        = new ColorUIResource(220, 220, 220);
-        windowInactiveBorderColor           = new ColorUIResource(210, 210, 210);
+        windowInactiveTitleBackgroundColor = new ColorUIResource(236, 236, 236);
+        windowInactiveTitleColorLight = new ColorUIResource(240, 240, 240);
+        windowInactiveTitleColorDark = new ColorUIResource(220, 220, 220);
+        windowInactiveBorderColor = new ColorUIResource(210, 210, 210);
         
-        menuBackgroundColor           = backgroundColor;
-        menuSelectionForegroundColor  = selectionForegroundColor;
-        menuSelectionBackgroundColor  = selectionBackgroundColor;
-        menuColorLight                = controlColorLight;
-        menuColorDark                 = controlColorDark;
+        menuBackgroundColor = backgroundColor;
+        menuSelectionForegroundColor = selectionForegroundColor;
+        menuSelectionBackgroundColor = selectionBackgroundColor;
+        menuColorLight = controlColorLight;
+        menuColorDark = controlColorDark;
         
-        toolbarBackgroundColor        = backgroundColor;
-        toolbarColorLight             = new ColorUIResource(240, 240, 240);
-        toolbarColorDark              = new ColorUIResource(200, 200, 200);
+        toolbarBackgroundColor = backgroundColor;
+        toolbarColorLight = new ColorUIResource(240, 240, 240);
+        toolbarColorDark = new ColorUIResource(200, 200, 200);
         
-        desktopColor                  = new ColorUIResource(240, 240, 240);
+        tabAreaBackgroundColor = backgroundColor;
+        tabSelectionForegroundColor = white;
+        
+        desktopColor = new ColorUIResource(240, 240, 240);
     }
     
     public void setUpColorArrs() {
@@ -97,9 +118,14 @@ public class AeroDefaultTheme extends AbstractTheme {
 
         DISABLED_COLORS = ColorHelper.createColorArr(new Color(240,240,240), new Color(220, 220, 220), 20);
         
-        WINDOW_TITLE_COLORS = new Color[20];
-        for (int i = 0; i < 20; i++)
-            WINDOW_TITLE_COLORS[i] = ColorHelper.brighter(DEFAULT_COLORS[i], 20);
+        color1 = ColorHelper.createColorArr(windowTitleColorLight, windowTitleColorDark, 6);
+        color2 = ColorHelper.createColorArr(ColorHelper.brighter(windowTitleColorDark, 10), windowTitleColorLight, 15);
+        for (int i = 0; i < 6; i++) {
+            WINDOW_TITLE_COLORS[i] = color1[i];
+        }
+        for (int i = 5; i < 20; i++) {
+            WINDOW_TITLE_COLORS[i] = color2[i - 5];
+        }
         
         MENUBAR_COLORS = ColorHelper.createColorArr(menuColorLight, menuColorDark, 20);
         TOOLBAR_COLORS = ColorHelper.createColorArr(toolbarColorLight, toolbarColorDark, 20);

@@ -1,13 +1,32 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.smart;
 
-import java.awt.*;
-import javax.swing.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.Icon;
+import javax.swing.JInternalFrame;
 
 /**
  * @author Michael Hagen
@@ -25,13 +44,13 @@ public class SmartInternalFrameTitlePane extends BaseInternalFrameTitlePane {
         Color backColor = null;
         Color frameColor = null;
         if (JTattooUtilities.isFrameActive(this)) {
-            JTattooUtilities.fillHorGradient(g, SmartLookAndFeel.getTheme().getWindowTitleColors(), 0, 0, width, height);
-            backColor = SmartLookAndFeel.getTheme().getWindowTitleColors()[10];
-            frameColor = ColorHelper.darker(SmartLookAndFeel.getWindowTitleColorDark(), 15);
+            JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), 0, 0, width, height);
+            backColor = AbstractLookAndFeel.getTheme().getWindowTitleColors()[10];
+            frameColor = ColorHelper.darker(AbstractLookAndFeel.getWindowTitleColorDark(), 15);
         } else {
-            JTattooUtilities.fillHorGradient(g, SmartLookAndFeel.getTheme().getWindowInactiveTitleColors(), 0, 0, width, height);
-            backColor = SmartLookAndFeel.getTheme().getWindowInactiveTitleColors()[10];
-            frameColor = ColorHelper.darker(SmartLookAndFeel.getWindowInactiveTitleColorDark(), 15);
+            JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), 0, 0, width, height);
+            backColor = AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors()[10];
+            frameColor = ColorHelper.darker(AbstractLookAndFeel.getWindowInactiveTitleColorDark(), 15);
         }
         g.setColor(frameColor);
         g.drawLine(0, height - 1, width, height - 1);
@@ -68,13 +87,13 @@ public class SmartInternalFrameTitlePane extends BaseInternalFrameTitlePane {
         Color backColor = null;
         Color frameColor = null;
         if (JTattooUtilities.isActive(this)) {
-            backColor = SmartLookAndFeel.getTheme().getWindowTitleColors()[10];
-            frameColor = SmartLookAndFeel.getTheme().getFrameColor();
-            JTattooUtilities.fillHorGradient(g, SmartLookAndFeel.getTheme().getWindowTitleColors(), 0, 0, width, height);
+            backColor = AbstractLookAndFeel.getTheme().getWindowTitleColors()[10];
+            frameColor = AbstractLookAndFeel.getTheme().getFrameColor();
+            JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), 0, 0, width, height);
         } else {
-            backColor = SmartLookAndFeel.getTheme().getWindowInactiveTitleColors()[10];
-            frameColor = ColorHelper.brighter(SmartLookAndFeel.getTheme().getFrameColor(), 40);
-            JTattooUtilities.fillHorGradient(g, SmartLookAndFeel.getTheme().getWindowInactiveTitleColors(), 0, 0, width, height);
+            backColor = AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors()[10];
+            frameColor = ColorHelper.brighter(AbstractLookAndFeel.getTheme().getFrameColor(), 40);
+            JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), 0, 0, width, height);
         }
 
         int iconWidth = 0;
@@ -106,7 +125,7 @@ public class SmartInternalFrameTitlePane extends BaseInternalFrameTitlePane {
         }
         int dy = 3;
 
-        if (dw > 0) {
+        if (!AbstractLookAndFeel.getTheme().isMacStyleWindowDecorationOn() && !AbstractLookAndFeel.getTheme().isCenterWindowTitleOn() && (dw > 0)) {
             Composite composite = g2D.getComposite();
             AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f);
             g2D.setComposite(alpha);
@@ -136,17 +155,20 @@ public class SmartInternalFrameTitlePane extends BaseInternalFrameTitlePane {
     }
 
     public void paintText(Graphics g, int x, int y, String title) {
+        if (isMacStyleWindowDecoration()) {
+            x += paintIcon(g, x, y) + 5;
+        }
         if (isActive()) {
             Color titleColor = AbstractLookAndFeel.getWindowTitleForegroundColor();
             if (ColorHelper.getGrayValue(titleColor) > 164) {
                 g.setColor(Color.black);
-                JTattooUtilities.drawString(frame, g, title, x + 1, y + 1);
+                JTattooUtilities.drawString(frame, g, title, x + 1, y);
             }
             g.setColor(titleColor);
-            JTattooUtilities.drawString(frame, g, title, x, y);
+            JTattooUtilities.drawString(frame, g, title, x, y - 1);
         } else {
             g.setColor(AbstractLookAndFeel.getWindowInactiveTitleForegroundColor());
-            JTattooUtilities.drawString(frame, g, title, x, y);
+            JTattooUtilities.drawString(frame, g, title, x, y - 1);
         }
     }
 }

@@ -1,15 +1,34 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.hifi;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.text.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
+import javax.swing.text.View;
 
 /**
  * @author Michael Hagen
@@ -26,11 +45,17 @@ public class HiFiTabbedPaneUI extends BaseTabbedPaneUI {
             ColorHelper.brighter(AbstractLookAndFeel.getBackgroundColor(), 20),
             ColorHelper.darker(AbstractLookAndFeel.getBackgroundColor(), 20),
             ColorHelper.darker(AbstractLookAndFeel.getBackgroundColor(), 40),
+            ColorHelper.darker(AbstractLookAndFeel.getBackgroundColor(), 60),
         };
         return SEP_COLORS;
     }
 
     protected void paintText(Graphics g, int tabPlacement, Font font, FontMetrics metrics, int tabIndex, String title, Rectangle textRect, boolean isSelected) {
+        Color backColor = tabPane.getBackgroundAt(tabIndex);
+        if (!(backColor instanceof UIResource)) {
+            super.paintText(g, tabPlacement, font, metrics, tabIndex, title, textRect, isSelected);
+            return;
+        }
         g.setFont(font);
         View v = getTextViewForTab(tabIndex);
         if (v != null) {
@@ -58,7 +83,7 @@ public class HiFiTabbedPaneUI extends BaseTabbedPaneUI {
             g2D.setComposite(alpha);
             Color fc = tabPane.getForegroundAt(tabIndex);
             if (isSelected) {
-                fc = AbstractLookAndFeel.getTheme().getButtonForegroundColor();
+                fc = AbstractLookAndFeel.getTheme().getTabSelectionForegroundColor();
             }
             if (!tabPane.isEnabled() || !tabPane.isEnabledAt(tabIndex)) {
                 fc = AbstractLookAndFeel.getTheme().getDisabledForegroundColor();
@@ -75,15 +100,4 @@ public class HiFiTabbedPaneUI extends BaseTabbedPaneUI {
         }
     }
 
-    protected void paintContentBorder(Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h) {
-        HiFiUtils.fillComponent(g, tabPane);
-        super.paintContentBorder(g, tabPlacement, selectedIndex, x, y, w, h);
-    }
-
-    protected void paintRoundedTopTabBorder(int tabIndex, Graphics g, int x1, int y1, int x2, int y2, boolean isSelected) {
-        super.paintRoundedTopTabBorder(tabIndex, g, x1, y1, x2, y2, isSelected);
-        g.setColor(tabAreaBackground);
-        g.drawLine(x1 + 1, y1 + 1, x1 + 1, y1 + 1);
-        g.drawLine(x2 - 1, y1 + 1, x2 - 1, y1 + 1);
-    }
 }

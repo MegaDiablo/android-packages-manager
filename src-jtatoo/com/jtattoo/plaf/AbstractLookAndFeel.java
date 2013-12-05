@@ -1,14 +1,35 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+
 package com.jtattoo.plaf;
 
-import java.util.*;
-import java.awt.*;
+import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.InsetsUIResource;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
 
 /**
  * @author Michael Hagen
@@ -25,6 +46,8 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
         }
     }
 
+    protected static String currentThemeName = "abstractTheme";
+    
     private static AbstractTheme myTheme = null;
 
     abstract public AbstractBorderFactory getBorderFactory();
@@ -60,13 +83,14 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
             "textHighlight", getSelectionBackgroundColor(), // Text background color when selected
             "textHighlightText", getSelectionForegroundColor(), // Text color when selected
             "textInactiveText", getDisabledForegroundColor(), // Text color when disabled
+
             "control", getControlBackgroundColor(), // Default color for controls (buttons, sliders, etc)
             "controlText", getControlForegroundColor(), // Default color for text in controls
-
             "controlHighlight", getControlHighlightColor(), // Specular highlight (opposite of the shadow)
             "controlLtHighlight", getControlHighlightColor(), // Highlight color for controls
             "controlShadow", getControlShadowColor(), // Shadow color for controls
             "controlDkShadow", getControlDarkShadowColor(), // Dark shadow color for controls
+
             "scrollbar", getControlBackgroundColor(), // Scrollbar background (usually the "track")
             "info", getTooltipBackgroundColor(), // ToolTip Background
             "infoText", getTooltipForegroundColor() // ToolTip Text
@@ -81,17 +105,16 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
         super.initComponentDefaults(table);
 
         BaseBorders.initDefaults();
+        BaseIcons.initDefaults();
 
         Object textFieldBorder = getBorderFactory().getTextFieldBorder();
         Object comboBoxBorder = getBorderFactory().getComboBoxBorder();
-        //      Object textBorder = getBorderFactory().getTextBorder();
         Object scrollPaneBorder = getBorderFactory().getScrollPaneBorder();
         Object tableScrollPaneBorder = getBorderFactory().getTableScrollPaneBorder();
         Object tabbedPaneBorder = getBorderFactory().getTabbedPaneBorder();
         Object buttonBorder = getBorderFactory().getButtonBorder();
         Object toggleButtonBorder = getBorderFactory().getToggleButtonBorder();
         Object titledBorderBorder = new UIDefaults.ProxyLazyValue("javax.swing.plaf.BorderUIResource$LineBorderUIResource", new Object[]{getFrameColor()});
-        //      Object desktopIconBorder = getBorderFactory().getDesktopIconBorder();
         Object menuBarBorder = getBorderFactory().getMenuBarBorder();
         Object popupMenuBorder = getBorderFactory().getPopupMenuBorder();
         Object menuItemBorder = getBorderFactory().getMenuItemBorder();
@@ -103,6 +126,9 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
         Object optionPaneMessageAreaBorder = BorderFactory.createEmptyBorder(8, 8, 8, 8);
         Object optionPaneButtonAreaBorder = BorderFactory.createEmptyBorder(0, 8, 8, 8);
         Object windowBorder = getBorderFactory().getInternalFrameBorder();
+
+        Color c = getBackgroundColor();
+        ColorUIResource progressBarBackground = new ColorUIResource(ColorHelper.brighter(c, 20));
 
         // DEFAULTS TABLE
         Object[] defaults = {
@@ -201,10 +227,9 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
             "Slider.focusInsets", new InsetsUIResource(0, 0, 0, 0),
             "Slider.trackWidth", new Integer(7),
             "Slider.majorTickLength", new Integer(6),
-//            "Slider.horizontalThumbIcon", new UIDefaults.ProxyLazyValue("javax.swing.plaf.metal.MetalIconFactory", "getHorizontalSliderThumbIcon"),
-//            "Slider.verticalThumbIcon", new UIDefaults.ProxyLazyValue("javax.swing.plaf.metal.MetalIconFactory", "getVerticalSliderThumbIcon"),
             // Progress Bar
             "ProgressBar.border", progressBarBorder,
+            "ProgressBar.background", progressBarBackground,
             "ProgressBar.selectionForeground", getSelectionForegroundColor(),
             "ProgressBar.selectionBackground", getForegroundColor(),
             // Combo Box
@@ -246,8 +271,7 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
             "InternalFrame.maximizeIcon", getIconFactory().getMaxIcon(),
             "InternalFrame.minimizeIcon", getIconFactory().getMinIcon(),
             "InternalFrame.closeIcon", getIconFactory().getCloseIcon(),
-            "InternalFrame.inactiveTitleGradient", getControlBackgroundColor(), // Netbeans 3.6 uses this for unselected WindowTabs
-            "InternalFrame.activeTitleBackground", new ColorUIResource(128, 164, 255), // Netbeans 3.6 uses this as base color for right gradient color in WindowTabs
+
             // Titled Border
             "TitledBorder.titleColor", getForegroundColor(),
             "TitledBorder.border", titledBorderBorder,
@@ -272,10 +296,16 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
             "ScrollBar.allowsAbsolutePositioning", Boolean.TRUE,
             // ScrollPane
             "ScrollPane.border", scrollPaneBorder,
+            "ScrollPane.foreground", getForegroundColor(),
+            "ScrollPane.background", getBackgroundColor(),
+            // Viewport
+            "Viewport.foreground", getForegroundColor(),
+            "Viewport.background", getBackgroundColor(),
+            "Viewport.font", getUserTextFont(),
 
             // Tabbed Pane
             "TabbedPane.boder", tabbedPaneBorder,
-            "TabbedPane.background", getControlBackgroundColor(),
+            "TabbedPane.background", getBackgroundColor(),
             "TabbedPane.tabAreaBackground", getTabAreaBackgroundColor(),
             "TabbedPane.unselectedBackground", getControlColorDark(),
             "TabbedPane.foreground", getControlForegroundColor(),
@@ -298,8 +328,6 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
             "Table.scrollPaneBorder", tableScrollPaneBorder,
             "Table.foreground", getInputForegroundColor(),
             "Table.background", getInputBackgroundColor(),
-//            "Table.selectionForeground", getSelectionForegroundColor(),
-//            "Table.selectionBackground", getSelectionBackgroundColor(),
             "Table.gridColor", getGridColor(),
             "TableHeader.foreground", getControlForegroundColor(),
             "TableHeader.background", getBackgroundColor(),
@@ -371,6 +399,7 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
             "FileView.floppyDriveIcon", getIconFactory().getTreeFloppyDriveIcon(),
             // File Chooser
             "FileChooser.detailsViewIcon", getIconFactory().getFileChooserDetailViewIcon(),
+            "FileChooser.viewMenuIcon", getIconFactory().getFileChooserDetailViewIcon(), 
             "FileChooser.homeFolderIcon", getIconFactory().getFileChooserHomeFolderIcon(),
             "FileChooser.listViewIcon", getIconFactory().getFileChooserListViewIcon(),
             "FileChooser.newFolderIcon", getIconFactory().getFileChooserNewFolderIcon(),
@@ -417,6 +446,9 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
             table.put("Spinner.arrowButtonBorder", BorderFactory.createEmptyBorder());
             table.put("Spinner.editorBorderPainted", Boolean.FALSE);
         }
+        if (getTheme().isMacStyleScrollBarOn()) {
+            table.put("ScrollBar.width", new Integer(8));
+        }
     }
 
     public static void setTheme(AbstractTheme theme) {
@@ -425,7 +457,7 @@ abstract public class AbstractLookAndFeel extends MetalLookAndFeel {
         }
 
         MetalLookAndFeel.setCurrentTheme(theme);
-        myTheme = (AbstractTheme) theme;
+        myTheme = theme;
         if (isWindowDecorationOn()) {
             DecorationHelper.decorateWindows(Boolean.TRUE);
         } else {

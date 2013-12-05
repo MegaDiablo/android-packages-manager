@@ -1,24 +1,39 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.bernstein;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonModel;
+import javax.swing.border.Border;
+import javax.swing.plaf.UIResource;
 
 /**
  * @author Michael Hagen
  */
 public class BernsteinBorders extends BaseBorders {
-
-    private static Border buttonBorder = null;
-    private static Border rolloverToolButtonBorder = null;
-    private static Border internalFrameBorder = null;
 
     //------------------------------------------------------------------------------------
     // Lazy access methods
@@ -56,13 +71,13 @@ public class BernsteinBorders extends BaseBorders {
         private static final Insets insets = new Insets(4, 8, 4, 8);
 
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
-            Color cHi = BernsteinLookAndFeel.getControlDarkShadow();
+            Color cHi = AbstractLookAndFeel.getControlDarkShadow();
             Color cLo = ColorHelper.darker(cHi, 8);
             JTattooUtilities.draw3DBorder(g, cHi, cLo, x, y, w, h);
         }
 
         public Insets getBorderInsets(Component c) {
-            return new Insets(insets.top, insets.left, insets.bottom, insets.right);
+            return insets;
         }
 
         public Insets getBorderInsets(Component c, Insets borderInsets) {
@@ -80,8 +95,8 @@ public class BernsteinBorders extends BaseBorders {
 
     public static class RolloverToolButtonBorder implements Border, UIResource {
 
-        private static final Color frameHiColor = ColorHelper.brighter(BernsteinLookAndFeel.getFrameColor(), 60);
-        private static final Color frameLoColor = BernsteinLookAndFeel.getFrameColor();
+        private static final Color frameHiColor = ColorHelper.brighter(AbstractLookAndFeel.getFrameColor(), 60);
+        private static final Color frameLoColor = AbstractLookAndFeel.getFrameColor();
         private static final Insets insets = new Insets(2, 2, 2, 2);
 
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
@@ -95,7 +110,7 @@ public class BernsteinBorders extends BaseBorders {
                     g.setColor(frameHiColor);
                     g.drawRect(x, y, w - 2, h - 1);
                 } else {
-                    g.setColor(BernsteinLookAndFeel.getFrameColor());
+                    g.setColor(AbstractLookAndFeel.getFrameColor());
                     g.drawRect(x, y, w - 2, h - 1);
                 }
             } else {

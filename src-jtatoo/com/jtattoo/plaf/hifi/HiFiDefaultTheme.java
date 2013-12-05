@@ -1,13 +1,34 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.hifi;
 
-import javax.swing.plaf.*;
-import java.awt.*;
-
-import com.jtattoo.plaf.*;
+import com.jtattoo.plaf.AbstractTheme;
+import com.jtattoo.plaf.ColorHelper;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.FontUIResource;
 
 /**
  * @author Michael Hagen
@@ -34,7 +55,7 @@ public class HiFiDefaultTheme extends AbstractTheme {
         // Defaults for HiFiLookAndFeel
         textShadow = true;
         foregroundColor = extraLightGray;
-        disabledForegroundColor = gray;//extraDarkGray;
+        disabledForegroundColor = gray;
         disabledBackgroundColor = new ColorUIResource(48, 48, 48);
 
         backgroundColor = new ColorUIResource(48, 48, 48);
@@ -50,6 +71,7 @@ public class HiFiDefaultTheme extends AbstractTheme {
         inputBackgroundColor = new ColorUIResource(80, 80, 80);
         inputForegroundColor = foregroundColor;
 
+        rolloverForegroundColor = extraLightGray;
         rolloverColor = new ColorUIResource(112, 112, 112);
         rolloverColorLight = new ColorUIResource(128, 128, 128);
         rolloverColorDark = new ColorUIResource(96, 96, 96);
@@ -67,12 +89,11 @@ public class HiFiDefaultTheme extends AbstractTheme {
         controlShadowColor = new ColorUIResource(32, 32, 32);
         controlDarkShadowColor = black;
 
-
         windowTitleForegroundColor = foregroundColor;
-        windowTitleBackgroundColor = new ColorUIResource(96, 96, 96);
+        windowTitleBackgroundColor = new ColorUIResource(32, 32, 32);
         windowTitleColorLight = new ColorUIResource(96, 96, 96);
-        windowTitleColorDark = new ColorUIResource(16, 16, 16);
-        windowBorderColor = new ColorUIResource(36, 36, 36);
+        windowTitleColorDark = new ColorUIResource(32, 32, 32);//new ColorUIResource(16, 16, 16);
+        windowBorderColor =  black;
         windowIconColor = lightGray;
         windowIconShadowColor = black;
         windowIconRolloverColor = orange;
@@ -81,7 +102,7 @@ public class HiFiDefaultTheme extends AbstractTheme {
         windowInactiveTitleBackgroundColor = new ColorUIResource(64, 64, 64);
         windowInactiveTitleColorLight = new ColorUIResource(64, 64, 64);
         windowInactiveTitleColorDark = new ColorUIResource(32, 32, 32);
-        windowInactiveBorderColor = new ColorUIResource(32, 32, 32);
+        windowInactiveBorderColor = black;
 
         menuForegroundColor = foregroundColor;
         menuBackgroundColor = new ColorUIResource(32, 32, 32);
@@ -90,13 +111,18 @@ public class HiFiDefaultTheme extends AbstractTheme {
         menuColorLight = new ColorUIResource(96, 96, 96);
         menuColorDark = new ColorUIResource(32, 32, 32);
 
-        toolbarBackgroundColor = new ColorUIResource(64, 64, 64);
+        toolbarBackgroundColor = new ColorUIResource(48, 48, 48);
         toolbarColorLight = new ColorUIResource(96, 96, 96);
         toolbarColorDark = new ColorUIResource(32, 32, 32);
 
         tabAreaBackgroundColor = backgroundColor;
+        tabSelectionForegroundColor = selectionForegroundColor;
+        
         desktopColor = new ColorUIResource(64, 64, 64);
 
+        tooltipForegroundColor = white;
+        tooltipBackgroundColor = new ColorUIResource(24, 24, 24);
+        
         controlFont = new FontUIResource("Dialog", Font.BOLD, 12);
         systemFont = new FontUIResource("Dialog", Font.BOLD, 12);
         userFont = new FontUIResource("Dialog", Font.BOLD, 12);
@@ -115,7 +141,10 @@ public class HiFiDefaultTheme extends AbstractTheme {
         BUTTON_COLORS = ColorHelper.createColorArr(buttonColorLight, buttonColorDark, 20);
         ROLLOVER_COLORS = HIDEFAULT_COLORS;
         PRESSED_COLORS = ColorHelper.createColorArr(black, controlColorDark, 20);
-        DISABLED_COLORS = ColorHelper.createColorArr(ColorHelper.darker(controlColorLight, 10), ColorHelper.darker(controlColorDark, 10), 20);
+        
+        //DISABLED_COLORS = ColorHelper.createColorArr(ColorHelper.darker(controlColorLight, 10), ColorHelper.darker(controlColorDark, 10), 20);
+        DISABLED_COLORS = ColorHelper.createColorArr(ColorHelper.brighter(controlColorDark, 5), ColorHelper.darker(controlColorDark, 10), 20);
+        
         WINDOW_TITLE_COLORS = ColorHelper.createColorArr(windowTitleColorLight, windowTitleColorDark, 20);
         WINDOW_INACTIVE_TITLE_COLORS = ColorHelper.createColorArr(windowInactiveTitleColorLight, windowInactiveTitleColorDark, 20);
         MENUBAR_COLORS = DEFAULT_COLORS;

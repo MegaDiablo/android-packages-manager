@@ -1,13 +1,31 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.smart;
 
-import java.util.*;
-import javax.swing.*;
-
 import com.jtattoo.plaf.*;
+import java.util.*;
+import javax.swing.UIDefaults;
 
 /**
  * @author Michael Hagen
@@ -219,8 +237,8 @@ public class SmartLookAndFeel extends AbstractLookAndFeel {
         grayProps.setProperty("toolbarColorDark", "232 232 232");
         grayProps.setProperty("desktopColor", "240 240 240");
 
-        String key = null;
-        String value = null;
+        String key;
+        String value;
         Iterator iter = smallFontProps.keySet().iterator();
         while (iter.hasNext()) {
             key = (String) iter.next();
@@ -363,23 +381,26 @@ public class SmartLookAndFeel extends AbstractLookAndFeel {
     }
 
     public static void setTheme(String name) {
-        if (myTheme != null) {
-            myTheme.setInternalName(name);
-        }
         setTheme((Properties) themesMap.get(name));
+        if (myTheme != null) {
+            AbstractTheme.setInternalName(name);
+        }
     }
 
     public static void setTheme(String name, String licenseKey, String logoString) {
         Properties props = (Properties) themesMap.get(name);
-        props.put("licenseKey", licenseKey);
-        props.put("logoString", logoString);
-        if (myTheme != null) {
-            myTheme.setInternalName(name);
+        if (props != null) {
+            props.put("licenseKey", licenseKey);
+            props.put("logoString", logoString);
+            setTheme(props);
+            if (myTheme != null) {
+                AbstractTheme.setInternalName(name);
+            }
         }
-        setTheme(props);
     }
 
     public static void setTheme(Properties themesProps) {
+        currentThemeName = "smartTheme";
         if (myTheme == null) {
             myTheme = new SmartDefaultTheme();
         }
@@ -431,6 +452,9 @@ public class SmartLookAndFeel extends AbstractLookAndFeel {
     }
 
     protected void initClassDefaults(UIDefaults table) {
+        if (!"smartTheme".equals(currentThemeName)) {
+            setTheme("Default");
+        }
         super.initClassDefaults(table);
         Object[] uiDefaults = {
             // BaseLookAndFeel classes
@@ -458,6 +482,8 @@ public class SmartLookAndFeel extends AbstractLookAndFeel {
             "CheckBoxMenuItemUI", BaseCheckBoxMenuItemUI.class.getName(),
             "RadioButtonMenuItemUI", BaseRadioButtonMenuItemUI.class.getName(),
             "PopupMenuSeparatorUI", BaseSeparatorUI.class.getName(),
+            "DesktopPaneUI", BaseDesktopPaneUI.class.getName(),
+            
             // SmartLookAndFeel classes
             "ButtonUI", SmartButtonUI.class.getName(),
             "ToggleButtonUI", SmartToggleButtonUI.class.getName(),

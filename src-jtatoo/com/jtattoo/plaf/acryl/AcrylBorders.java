@@ -1,29 +1,40 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.acryl;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonModel;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.Border;
+import javax.swing.plaf.UIResource;
 
 /**
  * @author Michael Hagen
  */
 public class AcrylBorders extends BaseBorders {
-
-    private static Border textFieldBorder = null;
-    private static Border spinnerBorder = null;
-    private static Border comboBoxBorder = null;
-    private static Border scrollPaneBorder = null;
-    private static Border tableScrollPaneBorder = null;
-    private static Border buttonBorder = null;
-    private static Border rolloverToolButtonBorder = null;
-    private static Border internalFrameBorder = null;
 
     //------------------------------------------------------------------------------------
     // Lazy access methods
@@ -227,12 +238,12 @@ public class AcrylBorders extends BaseBorders {
 
             g2D.setColor(frameColor);
             g2D.drawRoundRect(x, y, w - 2, h - 2, 6, 6);
-            
+
             g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, savedRederingHint);
         }
 
         public Insets getBorderInsets(Component c) {
-            return new Insets(insets.top, insets.left, insets.bottom, insets.right);
+            return insets;
         }
 
         public Insets getBorderInsets(Component c, Insets borderInsets) {
@@ -261,12 +272,12 @@ public class AcrylBorders extends BaseBorders {
                     g.setColor(frameColor);
                     g.drawRect(x, y, w - 1, h - 1);
                     Graphics2D g2D = (Graphics2D) g;
-                    Composite composite = g2D.getComposite();
+                    Composite savedComposit = g2D.getComposite();
                     AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f);
                     g2D.setComposite(alpha);
                     g.setColor(Color.black);
                     g.fillRect(x + 1, y + 1, w - 2, h - 2);
-                    g2D.setComposite(composite);
+                    g2D.setComposite(savedComposit);
                 } else if (model.isRollover()) {
                     Color frameColor = AbstractLookAndFeel.getToolbarBackgroundColor();
                     Color frameHiColor = ColorHelper.darker(frameColor, 5);
@@ -318,13 +329,13 @@ public class AcrylBorders extends BaseBorders {
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
             boolean active = isActive(c);
             int th = getTitleHeight(c);
-            Color titleColor = ColorHelper.brighter(AcrylLookAndFeel.getWindowInactiveTitleColorLight(), 10);
-            Color borderColor = AcrylLookAndFeel.getWindowInactiveTitleColorLight();
-            Color frameColor = ColorHelper.darker(AcrylLookAndFeel.getWindowInactiveBorderColor(), 10);
+            Color titleColor = ColorHelper.brighter(AbstractLookAndFeel.getWindowInactiveTitleColorLight(), 10);
+            Color borderColor = AbstractLookAndFeel.getWindowInactiveTitleColorLight();
+            Color frameColor = ColorHelper.darker(AbstractLookAndFeel.getWindowInactiveBorderColor(), 10);
             if (active) {
-                titleColor = AcrylLookAndFeel.getWindowTitleColorLight();
-                borderColor = AcrylLookAndFeel.getWindowTitleColorLight();
-                frameColor = ColorHelper.darker(AcrylLookAndFeel.getWindowBorderColor(), 10);
+                titleColor = AbstractLookAndFeel.getWindowTitleColorLight();
+                borderColor = AbstractLookAndFeel.getWindowTitleColorLight();
+                frameColor = ColorHelper.darker(AbstractLookAndFeel.getWindowBorderColor(), 10);
             }
             g.setColor(titleColor);
             g.fillRect(x, y + 1, w, insets.top - 1);
@@ -332,11 +343,11 @@ public class AcrylBorders extends BaseBorders {
             g.fillRect(x + 1, y + h - dw, w - 2, dw - 1);
 
             if (active) {
-                JTattooUtilities.fillHorGradient(g, AcrylLookAndFeel.getTheme().getWindowTitleColors(), 1, insets.top, dw, th + 1);
-                JTattooUtilities.fillHorGradient(g, AcrylLookAndFeel.getTheme().getWindowTitleColors(), w - dw, insets.top, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), 1, insets.top, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), w - dw, insets.top, dw, th + 1);
             } else {
-                JTattooUtilities.fillHorGradient(g, AcrylLookAndFeel.getTheme().getWindowInactiveTitleColors(), 1, insets.top, dw - 1, th + 1);
-                JTattooUtilities.fillHorGradient(g, AcrylLookAndFeel.getTheme().getWindowInactiveTitleColors(), w - dw, insets.top, dw - 1, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), 1, insets.top, dw - 1, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), w - dw, insets.top, dw - 1, th + 1);
             }
             g.setColor(borderColor);
             g.fillRect(1, insets.top + th + 1, dw - 1, h - th - dw);

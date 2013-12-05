@@ -1,13 +1,42 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+
 package com.jtattoo.plaf;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JSlider;
+import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicSliderUI;
 
 /**
@@ -84,6 +113,11 @@ public class BaseSliderUI extends BasicSliderUI {
         recalculateIfInsetsChanged();
         recalculateIfOrientationChanged();
         Rectangle clip = g.getClipBounds();
+        
+        if ( !clip.intersects(trackRect) && slider.getPaintTrack()) {
+            calculateGeometry();
+        }
+        
         if (slider.getPaintTrack() && clip.intersects(trackRect)) {
             paintTrack(g);
         }
@@ -119,8 +153,8 @@ public class BaseSliderUI extends BasicSliderUI {
         int overhang = 4;
         int trackLeft = 0;
         int trackTop = 0;
-        int trackRight = 0;
-        int trackBottom = 0;
+        int trackRight;
+        int trackBottom;
 
         if (slider.getOrientation() == JSlider.HORIZONTAL) {
             trackBottom = (trackRect.height - 1) - overhang;
@@ -140,11 +174,11 @@ public class BaseSliderUI extends BasicSliderUI {
         g.setColor(AbstractLookAndFeel.getFrameColor());
         g.drawRect(trackLeft, trackTop, (trackRight - trackLeft) - 1, (trackBottom - trackTop) - 1);
 
-        int middleOfThumb = 0;
-        int fillTop = 0;
-        int fillLeft = 0;
-        int fillBottom = 0;
-        int fillRight = 0;
+        int middleOfThumb;
+        int fillTop;
+        int fillLeft;
+        int fillBottom;
+        int fillRight;
 
         if (slider.getOrientation() == JSlider.HORIZONTAL) {
             middleOfThumb = thumbRect.x + (thumbRect.width / 2);
@@ -159,7 +193,7 @@ public class BaseSliderUI extends BasicSliderUI {
                 fillLeft = middleOfThumb;
                 fillRight = trackRight - 2;
             }
-            Color colors[] = null;
+            Color colors[];
             if (!JTattooUtilities.isActive(slider)) {
                 colors = AbstractLookAndFeel.getTheme().getInActiveColors();
             } else {
@@ -186,7 +220,7 @@ public class BaseSliderUI extends BasicSliderUI {
                 fillTop = trackTop + 1;
                 fillBottom = middleOfThumb;
             }
-            Color colors[] = null;
+            Color colors[];
             if (!JTattooUtilities.isActive(slider)) {
                 colors = AbstractLookAndFeel.getTheme().getInActiveColors();
             } else {
@@ -207,12 +241,12 @@ public class BaseSliderUI extends BasicSliderUI {
     public void paintTicks(Graphics g) {
         boolean leftToRight = JTattooUtilities.isLeftToRight(slider);
         Rectangle tickBounds = tickRect;
-        g.setColor(AbstractLookAndFeel.getForegroundColor());
+        g.setColor(slider.getForeground());
         if (slider.getOrientation() == JSlider.HORIZONTAL) {
             g.translate(0, tickBounds.y);
 
             int value = slider.getMinimum();
-            int xPos = 0;
+            int xPos;
 
             if (slider.getMinorTickSpacing() > 0) {
                 while (value <= slider.getMaximum()) {
@@ -236,7 +270,7 @@ public class BaseSliderUI extends BasicSliderUI {
             g.translate(tickBounds.x, 0);
 
             int value = slider.getMinimum();
-            int yPos = 0;
+            int yPos;
 
             if (slider.getMinorTickSpacing() > 0) {
                 int offset = 0;
@@ -275,23 +309,31 @@ public class BaseSliderUI extends BasicSliderUI {
         }
     }
 
+    protected boolean isDragging() {
+        if (JTattooUtilities.getJavaVersion() >= 1.5) {
+            return super.isDragging();
+        } else {
+            return false;
+        }
+    }
+
     public void paintThumb(Graphics g) {
-        Icon icon = null;
+        Icon icon;
         if (slider.getOrientation() == JSlider.HORIZONTAL) {
-            if (isRollover && slider.isEnabled()) {
+            if ((isRollover || isDragging()) && slider.isEnabled()) {
                 icon = getThumbHorIconRollover();
             } else {
                 icon = getThumbHorIcon();
             }
         } else {
-            if (isRollover && slider.isEnabled()) {
+            if ((isRollover || isDragging()) && slider.isEnabled()) {
                 icon = getThumbVerIconRollover();
             } else {
                 icon = getThumbVerIcon();
             }
         }
         Graphics2D g2D = (Graphics2D) g;
-        Composite composite = g2D.getComposite();
+        Composite savedComposite = g2D.getComposite();
         if (!slider.isEnabled()) {
             g.setColor(AbstractLookAndFeel.getBackgroundColor());
             g.fillRect(thumbRect.x + 1, thumbRect.y + 1, thumbRect.width - 2, thumbRect.height - 2);
@@ -299,7 +341,7 @@ public class BaseSliderUI extends BasicSliderUI {
             g2D.setComposite(alpha);
         }
         icon.paintIcon(null, g, thumbRect.x, thumbRect.y);
-        g2D.setComposite(composite);
+        g2D.setComposite(savedComposite);
     }
 
     protected class MyTrackListener extends TrackListener {
@@ -308,17 +350,17 @@ public class BaseSliderUI extends BasicSliderUI {
             super.mouseEntered(e);
             if (slider.isEnabled()) {
                 isRollover = thumbRect.contains(e.getPoint());
-                paintThumb(slider.getGraphics());
+                slider.repaint();
             }
         }
 
         public void mouseMoved(MouseEvent e) {
-            super.mouseEntered(e);
+            super.mouseMoved(e);
             if (slider.isEnabled()) {
                 boolean rollover = thumbRect.contains(e.getPoint());
                 if (rollover != isRollover) {
                     isRollover = rollover;
-                    paintThumb(slider.getGraphics());
+                    slider.repaint();
                 }
             }
         }
@@ -327,8 +369,9 @@ public class BaseSliderUI extends BasicSliderUI {
             super.mouseExited(e);
             if (slider.isEnabled()) {
                 isRollover = false;
-                paintThumb(slider.getGraphics());
+                slider.repaint();
             }
         }
+
     }
 }

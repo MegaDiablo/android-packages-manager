@@ -1,30 +1,40 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.luna;
 
-import java.awt.*;
-
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonModel;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.Border;
+import javax.swing.plaf.UIResource;
 
 /**
  * @author Michael Hagen
  */
 public class LunaBorders extends BaseBorders {
-    private static Border textFieldBorder = null;
-    private static Border comboBoxBorder = null;
-    private static Border scrollPaneBorder = null;
-    private static Border tableScrollPaneBorder = null;
-    private static Border buttonBorder = null;
-    private static Border toggleButtonBorder = null;
-    private static Border rolloverToolButtonBorder = null;
-    private static Border internalFrameBorder = null;
-    private static Border tableHeaderBorder = null;
 
     //------------------------------------------------------------------------------------
     // Lazy access methods
@@ -69,10 +79,7 @@ public class LunaBorders extends BaseBorders {
     }
 
     public static Border getToggleButtonBorder() {
-        if (toggleButtonBorder == null) {
-            toggleButtonBorder = new ToggleButtonBorder();
-        }
-        return toggleButtonBorder;
+        return getButtonBorder();
     }
 
     public static Border getRolloverToolButtonBorder() {
@@ -104,7 +111,6 @@ public class LunaBorders extends BaseBorders {
         private static final Color defaultColorHi = new Color(220, 230, 245);
         private static final Color defaultColorMed = new Color(212, 224, 243);
         private static final Color defaultColorLo = new Color(200, 215, 240);
-
         private static final Insets insets = new Insets(3, 6, 3, 6);
 
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
@@ -140,7 +146,7 @@ public class LunaBorders extends BaseBorders {
         }
 
         public Insets getBorderInsets(Component c) {
-            return new Insets(insets.top, insets.left, insets.bottom, insets.right);
+            return insets;
         }
 
         public Insets getBorderInsets(Component c, Insets borderInsets) {
@@ -155,50 +161,6 @@ public class LunaBorders extends BaseBorders {
             return true;
         }
     } // class ButtonBorder
-
-    public static class ToggleButtonBorder implements Border, UIResource {
-
-        private static final Insets insets = new Insets(3, 6, 3, 6);
-        private static final Color frameHiColor1 = Color.white;
-        private static final Color frameHiColor2 = new Color(220, 220, 220);
-        private static final Color frameLoColor1 = new Color(150, 150, 150);
-
-        public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
-            AbstractButton button = (AbstractButton) c;
-            ButtonModel model = button.getModel();
-            if (model.isEnabled()) {
-                if ((model.isPressed() && model.isArmed()) || model.isSelected()) {
-                    JTattooUtilities.draw3DBorder(g, frameLoColor1, frameHiColor1, x, y, w, h);
-                    JTattooUtilities.draw3DBorder(g, AbstractLookAndFeel.getFrameColor(), ColorHelper.brighter(AbstractLookAndFeel.getFrameColor(), 20), x + 1, y + 1, w - 2, h - 2);
-                } else {
-                    JTattooUtilities.draw3DBorder(g, frameHiColor2, frameHiColor1, x, y, w, h);
-                    JTattooUtilities.draw3DBorder(g, ColorHelper.brighter(AbstractLookAndFeel.getFrameColor(), 20), AbstractLookAndFeel.getFrameColor(), x + 1, y + 1, w - 2, h - 2);
-                }
-                if (model.isRollover()) {
-                    JTattooUtilities.drawBorder(g, AbstractLookAndFeel.getFocusColor(), x + 2, y + 2, w - 4, h - 4);
-                    JTattooUtilities.drawBorder(g, AbstractLookAndFeel.getFocusColor(), x + 3, y + 3, w - 6, h - 6);
-                }
-            } else {
-                JTattooUtilities.drawBorder(g, Color.lightGray, x, y, w, h);
-            }
-        }
-
-        public Insets getBorderInsets(Component c) {
-            return new Insets(insets.top, insets.left, insets.bottom, insets.right);
-        }
-
-        public Insets getBorderInsets(Component c, Insets borderInsets) {
-            borderInsets.left = insets.left;
-            borderInsets.top = insets.top;
-            borderInsets.right = insets.right;
-            borderInsets.bottom = insets.bottom;
-            return borderInsets;
-        }
-
-        public boolean isBorderOpaque() {
-            return true;
-        }
-    } // class ToggleButtonBorder
 
     public static class RolloverToolButtonBorder implements Border, UIResource {
 
@@ -285,7 +247,6 @@ public class LunaBorders extends BaseBorders {
             borderInsets.bottom = insets.bottom;
             return borderInsets;
         }
-
     } // class ComboBoxBorder
 
     public static class TextFieldBorder extends AbstractBorder implements UIResource {
@@ -311,16 +272,13 @@ public class LunaBorders extends BaseBorders {
             borderInsets.bottom = insets.bottom;
             return borderInsets;
         }
-
     } // class TextFieldBorder
 
     public static class ScrollPaneBorder extends AbstractBorder implements UIResource {
 
         private static final Color fieldBorderColor = new Color(127, 157, 185);
-
         private static final Insets insets = new Insets(2, 2, 2, 2);
         private static final Insets tableInsets = new Insets(1, 1, 1, 1);
-
         private boolean tableBorder = false;
 
         public ScrollPaneBorder(boolean tableBorder) {
@@ -350,7 +308,6 @@ public class LunaBorders extends BaseBorders {
             borderInsets.bottom = ins.bottom;
             return borderInsets;
         }
-
     } // class ScrollPaneBorder
 
     public static class InternalFrameBorder extends BaseInternalFrameBorder {
@@ -362,8 +319,8 @@ public class LunaBorders extends BaseBorders {
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
             boolean active = isActive(c);
             int th = getTitleHeight(c);
-            Color titleColor = LunaLookAndFeel.getWindowTitleColorLight();
-            Color borderColor = LunaLookAndFeel.getWindowBorderColor();
+            Color titleColor = AbstractLookAndFeel.getWindowTitleColorLight();
+            Color borderColor = AbstractLookAndFeel.getWindowBorderColor();
             if (!active) {
                 titleColor = ColorHelper.brighter(titleColor, 20);
                 borderColor = ColorHelper.brighter(borderColor, 20);
@@ -376,11 +333,11 @@ public class LunaBorders extends BaseBorders {
             g.fillRect(w - dw, insets.top + th + 1, dw - 1, h - th - dw);
 
             if (active) {
-                JTattooUtilities.fillHorGradient(g, LunaLookAndFeel.getTheme().getWindowTitleColors(), 1, insets.top, dw, th + 1);
-                JTattooUtilities.fillHorGradient(g, LunaLookAndFeel.getTheme().getWindowTitleColors(), w - dw, insets.top, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), 1, insets.top, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), w - dw, insets.top, dw, th + 1);
             } else {
-                JTattooUtilities.fillHorGradient(g, LunaLookAndFeel.getTheme().getWindowInactiveTitleColors(), 1, insets.top, dw, th + 1);
-                JTattooUtilities.fillHorGradient(g, LunaLookAndFeel.getTheme().getWindowInactiveTitleColors(), w - dw, insets.top, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), 1, insets.top, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), w - dw, insets.top, dw, th + 1);
             }
 
             g.setColor(ColorHelper.darker(borderColor, 15));
@@ -415,8 +372,6 @@ public class LunaBorders extends BaseBorders {
             borderInsets.bottom = insets.bottom;
             return borderInsets;
         }
-
     } // class TableHeaderBorder
-
 } // class LunaBorders
 

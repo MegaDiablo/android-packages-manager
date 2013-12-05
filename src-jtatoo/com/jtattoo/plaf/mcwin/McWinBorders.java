@@ -1,24 +1,39 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.mcwin;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonModel;
+import javax.swing.border.Border;
+import javax.swing.plaf.UIResource;
 
 /**
  * @author Michael Hagen
  */
 public class McWinBorders extends BaseBorders {
-
-    private static Border buttonBorder = null;
-    private static Border rolloverToolButtonBorder = null;
-    private static Border internalFrameBorder = null;
 
     //------------------------------------------------------------------------------------
     // Lazy access methods
@@ -61,7 +76,7 @@ public class McWinBorders extends BaseBorders {
         }
 
         public Insets getBorderInsets(Component c) {
-            if (McWinLookAndFeel.getTheme().doDrawSquareButtons()) {
+            if (AbstractLookAndFeel.getTheme().doDrawSquareButtons()) {
                 return new Insets(3, 4, 3, 4);
             } else {
                 return new Insets(2, 12, 2, 12);
@@ -78,7 +93,7 @@ public class McWinBorders extends BaseBorders {
         }
 
         public boolean isBorderOpaque() {
-            return false;
+            return true;
         }
     } // class ButtonBorder
 
@@ -122,22 +137,22 @@ public class McWinBorders extends BaseBorders {
             boolean active = isActive(c);
             boolean resizable = isResizable(c);
             int th = getTitleHeight(c);
-            Color frameColor = McWinLookAndFeel.getWindowInactiveBorderColor();
-            Color titleColor = McWinLookAndFeel.getWindowInactiveTitleColorLight();
-            Color borderColor = McWinLookAndFeel.getWindowInactiveTitleColorDark();
+            Color frameColor = AbstractLookAndFeel.getWindowInactiveBorderColor();
+            Color titleColor = AbstractLookAndFeel.getWindowInactiveTitleColorLight();
+            Color borderColor = AbstractLookAndFeel.getWindowInactiveTitleColorDark();
             if (active) {
-                frameColor = McWinLookAndFeel.getWindowBorderColor();
-                titleColor = McWinLookAndFeel.getWindowTitleColorLight();
-                borderColor = McWinLookAndFeel.getWindowTitleColorDark();
+                frameColor = AbstractLookAndFeel.getWindowBorderColor();
+                titleColor = AbstractLookAndFeel.getWindowTitleColorLight();
+                borderColor = AbstractLookAndFeel.getWindowTitleColorDark();
             }
             if (!resizable) {
                 Insets borderInsets = getBorderInsets(c);
                 g.setColor(frameColor);
                 g.drawRect(x, y, w - 1, h - 1);
                 if (active) {
-                    g.setColor(McWinLookAndFeel.getWindowTitleColorDark());
+                    g.setColor(AbstractLookAndFeel.getWindowTitleColorDark());
                 } else {
-                    g.setColor(McWinLookAndFeel.getWindowInactiveTitleColorDark());
+                    g.setColor(AbstractLookAndFeel.getWindowInactiveTitleColorDark());
                 }
                 for (int i = 1; i < borderInsets.left; i++) {
                     g.drawRect(i, i, w - (2 * i) - 1, h - (2 * i) - 1);
@@ -153,11 +168,11 @@ public class McWinBorders extends BaseBorders {
             g.setColor(borderColor);
             g.fillRect(x + 1, y + h - dw, w - 2, dw - 1);
             if (active) {
-                JTattooUtilities.fillHorGradient(g, McWinLookAndFeel.getTheme().getWindowTitleColors(), 1, dw, dw, th + 1);
-                JTattooUtilities.fillHorGradient(g, McWinLookAndFeel.getTheme().getWindowTitleColors(), w - dw, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), 1, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), w - dw, dw, dw, th + 1);
             } else {
-                JTattooUtilities.fillHorGradient(g, McWinLookAndFeel.getTheme().getWindowInactiveTitleColors(), 1, dw, dw, th + 1);
-                JTattooUtilities.fillHorGradient(g, McWinLookAndFeel.getTheme().getWindowInactiveTitleColors(), w - dw, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), 1, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), w - dw, dw, dw, th + 1);
             }
             g.setColor(borderColor);
             g.fillRect(1, insets.top + th + 1, dw - 1, h - th - dw);

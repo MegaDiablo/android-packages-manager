@@ -1,14 +1,31 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
-
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.aero;
 
-import java.util.*;
-import javax.swing.*;
-
 import com.jtattoo.plaf.*;
+import java.util.*;
+import javax.swing.UIDefaults;
 
 /**
  * @author Michael Hagen
@@ -61,11 +78,12 @@ public class AeroLookAndFeel extends AbstractLookAndFeel {
         goldProps.setProperty("controlColorDark", "200 200 120");
         goldProps.setProperty("windowTitleForegroundColor", "0 0 0");
         goldProps.setProperty("windowTitleBackgroundColor", "248 248 180");
-        goldProps.setProperty("windowTitleColorLight", "248 248 180");
-        goldProps.setProperty("windowTitleColorDark", "200 200 120");
+        goldProps.setProperty("windowTitleColorLight", "249 249 195");
+        goldProps.setProperty("windowTitleColorDark", "211 211 147");
         goldProps.setProperty("windowBorderColor", "200 200 120");
         goldProps.setProperty("menuSelectionForegroundColor", "0 0 0");
         goldProps.setProperty("menuSelectionBackgroundColor", "232 232 180");
+        goldProps.setProperty("tabSelectionForegroundColor", "0 0 0");
         
         greenProps.setProperty("focusCellColor", "40 100 60");
         greenProps.setProperty("selectionBackgroundColor", "150 211 176");
@@ -74,14 +92,15 @@ public class AeroLookAndFeel extends AbstractLookAndFeel {
         greenProps.setProperty("controlColorDark", "60 142 95");
         greenProps.setProperty("windowTitleForegroundColor", "255 255 255");
         greenProps.setProperty("windowTitleBackgroundColor", "80 120 100");
-        greenProps.setProperty("windowTitleColorLight", "150 211 176");
-        greenProps.setProperty("windowTitleColorDark", "60 142 95");
+        greenProps.setProperty("windowTitleColorLight", "171 219 191");
+        greenProps.setProperty("windowTitleColorDark", "99 164 127");
         greenProps.setProperty("windowBorderColor", "60 142 95");
         greenProps.setProperty("menuSelectionForegroundColor", "0 0 0");
         greenProps.setProperty("menuSelectionBackgroundColor", "150 211 176");
+        greenProps.setProperty("tabSelectionForegroundColor", "255 255 255");
         
-        String key = null;
-        String value = null;
+        String key;
+        String value;
         Iterator iter = smallFontProps.keySet().iterator();
         while (iter.hasNext()) {
             key = (String)iter.next();
@@ -153,31 +172,38 @@ public class AeroLookAndFeel extends AbstractLookAndFeel {
         themesMap.put("Green-Giant-Font", greenGiantFontProps);
     }
     
-    public static java.util.List getThemes()
-    { return themesList; }
+    public static java.util.List getThemes() { 
+        return themesList; 
+    }
     
     public static Properties getThemeProperties(String name) {
         return ((Properties)themesMap.get(name));
     }
     
     public static void setTheme(String name) {
-        if (myTheme != null)
-            myTheme.setInternalName(name);
-        setTheme((Properties)themesMap.get(name));
+        setTheme((Properties) themesMap.get(name));
+        if (myTheme != null) {
+            AbstractTheme.setInternalName(name);
+        }
     }
-    
+
     public static void setTheme(String name, String licenseKey, String logoString) {
-        Properties props = (Properties)themesMap.get(name);
-        props.put("licenseKey", licenseKey);
-        props.put("logoString", logoString); 
-        if (myTheme != null)
-            myTheme.setInternalName(name);
-        setTheme(props);
+        Properties props = (Properties) themesMap.get(name);
+        if (props != null) {
+            props.put("licenseKey", licenseKey);
+            props.put("logoString", logoString);
+            setTheme(props);
+            if (myTheme != null) {
+                AbstractTheme.setInternalName(name);
+            }
+        }
     }
-    
+
     public static void setTheme(Properties themesProps) {
-        if (myTheme == null)
+        currentThemeName = "aeroTheme";
+        if (myTheme == null) {
            myTheme = new AeroDefaultTheme();
+        }
         if ((myTheme != null) && (themesProps != null)) {
             myTheme.setUpColor();
             myTheme.setProperties(themesProps);
@@ -218,6 +244,9 @@ public class AeroLookAndFeel extends AbstractLookAndFeel {
     }
     
     protected void initClassDefaults(UIDefaults table) {
+        if (!"aeroTheme".equals(currentThemeName)) {
+            setTheme("Default");
+        }
         super.initClassDefaults(table);
         Object[] uiDefaults = {
             // BaseLookAndFeel classes
@@ -250,6 +279,7 @@ public class AeroLookAndFeel extends AbstractLookAndFeel {
             "CheckBoxMenuItemUI", BaseCheckBoxMenuItemUI.class.getName(),
             "RadioButtonMenuItemUI", BaseRadioButtonMenuItemUI.class.getName(),
             "PopupMenuSeparatorUI", BaseSeparatorUI.class.getName(),
+            "DesktopPaneUI", BaseDesktopPaneUI.class.getName(),
             
             // AeroLookAndFeel classes
             "TabbedPaneUI", AeroTabbedPaneUI.class.getName(),

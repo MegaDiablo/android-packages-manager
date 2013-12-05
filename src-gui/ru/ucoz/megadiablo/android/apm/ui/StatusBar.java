@@ -46,8 +46,7 @@ public class StatusBar extends JToolBar implements Events.IChangeStatus {
 
 		mCore = pCore;
 
-		JPanel panel = new JPanel();
-		add(panel);
+		JToolBar panel = this;
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 0, 0, 0, 0, 0 };
 		gbl_panel.rowHeights = new int[] { 0, 0 };

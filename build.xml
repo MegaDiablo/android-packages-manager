@@ -1,149 +1,247 @@
 <project name="apm" default="release">
 
 	<property file="build.properties"/>
-	<property name="version.core"  value="${app.build.verision}.${app.build.number}"/>
-	<property name="app.short-name" value="apm" />
-	
-	<property name="version" value="0.7.1" />
-	<property name="version.apm" value="${version}" />
-	<property name="year" value="2011-2013" />
-	
-	<property name="name.src" value="src" />
-	<property name="name.dest" value="dest" />
-	<property name="name.bin" value="bin" />
-	<property name="name.build" value="build" />
-	<property name="name.builds" value="builds" />
-	<property name="name.img" value="img" />
-	<property name="name.apm-gui" value="apm-gui" />
-	<property name="name.apm-core" value="apm-core" />
-	<property name="name.file.icon" value="apm64.png" />
+	<property name="version.core" value="${app.build.verision}.${app.build.number}"/>
 
-	<property name="app.base" value="${basedir}" />
-	<property name="app.prop-default" value="${app.base}/prop-default" />
-	<property name="app.icon" value="${app.base}/${name.img}/${name.file.icon}" />
-	
-	<property name="app.platform-tools" value="${app.base}/platform-tools" />
-	<property name="app.platform-tools.nix" value="${app.platform-tools}/nix" />
-	<property name="app.platform-tools.win" value="${app.platform-tools}/win" />
-	<property name="app.platform-tools.mac" value="${app.platform-tools}/mac" />
-	
+	<property name="version" value="0.8.0dev2"/>
+	<property name="version.apm" value="${version}"/>
+	<property name="year" value="2011-2013"/>
 
-	<property name="app.java.main-class" value="ru.ucoz.megadiablo.android.apm.Runner" />
+	<property name="name.src" value="src"/>
+	<property name="name.dest" value="dest"/>
+	<property name="name.bin" value="bin"/>
+	<property name="name.lib" value="lib"/>
+	<property name="name.properties" value="properties"/>
+	<property name="name.build" value="build"/>
+	<property name="name.builds" value="builds"/>
+	<property name="name.img" value="img"/>
+	<property name="name.apm-gui" value="apm-gui"/>
+	<property name="name.apm-core" value="apm-core"/>
+	<property name="name.file.icon" value="apm64.png"/>
+	<property name="name.platform-tools" value="platform-tools"/>
 
-	<property name="app.lib" value="${basedir}/libs" />
+	<property name="app.name.short" value="apm"/>
+	<property name="app.name.version" value="${app.name.short}-${version.apm}"/>
 
-	<property name="app.lib.adb-helper" value="${app.lib}/adb-helper.jar" />
-	<property name="app.libs" value="" />
+	<property name="app.base" value="${basedir}"/>
+	<property name="app.resources" value="${basedir}/resources"/>
+	<property name="app.resources.properties" value="${app.resources}/${name.properties}"/>
 
-	<property name="app.src" value="${app.base}/${name.src}" />
-	<property name="app.src-gui" value="${app.base}/${name.src}-gui" />
-	<property name="app.src-core" value="${app.base}/${name.src}-core" />
-	<property name="app.src-jtatoo" value="${app.base}/${name.src}-jtatoo" />
-	<property name="app.src-data" value="${app.base}/${name.src}-data" />
-	<property name="app.license.file" value="${app.base}/LICENSE" />
+	<property name="app.resources.platform-tools" value="${app.resources}/platform-tools"/>
+	<property name="app.resources.platform-tools.nix" value="${app.resources.platform-tools}/nix"/>
+	<property name="app.resources.platform-tools.win" value="${app.resources.platform-tools}/win"/>
+	<property name="app.resources.platform-tools.mac" value="${app.resources.platform-tools}/mac"/>
 
-	<property name="app.build" value="${app.base}/${name.bin}/${name.build}" />
-	<property name="app.build.src" value="${app.build}/${name.src}" />
-	<property name="app.build.bin" value="${app.build}/${name.bin}" />
+	<property name="app.icon" value="${app.resources}/img/${name.file.icon}"/>
+	<property name="app.run-script"
+			  value="java -cp &quot;./${name.lib}&quot; -jar ${name.lib}/${app.name.version}.jar"/>
 
-	<property name="app.build.jar" value="${app.base}/${name.builds}/${name.apm-gui}" />
-	<property name="app.build.jar.name" value="${app.build.jar}/${app.short-name}-${version.apm}.jar" />
+	<property name="app.java.main-class" value="ru.ucoz.megadiablo.android.apm.Runner"/>
+	<property name="app.lib" value="${basedir}/${name.lib}"/>
 
-	<property name="app.build.zip" value="${app.base}/${name.builds}/${name.apm-gui}" />
-	<property name="app.build.zip.name" value="${app.build.zip}/${app.short-name}-${version.apm}" />
-	<property name="app.build.zip.name.nix" value="${app.build.zip.name}-nix.zip" />
-	<property name="app.build.zip.name.win" value="${app.build.zip.name}-win.zip" />
-	<property name="app.build.zip.name.mac" value="${app.build.zip.name}-mac.zip" />
+	<property name="app.src-gui" value="${app.base}/${name.src}-gui"/>
+	<property name="app.src-core" value="${app.base}/${name.src}-core"/>
+	<property name="app.src-data" value="${app.base}/${name.src}-data"/>
+	<property name="app.license.file" value="${app.base}/LICENSE"/>
+
+	<property name="app.build" value="${app.base}/${name.bin}/${name.build}"/>
+	<property name="app.build.src" value="${app.build}/${name.src}"/>
+	<property name="app.build.bin" value="${app.build}/${name.bin}"/>
+	<property name="app.build.lib" value="${app.build}/${name.lib}"/>
+
+	<property name="app.build.jar.name" value="${app.build.lib}/${app.name.version}.jar"/>
+
+	<property name="app.build.archive" value="${app.base}/${name.builds}/${name.apm-gui}"/>
+	<property name="app.build.archive.name" value="${app.build.archive}/${app.name.version}"/>
+	<property name="app.build.archive.name.nix" value="${app.build.archive.name}-nix.tgz"/>
+	<property name="app.build.archive.name.win" value="${app.build.archive.name}-win.zip"/>
+	<property name="app.build.archive.name.mac" value="${app.build.archive.name}-mac.tgz"/>
+
+	<property name="app.build.nix" value="${app.build}/nix"/>
+	<property name="app.build.win" value="${app.build}/win"/>
+	<property name="app.build.mac" value="${app.build}/mac"/>
+
+	<property name="app.build.nix.lib" value="${app.build.nix}/${name.lib}"/>
+	<property name="app.build.win.lib" value="${app.build.win}/${name.lib}"/>
+	<property name="app.build.mac.lib" value="${app.build.mac}/${name.lib}"/>
+
+	<property name="app.build.nix.properties" value="${app.build.nix}/${name.properties}"/>
+	<property name="app.build.win.properties" value="${app.build.win}/${name.properties}"/>
+	<property name="app.build.mac.properties" value="${app.build.mac}/${name.properties}"/>
+
+	<property name="app.build.nix.platform-tools" value="${app.build.nix}/${name.platform-tools}"/>
+	<property name="app.build.win.platform-tools" value="${app.build.win}/${name.platform-tools}"/>
+	<property name="app.build.mac.platform-tools" value="${app.build.mac}/${name.platform-tools}"/>
+
+	<property name="app.build.nix.run-script" value="${app.build.nix}/apm.sh"/>
+	<property name="app.build.win.run-script" value="${app.build.win}/apm.bat"/>
+	<property name="app.build.mac.run-script" value="${app.build.mac}/apm.sh"/>
 
 	<target name="release" depends="version,compile,build-jar,build-zip,clean">
 		<echo>Finished</echo>
 	</target>
+
 	<target name="version">
-		<echo>GUI  : ${version.apm}</echo>
+		<echo>GUI : ${version.apm}</echo>
 		<echo>Core : ${version.core}</echo>
 	</target>
 
 	<target name="clean">
-		<delete dir="${app.build}" />
+		<delete dir="${app.build}"/>
 	</target>
 
 	<target name="create-dir">
-		<mkdir dir="${app.build}" />
-		<mkdir dir="${app.build.src}" />
-		<mkdir dir="${app.build.bin}" />
+		<mkdir dir="${app.build}"/>
+		<mkdir dir="${app.build.src}"/>
+		<mkdir dir="${app.build.bin}"/>
+		<mkdir dir="${app.build.lib}"/>
+
+		<mkdir dir="${app.build.nix}"/>
+		<mkdir dir="${app.build.win}"/>
+		<mkdir dir="${app.build.mac}"/>
+
+		<mkdir dir="${app.build.nix.lib}"/>
+		<mkdir dir="${app.build.win.lib}"/>
+		<mkdir dir="${app.build.mac.lib}"/>
+
+		<mkdir dir="${app.build.nix.properties}"/>
+		<mkdir dir="${app.build.win.properties}"/>
+		<mkdir dir="${app.build.mac.properties}"/>
+
+		<mkdir dir="${app.build.nix.platform-tools}"/>
+		<mkdir dir="${app.build.win.platform-tools}"/>
+		<mkdir dir="${app.build.mac.platform-tools}"/>
 	</target>
 
 	<target name="copy">
 		<copy todir="${app.build.src}" overwrite="true">
-			<fileset dir="${app.src-gui}" includes="**/*" />
-			<fileset dir="${app.src-core}" includes="**/*" />
-			<fileset dir="${app.src-jtatoo}" includes="**/*" />
-			<fileset dir="${app.src-data}" includes="**/*" />
+			<fileset dir="${app.src-gui}" includes="**/*"/>
+			<fileset dir="${app.src-core}" includes="**/*"/>
+			<fileset dir="${app.src-data}" includes="**/*"/>
 		</copy>
 	</target>
 
 	<target name="precompile" depends="clean,create-dir,copy">
 		<replace dir="${app.build.src}" encoding="UTF-8">
-			<replacefilter token="%%VERSION%%" value="${version.apm}" />
-			<replacefilter token="%%VERSION_CORE%%" value="${version.core}" />
-			<replacefilter token="%%YEAR%%" value="${year}" />
+			<replacefilter token="%%VERSION%%" value="${version.apm}"/>
+			<replacefilter token="%%VERSION_CORE%%" value="${version.core}"/>
+			<replacefilter token="%%YEAR%%" value="${year}"/>
 		</replace>
+
+		<echo file="${app.build.nix.run-script}" append="false">${app.run-script}</echo>
+		<echo file="${app.build.win.run-script}" append="false">${app.run-script}</echo>
+		<echo file="${app.build.mac.run-script}" append="false">${app.run-script}</echo>
 
 		<echo>Finished</echo>
 	</target>
 
 	<target name="compile" depends="precompile">
-		<javac srcdir="${app.build.src}" destdir="${app.build.bin}" classpath="${app.libs}" debug="off" encoding="UTF-8">
+		<javac srcdir="${app.build.src}" destdir="${app.build.bin}" classpath="" debug="off" encoding="UTF-8">
 		</javac>
 	</target>
 
 	<target name="build-jar" depends="">
-		<delete file="${app.build.jar.name}" />
+		<delete file="${app.build.jar.name}"/>
 
 		<jar destfile="${app.build.jar.name}">
 
-			<fileset dir="${app.build.bin}" includes="**/*.class" excludes="com/adbhelper/*.class" />
-			<fileset dir="${app.build.src}" includes="**/*" excludes="**/*.java" />
+			<fileset dir="${app.build.bin}" includes="**/*.class" excludes="com/adbhelper/*.class"/>
+			<fileset dir="${app.build.src}" includes="**/*" excludes="**/*.java"/>
 			<fileset file="${app.license.file}"/>
 
 			<manifest>
-				<attribute name="Manifest-Version" value="1.1" />
-				<attribute name="Class-Path" value="." />
-				<attribute name="Main-Class" value="${app.java.main-class}" />
-				<attribute name="LICENSE" value="GNU GPLv3" />
+				<attribute name="Manifest-Version" value="1.1"/>
+				<attribute name="Main-Class" value="${app.java.main-class}"/>
+				<attribute name="LICENSE" value="GNU GPLv3"/>
 			</manifest>
 		</jar>
 	</target>
 
-	<target name="build-zip" depends="">
-		<delete file="${app.build.zip.name}" />
-		<delete file="${app.build.zip.name.nix}" />
-		<delete file="${app.build.zip.name.win}" />
-		<delete file="${app.build.zip.name.mac}" />
+	<target name="pre-build-zip" depends="">
+		<delete file="${app.build.archive.name}"/>
+		<delete file="${app.build.archive.name.nix}"/>
+		<delete file="${app.build.archive.name.win}"/>
+		<delete file="${app.build.archive.name.mac}"/>
 
-		<zip destfile="${app.build.zip.name.nix}">
-			<fileset file="${app.build.jar.name}" />
-			<fileset file="${app.icon}" />
-            <fileset file="${app.license.file}" />
-            <fileset dir="${app.prop-default}" includes="*.prop" />
-            <fileset dir="${app.platform-tools.nix}" includes="*" />
-        </zip>
+		<copy todir="${app.build.nix.properties}" overwrite="true">
+			<fileset dir="${app.resources.properties}" includes="**/*"/>
+		</copy>
+		<copy todir="${app.build.win.properties}" overwrite="true">
+			<fileset dir="${app.resources.properties}" includes="**/*"/>
+		</copy>
+		<copy todir="${app.build.mac.properties}" overwrite="true">
+			<fileset dir="${app.resources.properties}" includes="**/*"/>
+		</copy>
 
-        <zip destfile="${app.build.zip.name.win}">
-            <fileset file="${app.build.jar.name}" />
-            <fileset file="${app.icon}" />
-            <fileset file="${app.license.file}" />
-            <fileset dir="${app.prop-default}" includes="*.prop" />
-            <fileset dir="${app.platform-tools.win}" includes="*" />
-        </zip>
+		<copy todir="${app.build.nix.lib}" overwrite="true">
+			<fileset dir="${app.lib}" includes="**/*"/>
+			<fileset dir="${app.build.lib}" includes="**/*"/>
+		</copy>
+		<copy todir="${app.build.win.lib}" overwrite="true">
+			<fileset dir="${app.lib}" includes="**/*"/>
+			<fileset dir="${app.build.lib}" includes="**/*"/>
+		</copy>
+		<copy todir="${app.build.mac.lib}" overwrite="true">
+			<fileset dir="${app.lib}" includes="**/*"/>
+			<fileset dir="${app.build.lib}" includes="**/*"/>
+		</copy>
 
-        <zip destfile="${app.build.zip.name.mac}">
-            <fileset file="${app.build.jar.name}" />
-            <fileset file="${app.icon}" />
-            <fileset file="${app.license.file}" />
-            <fileset dir="${app.prop-default}" includes="*.prop" />
-			<fileset dir="${app.platform-tools.mac}" includes="*" />
+		<copy todir="${app.build.nix.platform-tools}" overwrite="true">
+			<fileset dir="${app.resources.platform-tools.nix}" includes="**/*"/>
+		</copy>
+		<copy todir="${app.build.win.platform-tools}" overwrite="true">
+			<fileset dir="${app.resources.platform-tools.win}" includes="**/*"/>
+		</copy>
+		<copy todir="${app.build.mac.platform-tools}" overwrite="true">
+			<fileset dir="${app.resources.platform-tools.mac}" includes="**/*"/>
+		</copy>
+	</target>
+
+	<target name="build-zip" depends="pre-build-zip">
+		<tar compression="gzip" destfile="${app.build.archive.name.nix}">
+			<fileset file="${app.icon}"/>
+			<fileset file="${app.license.file}"/>
+			<fileset dir="${app.build.nix}" includes="**/*">
+				<exclude name="apm.*"/>
+				<exclude name="*/adb.*"/>
+				<exclude name="*/aapt.*"/>
+			</fileset>
+			<tarfileset dir="${app.build.nix}" filemode="544">
+				<include name="apm.*"/>
+				<include name="*/adb.*"/>
+				<include name="*/aapt.*"/>
+			</tarfileset>
+		</tar>
+
+		<zip destfile="${app.build.archive.name.win}">
+			<fileset file="${app.icon}"/>
+			<fileset file="${app.license.file}"/>
+			<fileset dir="${app.build.win}" includes="**/*">
+				<exclude name="apm.*"/>
+				<exclude name="*/adb.*"/>
+				<exclude name="*/aapt.*"/>
+			</fileset>
+			<fileset dir="${app.build.win}">
+				<include name="apm.*"/>
+				<include name="*/adb.*"/>
+				<include name="*/aapt.*"/>
+			</fileset>
 		</zip>
+
+		<tar compression="gzip" destfile="${app.build.archive.name.mac}">
+			<fileset file="${app.icon}"/>
+			<fileset file="${app.license.file}"/>
+			<fileset dir="${app.build.mac}" includes="**/*">
+				<exclude name="apm.*"/>
+				<exclude name="*/adb.*"/>
+				<exclude name="*/aapt.*"/>
+			</fileset>
+			<tarfileset dir="${app.build.mac}" filemode="544">
+				<include name="apm.*"/>
+				<include name="*/adb.*"/>
+				<include name="*/aapt.*"/>
+			</tarfileset>
+		</tar>
 	</target>
 
 </project>

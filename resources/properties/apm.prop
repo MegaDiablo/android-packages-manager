@@ -1,0 +1,13 @@
+#
+#Thu Dec 01 12:26:33 GMT+03:00 2011
+plaf=AERO
+connect.device.max.count=5
+filter.text=
+device.auto.refresh=15000
+path.adb=./platform-tools/adb
+path.aapt=./platform-tools/aapt
+settings.package.autostart=false
+settings.devices.autorefresh=true
+settings.package.use.reinstall=false
+system.packages.visible=false
+settings.adb.console.charset=UTF-8

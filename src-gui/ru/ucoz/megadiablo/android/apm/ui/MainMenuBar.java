@@ -25,6 +25,7 @@ import ru.ucoz.megadiablo.android.apm.MainFrame;
 import ru.ucoz.megadiablo.android.apm.Runner;
 import ru.ucoz.megadiablo.android.apm.ui.keyboard.KeyBoard;
 import ru.ucoz.megadiablo.android.apm.ui.log.LogDialog;
+import ru.ucoz.megadiablo.android.apm.ui.plaf.JMenuLookAndFeel;
 import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 import ru.ucoz.megadiablo.android.apm.ui.settings.SettingsChangedListener;
 import ru.ucoz.megadiablo.android.apm.ui.settings.SettingsUI;

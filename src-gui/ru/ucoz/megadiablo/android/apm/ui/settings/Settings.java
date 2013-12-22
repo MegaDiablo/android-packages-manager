@@ -146,12 +146,16 @@ public final class Settings {
 		fireChangedListener(Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL);
 	}
 
-	public String getLookAndFeel() {
-		return mProperties.getProperty(Consts.Settings.LOOK_AND_FEEL, null);
-	}
-
 	public String getThemePath() {
 		return mProperties.getProperty(Consts.Settings.SETTINGS_THEMES_PATH, "themes");
+	}
+
+	public ThemeManager getThemeManager() {
+		return mThemeManager;
+	}
+
+	public String getLookAndFeel() {
+		return mProperties.getProperty(Consts.Settings.LOOK_AND_FEEL, null);
 	}
 
 	public void setLookAndFeel(final String pLookAndFeel) {

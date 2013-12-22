@@ -10,10 +10,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 
 import ru.ucoz.megadiablo.android.apm.Core;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 /**
  * @author MegaDiablo
- * */
+ */
 public class JMenuLookAndFeel extends JMenu {
 
 	/**
@@ -28,12 +29,10 @@ public class JMenuLookAndFeel extends JMenu {
 		setText("Оформление");
 
 		mCore = pCore;
-
 		mGroup = new ButtonGroup();
-//		Theme[] themes = EnumPLAF.values();
 
 		String os = "???";
-		
+
 		String osName = System.getProperty("os.name");
 		osName = osName == null ? "" : osName.toLowerCase();
 		if (osName.startsWith("windows")) {
@@ -42,34 +41,38 @@ public class JMenuLookAndFeel extends JMenu {
 			os = "nix";
 		}
 
-		
-//		for (EnumPLAF theme : themes) {
-//			if (theme.getPlatform() == null || theme.getPlatform().equals(os)) {
-//				addItem(theme.getText(), theme);
-//			}
-//		}
+
+		Settings settings = Settings.getInstance();
+		ThemeManager manager = settings.getThemeManager();
+		Theme[] themes = manager.getThemes();
+
+		String currentTheme = settings.getLookAndFeel();
+		if (currentTheme == null) {
+			currentTheme = "";
+		}
+		addItem("Системное", null, "".equals(currentTheme));
+		for (Theme theme : themes) {
+			addItem(theme.getFullName(), theme, currentTheme.equals(theme.getKey()));
+		}
 	}
 
-	private void addItem(final String pText, final Theme pEnumPLAF) {
+	private void addItem(final String pText, final Theme pTheme, final boolean pSelected) {
 
-		JMenuItem mMenuItemAero = new JRadioButtonMenuItem(pText);
-		add(mMenuItemAero);
-		mMenuItemAero.addActionListener(new ActionListener() {
+		JRadioButtonMenuItem mMenuItem = new JRadioButtonMenuItem(pText);
+		mGroup.add(mMenuItem);
+		mMenuItem.setSelected(pSelected);
+		add(mMenuItem);
+		mMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				mCore.setLookAndFeel(pEnumPLAF);
+				mCore.setLookAndFeel(pTheme);
 
 				JOptionPane
-						.showMessageDialog(
-								JMenuLookAndFeel.this,
-								"Изменения вступят в силу после перезагрузки приложенияю.",
-								"Предупреждение",
-								JOptionPane.WARNING_MESSAGE);
+					.showMessageDialog(
+						JMenuLookAndFeel.this,
+						"Изменения вступят в силу после перезагрузки приложенияю.",
+						"Предупреждение",
+						JOptionPane.WARNING_MESSAGE);
 			}
 		});
-
-//		EnumPLAF selectPLAF = Settings.getInstance().getLookAndFeel();
-//		mMenuItemAero.setSelected(selectPLAF == pEnumPLAF);
-//		mGroup.add(mMenuItemAero);
-//		add(mMenuItemAero);
 	}
 }

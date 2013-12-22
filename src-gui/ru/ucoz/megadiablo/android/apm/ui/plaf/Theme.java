@@ -44,6 +44,17 @@ public class Theme {
 		mValue = pValue;
 	}
 
+	public String getFullName() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(mParent.getName());
+		if (mName != null) {
+			sb.append(" - ");
+			sb.append(mName);
+		}
+
+		return sb.toString();
+	}
+
 	public String getKey() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(mParent.getName());
@@ -76,8 +87,8 @@ public class Theme {
 
 	private static String byteArrayToHexString(byte[] b) {
 		StringBuilder result = new StringBuilder();
-		for (int i = 0; i < b.length; i++) {
-			result.append(Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1));
+		for (byte byte_ : b) {
+			result.append(Integer.toString((byte_ & 0xff) + 0x100, 16).substring(1));
 		}
 		return result.toString();
 	}

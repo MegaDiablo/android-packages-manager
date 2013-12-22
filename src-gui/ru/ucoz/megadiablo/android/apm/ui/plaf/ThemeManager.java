@@ -32,9 +32,9 @@ public class ThemeManager {
 
 				Theme theme = new Theme();
 				theme.setParent(laf);
-				theme.setName(String.class.cast(item.get("name")));
-				theme.setMethodTheme(String.class.cast(item.get("method")));
-				theme.setValue(String.class.cast(item.get("value")));
+				theme.setName(String.class.cast(itemTheme.get("name")));
+				theme.setMethodTheme(String.class.cast(itemTheme.get("method")));
+				theme.setValue(String.class.cast(itemTheme.get("value")));
 
 				mThemes.add(theme);
 			}
@@ -52,6 +52,10 @@ public class ThemeManager {
 			}
 		}
 		return null;
+	}
+
+	public Theme[] getThemes() {
+		return mThemes.toArray(new Theme[mThemes.size()]);
 	}
 
 	public static void main(String[] args) throws IOException, ParseException {

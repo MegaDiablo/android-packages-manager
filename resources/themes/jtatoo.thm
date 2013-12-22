@@ -1,0 +1,9 @@
+[
+	{ 
+		"name": "AERO", 
+		"class": "com.jtattoo.plaf.aero.AeroLookAndFeel",
+		"themes": [
+			{ "name": null, "method":"com.jtattoo.plaf.aero.AeroLookAndFeel.setTheme", "value":"Default"}
+		]
+	}
+]

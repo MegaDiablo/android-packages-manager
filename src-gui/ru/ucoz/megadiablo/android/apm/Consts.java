@@ -30,6 +30,7 @@ public final class Consts {
 				"connect.device.max.count";
 
 		public static final String LOOK_AND_FEEL = "plaf";
+		public static final String SETTINGS_THEMES_PATH = "settings.themes.path";
 
 		public static final String SYSTEM_PACKAGES_VISIBLE =
 				"system.packages.visible";

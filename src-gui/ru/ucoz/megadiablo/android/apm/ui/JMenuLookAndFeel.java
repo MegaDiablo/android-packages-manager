@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 
 import ru.ucoz.megadiablo.android.apm.Core;
+import ru.ucoz.megadiablo.android.apm.ui.plaf.Theme;
 import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 /**
@@ -31,7 +32,7 @@ public class JMenuLookAndFeel extends JMenu {
 		mCore = pCore;
 
 		mGroup = new ButtonGroup();
-		EnumPLAF[] themes = EnumPLAF.values();
+//		Theme[] themes = EnumPLAF.values();
 
 		String os = "???";
 		
@@ -44,14 +45,14 @@ public class JMenuLookAndFeel extends JMenu {
 		}
 
 		
-		for (EnumPLAF theme : themes) {
-			if (theme.getPlatform() == null || theme.getPlatform().equals(os)) {
-				addItem(theme.getText(), theme);
-			}
-		}
+//		for (EnumPLAF theme : themes) {
+//			if (theme.getPlatform() == null || theme.getPlatform().equals(os)) {
+//				addItem(theme.getText(), theme);
+//			}
+//		}
 	}
 
-	private void addItem(final String pText, final EnumPLAF pEnumPLAF) {
+	private void addItem(final String pText, final Theme pEnumPLAF) {
 
 		JMenuItem mMenuItemAero = new JRadioButtonMenuItem(pText);
 		add(mMenuItemAero);
@@ -68,9 +69,9 @@ public class JMenuLookAndFeel extends JMenu {
 			}
 		});
 
-		EnumPLAF selectPLAF = Settings.getInstance().getPLookAndFeel();
-		mMenuItemAero.setSelected(selectPLAF == pEnumPLAF);
-		mGroup.add(mMenuItemAero);
-		add(mMenuItemAero);
+//		EnumPLAF selectPLAF = Settings.getInstance().getLookAndFeel();
+//		mMenuItemAero.setSelected(selectPLAF == pEnumPLAF);
+//		mGroup.add(mMenuItemAero);
+//		add(mMenuItemAero);
 	}
 }

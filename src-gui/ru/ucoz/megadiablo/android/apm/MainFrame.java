@@ -53,8 +53,7 @@ public class MainFrame extends JFrame {
 			final Events pEvents,
 			final List<EventUpdater> pListEventUpdaters) {
 
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				MainFrame.class.getResource("/res/apm64.png")));
+		setIconImage(Settings.getInstance().getDefaultApplicationIcon());
 		mCore = pCore;
 
 		setSize(new Dimension(640, 480));

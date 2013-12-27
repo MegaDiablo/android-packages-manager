@@ -1,5 +1,6 @@
 package ru.ucoz.megadiablo.android.apm.ui.settings;
 
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public final class Settings {
 	// CONNECT_DEVICE_MAX_COUNT
 	private Theme mThemeLookAndFeel;
 	private ThemeManager mThemeManager;
+	private Image mDefaultApplicationIcon = null;
 
 	private final Properties mProperties = new Properties();
 
@@ -163,7 +165,7 @@ public final class Settings {
 
 		fireChangedListener(Consts.Settings.LOOK_AND_FEEL);
 	}
-	
+
 	public void removeLookAndFeel() {
 		mProperties.remove(Consts.Settings.LOOK_AND_FEEL);
 	}
@@ -271,6 +273,13 @@ public final class Settings {
 				pCharset.trim());
 		}
 		fireChangedListener(Consts.Settings.SETTINGS_ADB_CONSOLE_CHARSET);
+	}
+
+	public Image getDefaultApplicationIcon() {
+		if (mDefaultApplicationIcon == null) {
+			mDefaultApplicationIcon = Toolkit.getDefaultToolkit().getImage(Settings.class.getResource("/res/apm64.png"));
+		}
+		return mDefaultApplicationIcon;
 	}
 
 	public void load() {

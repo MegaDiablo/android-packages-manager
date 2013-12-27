@@ -9,6 +9,7 @@ import java.util.List;
 public class LookAndFeelTheme {
 	private String mName;
 	private String mClassName;
+	private Boolean mExist;
 
 	private LookAndFeel mLookAndFeel;
 
@@ -47,5 +48,19 @@ public class LookAndFeelTheme {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public boolean exist() {
+		if (mExist != null) {
+			return mExist;
+		}
+		mExist = false;
+		try {
+			LookAndFeel laf = (LookAndFeel) ClassLoader.getSystemClassLoader().loadClass(mClassName).newInstance();
+			mExist = laf.isSupportedLookAndFeel();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mExist;
 	}
 }

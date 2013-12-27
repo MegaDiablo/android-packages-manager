@@ -70,6 +70,10 @@ public class Theme {
 
 		return toSHA1(sb.toString());
 	}
+	
+	public boolean exist() {
+		return mParent != null && mParent.exist();
+	}
 
 	private static String toSHA1(String convertme) {
 		return toSHA1(convertme.getBytes());

@@ -57,6 +57,12 @@ public class JMenuLookAndFeel extends JMenu {
 	}
 
 	private void addItem(final String pText, final Theme pTheme, final boolean pSelected) {
+		
+		if (pTheme != null) {
+			if (!pTheme.exist()) {
+				return;
+			}
+		}
 
 		JRadioButtonMenuItem mMenuItem = new JRadioButtonMenuItem(pText);
 		mGroup.add(mMenuItem);

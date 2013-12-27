@@ -14,19 +14,7 @@ public final class UserInterfaceUtils {
 
 	public static void setLookAndFeel(final Theme pTheme) {
 		if (pTheme == null) {
-			JFrame.setDefaultLookAndFeelDecorated(false);
-			try {
-				UIManager.setLookAndFeel(UIManager
-					.getSystemLookAndFeelClassName());
-			} catch (UnsupportedLookAndFeelException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
+			setSystemTheme();
 		} else {
 //			plaf.setThemeDefault();
 			JFrame.setDefaultLookAndFeelDecorated(true);
@@ -34,7 +22,25 @@ public final class UserInterfaceUtils {
 				UIManager.setLookAndFeel(pTheme.getParent().getLookAndFeel());
 			} catch (UnsupportedLookAndFeelException e) {
 				e.printStackTrace();
+
+				setSystemTheme();
 			}
+		}
+	}
+	
+	private static void setSystemTheme() {
+		JFrame.setDefaultLookAndFeelDecorated(false);
+		try {
+			UIManager.setLookAndFeel(UIManager
+				.getSystemLookAndFeelClassName());
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
 	}
 }

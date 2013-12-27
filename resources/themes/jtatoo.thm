@@ -1,9 +1,65 @@
 [
 	{ 
-		"name": "AERO", 
+		"name": "Aero", 
 		"class": "com.jtattoo.plaf.aero.AeroLookAndFeel",
 		"themes": [
 			{ "name": null, "method":"com.jtattoo.plaf.aero.AeroLookAndFeel.setTheme", "value":"Default"}
 		]
-	}
+	},
+	{ 
+		"name": "HiFi", 
+		"class": "com.jtattoo.plaf.hifi.HiFiLookAndFeel",
+		"themes": [
+			{ "name": null, "method":"com.jtattoo.plaf.hifi.HiFiLookAndFeel.setTheme", "value":"Default"}
+		]
+	},
+	{ 
+		"name": "Aluminium", 
+		"class": "com.jtattoo.plaf.aluminium.AluminiumLookAndFeel",
+		"themes": [
+			{ "name": null, "method":"com.jtattoo.plaf.aluminium.AluminiumLookAndFeel.setTheme", "value":"Default"}
+		]
+	},
+	{ 
+		"name": "Fast", 
+		"class": "com.jtattoo.plaf.fast.FastLookAndFeel",
+		"themes": [
+			{ "name": null, "method":"com.jtattoo.plaf.fast.FastLookAndFeel.setTheme", "value":"Default"}
+		]
+	},
+	{ 
+		"name": "McWin", 
+		"class": "com.jtattoo.plaf.mcwin.McWinLookAndFeel",
+		"themes": [
+			{ "name": null, "method":"com.jtattoo.plaf.mcwin.McWinLookAndFeel.setTheme", "value":"Default"}
+		]
+	},
+	{ 
+		"name": "Mint", 
+		"class": "com.jtattoo.plaf.mint.MintLookAndFeel",
+		"themes": [
+			{ "name": null, "method":"com.jtattoo.plaf.mint.MintLookAndFeel.setTheme", "value":"Default"}
+		]
+	},
+	{ 
+		"name": "Noire", 
+		"class": "com.jtattoo.plaf.noire.NoireLookAndFeel",
+		"themes": [
+			{ "name": null, "method":"com.jtattoo.plaf.noire.NoireLookAndFeel.setTheme", "value":"Default"}
+		]
+	},
+	{ 
+		"name": "Smart", 
+		"class": "com.jtattoo.plaf.smart.SmartLookAndFeel",
+		"themes": [
+			{ "name": null, "method":"com.jtattoo.plaf.smart.SmartLookAndFeel.setTheme", "value":"Default"}
+		]
+	},
+	{ 
+		"name": "Acry", 
+		"class": "com.jtattoo.plaf.acryl.AcrylLookAndFeel",
+		"themes": [
+			{ "name": null, "method":"com.jtattoo.plaf.acryl.AcrylLookAndFeel.setTheme", "value":"Default"}
+		]
+	},
 ]

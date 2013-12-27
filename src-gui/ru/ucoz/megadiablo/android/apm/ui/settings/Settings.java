@@ -163,6 +163,10 @@ public final class Settings {
 
 		fireChangedListener(Consts.Settings.LOOK_AND_FEEL);
 	}
+	
+	public void removeLookAndFeel() {
+		mProperties.remove(Consts.Settings.LOOK_AND_FEEL);
+	}
 
 	public String getAdbPath() {
 		return mProperties.getProperty(Consts.Settings.PATH_ADB, "adb");

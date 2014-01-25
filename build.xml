@@ -19,6 +19,7 @@
 	<property name="name.apm-core" value="apm-core"/>
 	<property name="name.file.icon" value="apm64.png"/>
 	<property name="name.platform-tools" value="platform-tools"/>
+	<property name="name.themes" value="themes"/>
 
 	<property name="app.name.short" value="apm"/>
 	<property name="app.name.version" value="${app.name.short}-${version.apm}"/>
@@ -26,6 +27,7 @@
 	<property name="app.base" value="${basedir}"/>
 	<property name="app.resources" value="${basedir}/resources"/>
 	<property name="app.resources.properties" value="${app.resources}/${name.properties}"/>
+	<property name="app.resources.themes" value="${app.resources}/${name.themes}"/>
 
 	<property name="app.resources.platform-tools" value="${app.resources}/platform-tools"/>
 	<property name="app.resources.platform-tools.nix" value="${app.resources.platform-tools}/nix"/>
@@ -34,7 +36,7 @@
 
 	<property name="app.icon" value="${app.resources}/img/${name.file.icon}"/>
 	<property name="app.run-script"
-			  value="java -cp &quot;./${name.lib}&quot; -jar ${name.lib}/${app.name.version}.jar"/>
+			  value="java -cp &quot;./${name.lib}&quot; -jar ${name.lib}/${app.name.short}.jar"/>
 
 	<property name="app.java.main-class" value="ru.ucoz.megadiablo.android.apm.Runner"/>
 	<property name="app.lib" value="${basedir}/${name.lib}"/>
@@ -49,7 +51,7 @@
 	<property name="app.build.bin" value="${app.build}/${name.bin}"/>
 	<property name="app.build.lib" value="${app.build}/${name.lib}"/>
 
-	<property name="app.build.jar.name" value="${app.build.lib}/${app.name.version}.jar"/>
+	<property name="app.build.jar.name" value="${app.build.lib}/${app.name.short}.jar"/>
 
 	<property name="app.build.archive" value="${app.base}/${name.builds}/${name.apm-gui}"/>
 	<property name="app.build.archive.name" value="${app.build.archive}/${app.name.version}"/>
@@ -68,6 +70,10 @@
 	<property name="app.build.nix.properties" value="${app.build.nix}/${name.properties}"/>
 	<property name="app.build.win.properties" value="${app.build.win}/${name.properties}"/>
 	<property name="app.build.mac.properties" value="${app.build.mac}/${name.properties}"/>
+
+	<property name="app.build.nix.themes" value="${app.build.nix}/${name.themes}"/>
+	<property name="app.build.win.themes" value="${app.build.win}/${name.themes}"/>
+	<property name="app.build.mac.themes" value="${app.build.mac}/${name.themes}"/>
 
 	<property name="app.build.nix.platform-tools" value="${app.build.nix}/${name.platform-tools}"/>
 	<property name="app.build.win.platform-tools" value="${app.build.win}/${name.platform-tools}"/>
@@ -100,13 +106,13 @@
 		<mkdir dir="${app.build.win}"/>
 		<mkdir dir="${app.build.mac}"/>
 
-		<mkdir dir="${app.build.nix.lib}"/>
-		<mkdir dir="${app.build.win.lib}"/>
-		<mkdir dir="${app.build.mac.lib}"/>
-
 		<mkdir dir="${app.build.nix.properties}"/>
 		<mkdir dir="${app.build.win.properties}"/>
 		<mkdir dir="${app.build.mac.properties}"/>
+
+		<mkdir dir="${app.build.nix.themes}"/>
+		<mkdir dir="${app.build.win.themes}"/>
+		<mkdir dir="${app.build.mac.themes}"/>
 
 		<mkdir dir="${app.build.nix.platform-tools}"/>
 		<mkdir dir="${app.build.win.platform-tools}"/>
@@ -128,15 +134,14 @@
 			<replacefilter token="%%YEAR%%" value="${year}"/>
 		</replace>
 
-		<echo file="${app.build.nix.run-script}" append="false">${app.run-script}</echo>
-		<echo file="${app.build.win.run-script}" append="false">${app.run-script}</echo>
-		<echo file="${app.build.mac.run-script}" append="false">${app.run-script}</echo>
+		<unzip src="${app.lib}/json-simple-1.1.1.jar" dest="${app.build.bin}"/>
 
 		<echo>Finished</echo>
 	</target>
 
 	<target name="compile" depends="precompile">
-		<javac srcdir="${app.build.src}" destdir="${app.build.bin}" classpath="" debug="off" encoding="UTF-8">
+		<javac srcdir="${app.build.src}" destdir="${app.build.bin}" classpath="${app.build.bin}" debug="on"
+			   encoding="UTF-8">
 		</javac>
 	</target>
 
@@ -173,17 +178,14 @@
 			<fileset dir="${app.resources.properties}" includes="**/*"/>
 		</copy>
 
-		<copy todir="${app.build.nix.lib}" overwrite="true">
-			<fileset dir="${app.lib}" includes="**/*"/>
-			<fileset dir="${app.build.lib}" includes="**/*"/>
+		<copy todir="${app.build.nix.themes}" overwrite="true">
+			<fileset dir="${app.resources.themes}" includes="**/*"/>
 		</copy>
-		<copy todir="${app.build.win.lib}" overwrite="true">
-			<fileset dir="${app.lib}" includes="**/*"/>
-			<fileset dir="${app.build.lib}" includes="**/*"/>
+		<copy todir="${app.build.win.themes}" overwrite="true">
+			<fileset dir="${app.resources.themes}" includes="**/*"/>
 		</copy>
-		<copy todir="${app.build.mac.lib}" overwrite="true">
-			<fileset dir="${app.lib}" includes="**/*"/>
-			<fileset dir="${app.build.lib}" includes="**/*"/>
+		<copy todir="${app.build.mac.themes}" overwrite="true">
+			<fileset dir="${app.resources.themes}" includes="**/*"/>
 		</copy>
 
 		<copy todir="${app.build.nix.platform-tools}" overwrite="true">
@@ -201,16 +203,15 @@
 		<tar compression="gzip" destfile="${app.build.archive.name.nix}">
 			<fileset file="${app.icon}"/>
 			<fileset file="${app.license.file}"/>
-			<fileset dir="${app.build.nix}" includes="**/*">
-				<exclude name="apm.*"/>
-				<exclude name="*/adb.*"/>
-				<exclude name="*/aapt.*"/>
-			</fileset>
-			<tarfileset dir="${app.build.nix}" filemode="544">
-				<include name="apm.*"/>
-				<include name="*/adb.*"/>
-				<include name="*/aapt.*"/>
+			<tarfileset dir="${app.build.nix}" includes="**/*">
+				<exclude name="${name.platform-tools}/adb"/>
+				<exclude name="${name.platform-tools}/aapt"/>
 			</tarfileset>
+			<tarfileset dir="${app.build.nix}" filemode="544">
+				<include name="${name.platform-tools}/adb"/>
+				<include name="${name.platform-tools}/aapt"/>
+			</tarfileset>
+			<tarfileset file="${app.build.jar.name}" filemode="544"/>
 		</tar>
 
 		<zip destfile="${app.build.archive.name.win}">
@@ -226,21 +227,21 @@
 				<include name="*/adb.*"/>
 				<include name="*/aapt.*"/>
 			</fileset>
+			<fileset file="${app.build.jar.name}"/>
 		</zip>
 
 		<tar compression="gzip" destfile="${app.build.archive.name.mac}">
 			<fileset file="${app.icon}"/>
 			<fileset file="${app.license.file}"/>
-			<fileset dir="${app.build.mac}" includes="**/*">
-				<exclude name="apm.*"/>
-				<exclude name="*/adb.*"/>
-				<exclude name="*/aapt.*"/>
-			</fileset>
-			<tarfileset dir="${app.build.mac}" filemode="544">
-				<include name="apm.*"/>
-				<include name="*/adb.*"/>
-				<include name="*/aapt.*"/>
+			<tarfileset dir="${app.build.nix}" includes="**/*">
+				<exclude name="${name.platform-tools}/adb"/>
+				<exclude name="${name.platform-tools}/aapt"/>
 			</tarfileset>
+			<tarfileset dir="${app.build.nix}" filemode="544">
+				<include name="${name.platform-tools}/adb"/>
+				<include name="${name.platform-tools}/aapt"/>
+			</tarfileset>
+			<tarfileset file="${app.build.jar.name}" filemode="544"/>
 		</tar>
 	</target>
 

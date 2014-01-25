@@ -23,7 +23,7 @@ import ru.ucoz.megadiablo.android.apm.ui.ListPackages;
 import ru.ucoz.megadiablo.android.apm.ui.MainMenuBar;
 import ru.ucoz.megadiablo.android.apm.ui.SearchPackages;
 import ru.ucoz.megadiablo.android.apm.ui.StatusBar;
-import ru.ucoz.megadiablo.android.apm.ui.UserInterfaceUtils;
+import ru.ucoz.megadiablo.android.apm.ui.plaf.UserInterfaceUtils;
 import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 /**
@@ -33,7 +33,7 @@ public class MainFrame extends JFrame {
 
 	static {
 		UserInterfaceUtils.setLookAndFeel(Settings.getInstance()
-				.getPLookAndFeel());
+				.getThemeLookAndFeel());
 	}
 
 	/**
@@ -53,8 +53,7 @@ public class MainFrame extends JFrame {
 			final Events pEvents,
 			final List<EventUpdater> pListEventUpdaters) {
 
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				MainFrame.class.getResource("/res/apm64.png")));
+		setIconImage(Settings.getInstance().getDefaultApplicationIcon());
 		mCore = pCore;
 
 		setSize(new Dimension(640, 480));

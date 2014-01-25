@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.adbhelper.adb.AdbModule;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 /**
  * @author MegaDiablo
@@ -29,6 +30,7 @@ public class AboutDialog extends JDialog {
 		setTitle("О программе...");
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+		setIconImage(Settings.getInstance().getDefaultApplicationIcon());
 		setModal(true);
 
 		setMinimumSize(new Dimension(530, 320));

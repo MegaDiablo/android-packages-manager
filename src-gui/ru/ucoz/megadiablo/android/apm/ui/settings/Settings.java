@@ -1,19 +1,19 @@
 package ru.ucoz.megadiablo.android.apm.ui.settings;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.json.simple.parser.ParseException;
 import ru.ucoz.megadiablo.android.apm.Consts;
-import ru.ucoz.megadiablo.android.apm.ui.EnumPLAF;
+import ru.ucoz.megadiablo.android.apm.ui.plaf.Theme;
+import ru.ucoz.megadiablo.android.apm.ui.plaf.ThemeManager;
 
 /**
  * @author Alexander Gromyko
- * */
+ */
 public final class Settings {
 
 	private static Settings mSettings;
@@ -37,10 +37,12 @@ public final class Settings {
 	private boolean mUseReinstall = false;
 	private int mTimeAutoRefreshDevices = Consts.Default.AUTO_REFRESH_DEVICES;
 	private int mConnectDeviceMaxCount =
-			Consts.Default.CONNECT_DEVICE_MAX_COUNT;
+		Consts.Default.CONNECT_DEVICE_MAX_COUNT;
 	private int mMonkeyCount = Consts.Default.MONKEY_COUNT;
 	// CONNECT_DEVICE_MAX_COUNT
-	private EnumPLAF mLookAndFeel;
+	private Theme mThemeLookAndFeel;
+	private ThemeManager mThemeManager;
+	private Image mDefaultApplicationIcon = null;
 
 	private final Properties mProperties = new Properties();
 
@@ -49,47 +51,48 @@ public final class Settings {
 		mSettings.load();
 
 		mSettings.mSettingsChangedListeners =
-				new ArrayList<SettingsChangedListener>();
+			new ArrayList<SettingsChangedListener>();
 
 		mSettings.mTimeAutoRefreshDevices =
-				parsePropToInt(
-						Consts.Settings.DEVICE_AUTO_REFRESH_TIME,
-						Consts.Default.AUTO_REFRESH_DEVICES);
+			parsePropToInt(
+				Consts.Settings.DEVICE_AUTO_REFRESH_TIME,
+				Consts.Default.AUTO_REFRESH_DEVICES);
 		mSettings.mMonkeyCount =
-				parsePropToInt(
-						Consts.Settings.MONKEY_COUNT,
-						Consts.Default.MONKEY_COUNT);
+			parsePropToInt(
+				Consts.Settings.MONKEY_COUNT,
+				Consts.Default.MONKEY_COUNT);
 
 		mSettings.mConnectDeviceMaxCount =
-				parsePropToInt(
-						Consts.Settings.CONNECT_DEVICE_MAX_COUNT,
-						Consts.Default.CONNECT_DEVICE_MAX_COUNT);
+			parsePropToInt(
+				Consts.Settings.CONNECT_DEVICE_MAX_COUNT,
+				Consts.Default.CONNECT_DEVICE_MAX_COUNT);
 
 		mSettings.mVisibleSystemPackages =
-				parsePropToBoolean(
-						Consts.Settings.SYSTEM_PACKAGES_VISIBLE,
-						false);
+			parsePropToBoolean(
+				Consts.Settings.SYSTEM_PACKAGES_VISIBLE,
+				false);
 
 		mSettings.mAutostartPackage =
-				parsePropToBoolean(
-						Consts.Settings.SETTINGS_PACKAGE_AUTOSTART,
-						false);
+			parsePropToBoolean(
+				Consts.Settings.SETTINGS_PACKAGE_AUTOSTART,
+				false);
 
 		mSettings.mAutorefreshListDevices =
-				parsePropToBoolean(
-						Consts.Settings.SETTINGS_DEVICES_AUTOREFRESH,
-						false);
+			parsePropToBoolean(
+				Consts.Settings.SETTINGS_DEVICES_AUTOREFRESH,
+				false);
 
 		mSettings.mTimeAutoRefreshDevices =
-				parsePropToInt(
-						Consts.Settings.DEVICE_AUTO_REFRESH_TIME,
-						Consts.Default.AUTO_REFRESH_DEVICES);
+			parsePropToInt(
+				Consts.Settings.DEVICE_AUTO_REFRESH_TIME,
+				Consts.Default.AUTO_REFRESH_DEVICES);
 
 		mSettings.mUseReinstall =
-				parsePropToBoolean(
-						Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL,
-						false);
+			parsePropToBoolean(
+				Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL,
+				false);
 
+		initThemeManager(mSettings.getThemePath());
 		initLookAndFeel(mSettings.getLookAndFeel());
 	}
 
@@ -100,8 +103,8 @@ public final class Settings {
 	public void setVisibleSystemPackages(final boolean pVisible) {
 		mVisibleSystemPackages = pVisible;
 		mProperties.setProperty(
-				Consts.Settings.SYSTEM_PACKAGES_VISIBLE,
-				String.valueOf(pVisible));
+			Consts.Settings.SYSTEM_PACKAGES_VISIBLE,
+			String.valueOf(pVisible));
 
 		fireChangedListener(Consts.Settings.SYSTEM_PACKAGES_VISIBLE);
 	}
@@ -113,8 +116,8 @@ public final class Settings {
 	public void setAutostartPackage(final boolean pVisible) {
 		mAutostartPackage = pVisible;
 		mProperties.setProperty(
-				Consts.Settings.SETTINGS_PACKAGE_AUTOSTART,
-				String.valueOf(pVisible));
+			Consts.Settings.SETTINGS_PACKAGE_AUTOSTART,
+			String.valueOf(pVisible));
 
 		fireChangedListener(Consts.Settings.SETTINGS_PACKAGE_AUTOSTART);
 	}
@@ -126,8 +129,8 @@ public final class Settings {
 	public void setAutorefreshListDevices(final boolean pVisible) {
 		mAutorefreshListDevices = pVisible;
 		mProperties.setProperty(
-				Consts.Settings.SETTINGS_DEVICES_AUTOREFRESH,
-				String.valueOf(pVisible));
+			Consts.Settings.SETTINGS_DEVICES_AUTOREFRESH,
+			String.valueOf(pVisible));
 
 		fireChangedListener(Consts.Settings.SETTINGS_DEVICES_AUTOREFRESH);
 	}
@@ -139,10 +142,18 @@ public final class Settings {
 	public void setUseReinstall(final boolean pVisible) {
 		mUseReinstall = pVisible;
 		mProperties.setProperty(
-				Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL,
-				String.valueOf(pVisible));
+			Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL,
+			String.valueOf(pVisible));
 
 		fireChangedListener(Consts.Settings.SETTINGS_PACKAGE_USE_REINSTALL);
+	}
+
+	public String getThemePath() {
+		return mProperties.getProperty(Consts.Settings.SETTINGS_THEMES_PATH, "themes");
+	}
+
+	public ThemeManager getThemeManager() {
+		return mThemeManager;
 	}
 
 	public String getLookAndFeel() {
@@ -153,6 +164,10 @@ public final class Settings {
 		mProperties.setProperty(Consts.Settings.LOOK_AND_FEEL, pLookAndFeel);
 
 		fireChangedListener(Consts.Settings.LOOK_AND_FEEL);
+	}
+
+	public void removeLookAndFeel() {
+		mProperties.remove(Consts.Settings.LOOK_AND_FEEL);
 	}
 
 	public String getAdbPath() {
@@ -181,7 +196,7 @@ public final class Settings {
 
 	public void setPackageFilterName(final String pPackageFilterName) {
 		mProperties
-				.setProperty(Consts.Settings.FILTER_TEXT, pPackageFilterName);
+			.setProperty(Consts.Settings.FILTER_TEXT, pPackageFilterName);
 
 		fireChangedListener(Consts.Settings.FILTER_TEXT);
 	}
@@ -193,8 +208,8 @@ public final class Settings {
 	public void setTimeAutoRefreshDevices(final int pTimeAutoRefreshDevices) {
 		mTimeAutoRefreshDevices = pTimeAutoRefreshDevices;
 		mProperties.setProperty(
-				Consts.Settings.DEVICE_AUTO_REFRESH_TIME,
-				String.valueOf(pTimeAutoRefreshDevices));
+			Consts.Settings.DEVICE_AUTO_REFRESH_TIME,
+			String.valueOf(pTimeAutoRefreshDevices));
 
 		fireChangedListener(Consts.Settings.DEVICE_AUTO_REFRESH_TIME);
 	}
@@ -206,31 +221,31 @@ public final class Settings {
 	public void setConnectDeviceMaxCount(final int pConnectDeviceMaxCount) {
 		mConnectDeviceMaxCount = pConnectDeviceMaxCount;
 		mProperties.setProperty(
-				Consts.Settings.CONNECT_DEVICE_MAX_COUNT,
-				String.valueOf(pConnectDeviceMaxCount));
+			Consts.Settings.CONNECT_DEVICE_MAX_COUNT,
+			String.valueOf(pConnectDeviceMaxCount));
 
 		fireChangedListener(Consts.Settings.CONNECT_DEVICE_MAX_COUNT);
 	}
 
 	public String getConnectDeviceByNumber(final int pNum) {
 		String key =
-				Consts.Settings.CONNECT_DEVICE_NUMBER + String.valueOf(pNum);
+			Consts.Settings.CONNECT_DEVICE_NUMBER + String.valueOf(pNum);
 		return mProperties.getProperty(key, "");
 	}
 
 	public void setConnectDeviceByNumber(final int pNum, final String pConnect) {
 		String key =
-				Consts.Settings.CONNECT_DEVICE_NUMBER + String.valueOf(pNum);
+			Consts.Settings.CONNECT_DEVICE_NUMBER + String.valueOf(pNum);
 		mProperties.setProperty(key, pConnect);
 
 		fireChangedListener(Consts.Settings.CONNECT_DEVICE_NUMBER);
 	}
 
-	public EnumPLAF getPLookAndFeel() {
-		if (mLookAndFeel == null) {
-			mLookAndFeel = EnumPLAF.AERO;
+	public Theme getThemeLookAndFeel() {
+		if (mThemeLookAndFeel == null) {
+//			mThemeLookAndFeel = EnumPLAF.AERO;
 		}
-		return mLookAndFeel;
+		return mThemeLookAndFeel;
 	}
 
 	public int getMonkeyCount() {
@@ -240,8 +255,8 @@ public final class Settings {
 	public void setMonkeyCount(final int pMonkeyCount) {
 		mMonkeyCount = pMonkeyCount;
 		mProperties.setProperty(
-				Consts.Settings.MONKEY_COUNT,
-				String.valueOf(pMonkeyCount));
+			Consts.Settings.MONKEY_COUNT,
+			String.valueOf(pMonkeyCount));
 		fireChangedListener(Consts.Settings.MONKEY_COUNT);
 	}
 
@@ -260,6 +275,13 @@ public final class Settings {
 		fireChangedListener(Consts.Settings.SETTINGS_ADB_CONSOLE_CHARSET);
 	}
 
+	public Image getDefaultApplicationIcon() {
+		if (mDefaultApplicationIcon == null) {
+			mDefaultApplicationIcon = Toolkit.getDefaultToolkit().getImage(Settings.class.getResource("/res/apm64.png"));
+		}
+		return mDefaultApplicationIcon;
+	}
+
 	public void load() {
 		try {
 			mProperties.load(new FileInputStream(Consts.Settings.FILE_PROP));
@@ -273,8 +295,8 @@ public final class Settings {
 	public void save() {
 		try {
 			mProperties.store(
-					new FileOutputStream(Consts.Settings.FILE_PROP),
-					"");
+				new FileOutputStream(Consts.Settings.FILE_PROP),
+				"");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -283,8 +305,7 @@ public final class Settings {
 	}
 
 	public void fireChangedListener(final String pName) {
-		for (int i = 0; i < mSettingsChangedListeners.size(); i++) {
-			SettingsChangedListener item = mSettingsChangedListeners.get(i);
+		for (SettingsChangedListener item : mSettingsChangedListeners) {
 			item.changedSettings(pName);
 		}
 	}
@@ -304,11 +325,11 @@ public final class Settings {
 	}
 
 	private static boolean parsePropToBoolean(final String pProp,
-			final boolean pDef) {
+											  final boolean pDef) {
 
 		return parseStringToBoolean(
-				mSettings.mProperties.getProperty(pProp),
-				pDef);
+			mSettings.mProperties.getProperty(pProp),
+			pDef);
 	}
 
 	private static int parseStringToInt(final String pValue, final int pDef) {
@@ -326,7 +347,7 @@ public final class Settings {
 	}
 
 	private static boolean parseStringToBoolean(final String pValue,
-			final boolean pDef) {
+												final boolean pDef) {
 
 		if (pValue == null) {
 			return pDef;
@@ -339,15 +360,30 @@ public final class Settings {
 		return pDef;
 	}
 
+	private static void initThemeManager(final String pPath) {
+		if (mSettings.mThemeManager == null) {
+			mSettings.mThemeManager = new ThemeManager();
+		}
+		try {
+			File parent = new File(pPath);
+			File[] files = parent.listFiles();
+			if (files != null) {
+				for (File file : files) {
+					if (file.getName().endsWith(".thm")) {
+						mSettings.mThemeManager.load(file);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private static void initLookAndFeel(final String pName) {
-		mSettings.mLookAndFeel = null;
+		mSettings.mThemeLookAndFeel = null;
 
 		if (pName != null) {
-			mSettings.mLookAndFeel = EnumPLAF.findByName(pName);
-		}
-
-		if (mSettings.mLookAndFeel == null) {
-			mSettings.mLookAndFeel = EnumPLAF.AERO;
+			mSettings.mThemeLookAndFeel = mSettings.mThemeManager.getTheme(pName);
 		}
 	}
 

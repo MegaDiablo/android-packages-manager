@@ -24,6 +24,7 @@ import javax.swing.border.LineBorder;
 import ru.ucoz.megadiablo.android.apm.Core;
 
 import com.adbhelper.adb.IKeyCode;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 /**
  * @author MegaDiablo
@@ -43,6 +44,7 @@ public class KeyBoard extends JDialog {
 
 		setMinimumSize(new Dimension(320, 240));
 		setTitle("Клавиатура");
+		setIconImage(Settings.getInstance().getDefaultApplicationIcon());
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(3, 3, 3, 3));

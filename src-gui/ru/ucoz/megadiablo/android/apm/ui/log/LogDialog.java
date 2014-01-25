@@ -32,6 +32,7 @@ import javax.swing.table.TableRowSorter;
 import ru.ucoz.megadiablo.android.apm.Core;
 
 import com.adbhelper.adb.ILogListener;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 /**
  *
@@ -75,6 +76,7 @@ public class LogDialog extends JDialog implements ILogListener {
 		setMinimumSize(new Dimension(320, 240));
 		setSize(new Dimension(640, 480));
 		setTitle("\u041b\u043e\u0433");
+		setIconImage(Settings.getInstance().getDefaultApplicationIcon());
 
 		mScrollPane = new JScrollPane();
 		getContentPane().add(mScrollPane, BorderLayout.CENTER);

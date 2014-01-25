@@ -1,0 +1,11 @@
+plaf=03ffe688e501807b1f894f627d99709687226e57
+connect.device.max.count=5
+filter.text=
+device.auto.refresh=15000
+path.adb=./platform-tools/adb
+path.aapt=./platform-tools/aapt
+settings.package.autostart=false
+settings.devices.autorefresh=true
+settings.package.use.reinstall=false
+system.packages.visible=false
+settings.adb.console.charset=UTF-8

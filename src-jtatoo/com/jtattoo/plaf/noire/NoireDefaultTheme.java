@@ -1,13 +1,34 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.noire;
 
-import javax.swing.plaf.*;
-import java.awt.*;
-
-import com.jtattoo.plaf.*;
+import com.jtattoo.plaf.AbstractTheme;
+import com.jtattoo.plaf.ColorHelper;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.FontUIResource;
 
 /**
  * @author Michael Hagen
@@ -51,12 +72,13 @@ public class NoireDefaultTheme extends AbstractTheme {
         inputBackgroundColor = new ColorUIResource(52, 55, 59);
         inputForegroundColor = foregroundColor;
 
+        rolloverForegroundColor = white;
         rolloverColor = new ColorUIResource(240, 168, 0);
         rolloverColorLight = new ColorUIResource(240, 168, 0);
         rolloverColorDark = new ColorUIResource(196, 137, 0);
 
         buttonForegroundColor = black;
-        buttonBackgroundColor = new ColorUIResource(196, 196, 196);
+        buttonBackgroundColor = new ColorUIResource(120, 129, 148);
         buttonColorLight = new ColorUIResource(232, 238, 244);
         buttonColorDark = new ColorUIResource(196, 200, 208);
 
@@ -69,19 +91,19 @@ public class NoireDefaultTheme extends AbstractTheme {
         controlDarkShadowColor = black;
 
         windowTitleForegroundColor = foregroundColor;
-        windowTitleBackgroundColor = new ColorUIResource(144, 148, 149);//new ColorUIResource(124, 128, 129);
-        windowTitleColorLight = new ColorUIResource(64, 67, 60);//new ColorUIResource(44, 47, 50);
-        windowTitleColorDark = black;//new ColorUIResource(16, 18, 20);
-        windowBorderColor = new ColorUIResource(16, 18, 20);//new ColorUIResource(26, 28, 30);
+        windowTitleBackgroundColor = new ColorUIResource(16, 17, 15);
+        windowTitleColorLight = new ColorUIResource(64, 67, 60);
+        windowTitleColorDark = black;
+        windowBorderColor = black;
         windowIconColor = lightGray;
         windowIconShadowColor = black;
         windowIconRolloverColor = orange;
 
         windowInactiveTitleForegroundColor = new ColorUIResource(196, 196, 196);
-        windowInactiveTitleBackgroundColor = new ColorUIResource(64, 64, 64);
+        windowInactiveTitleBackgroundColor = new ColorUIResource(16, 16, 16);
         windowInactiveTitleColorLight = new ColorUIResource(64, 64, 64);
         windowInactiveTitleColorDark = new ColorUIResource(32, 32, 32);
-        windowInactiveBorderColor = new ColorUIResource(48, 48, 48);
+        windowInactiveBorderColor = black;
 
         menuForegroundColor = white;
         menuBackgroundColor = new ColorUIResource(24, 26, 28);
@@ -90,12 +112,15 @@ public class NoireDefaultTheme extends AbstractTheme {
         menuColorLight = new ColorUIResource(96, 96, 96);
         menuColorDark = new ColorUIResource(32, 32, 32);
 
-        toolbarBackgroundColor = new ColorUIResource(64, 64, 64);
+        toolbarBackgroundColor = new ColorUIResource(24, 26, 28);
         toolbarColorLight = new ColorUIResource(96, 96, 96);
         toolbarColorDark = new ColorUIResource(32, 32, 32);
 
         tabAreaBackgroundColor = backgroundColor;
         desktopColor = new ColorUIResource(52, 55, 59);
+        
+        tooltipForegroundColor = white;
+        tooltipBackgroundColor = black;//new ColorUIResource(16, 16, 16);
 
         controlFont = new FontUIResource("Dialog", Font.BOLD, 12);
         systemFont = new FontUIResource("Dialog", Font.BOLD, 12);
@@ -112,42 +137,37 @@ public class NoireDefaultTheme extends AbstractTheme {
         Color bottomHi = buttonColorDark;
         Color bottomLo = ColorHelper.darker(buttonColorDark, 40);
         Color topColors[] = ColorHelper.createColorArr(topHi, topLo, 10);
-        Color bottomColors[] = ColorHelper.createColorArr(bottomHi, bottomLo, 10);
-        BUTTON_COLORS = new Color[20];
-        for (int i = 0; i < 10; i++) {
-            BUTTON_COLORS[i] = topColors[i];
-            BUTTON_COLORS[i + 10] = bottomColors[i];
-        }
+        Color bottomColors[] = ColorHelper.createColorArr(bottomHi, bottomLo, 12);
+        BUTTON_COLORS = new Color[22];
+        System.arraycopy(topColors, 0, BUTTON_COLORS, 0, 10);
+        System.arraycopy(bottomColors, 0, BUTTON_COLORS, 10, 12);
 
         topHi = ColorHelper.brighter(controlColorLight, 40);
         topLo = ColorHelper.brighter(controlColorDark, 40);
         bottomHi = controlColorLight;
         bottomLo = controlColorDark;
         topColors = ColorHelper.createColorArr(topHi, topLo, 10);
-        bottomColors = ColorHelper.createColorArr(bottomHi, bottomLo, 10);
-        DEFAULT_COLORS = new Color[20];
-        for (int i = 0; i < 10; i++) {
-            DEFAULT_COLORS[i] = topColors[i];
-            DEFAULT_COLORS[i + 10] = bottomColors[i];
-        }
+        bottomColors = ColorHelper.createColorArr(bottomHi, bottomLo, 12);
+        DEFAULT_COLORS = new Color[22];
+        System.arraycopy(topColors, 0, DEFAULT_COLORS, 0, 10);
+        System.arraycopy(bottomColors, 0, DEFAULT_COLORS, 10, 12);
+        
         HIDEFAULT_COLORS = ColorHelper.createColorArr(ColorHelper.brighter(controlColorLight, 15), ColorHelper.brighter(controlColorDark, 15), 20);
         ACTIVE_COLORS = ColorHelper.createColorArr(controlColorLight, controlColorDark, 20);
         INACTIVE_COLORS = ColorHelper.createColorArr(new Color(64, 64, 64), new Color(32, 32, 32), 20);
 
         SELECTED_COLORS = BUTTON_COLORS;
-        //SELECTED_COLORS = ColorHelper.createColorArr(new Color(255, 0, 0), new Color(128, 0, 0), 20);
 
         topHi = ColorHelper.brighter(rolloverColorLight, 40);
         topLo = rolloverColorLight;
         bottomHi = rolloverColorDark;
         bottomLo = ColorHelper.darker(rolloverColorDark, 20);
         topColors = ColorHelper.createColorArr(topHi, topLo, 10);
-        bottomColors = ColorHelper.createColorArr(bottomHi, bottomLo, 10);
-        ROLLOVER_COLORS = new Color[20];
-        for (int i = 0; i < 10; i++) {
-            ROLLOVER_COLORS[i] = topColors[i];
-            ROLLOVER_COLORS[i + 10] = bottomColors[i];
-        }
+        bottomColors = ColorHelper.createColorArr(bottomHi, bottomLo, 12);
+        ROLLOVER_COLORS = new Color[22];
+        System.arraycopy(topColors, 0, ROLLOVER_COLORS, 0, 10);
+        System.arraycopy(bottomColors, 0, ROLLOVER_COLORS, 10, 12);
+        
         PRESSED_COLORS = ColorHelper.createColorArr(new Color(64, 64, 64), new Color(96, 96, 96), 20);
         DISABLED_COLORS = ColorHelper.createColorArr(new Color(80, 80, 80), new Color(64, 64, 64), 20);
         topHi = ColorHelper.brighter(windowTitleColorLight, 40);
@@ -157,12 +177,8 @@ public class NoireDefaultTheme extends AbstractTheme {
         topColors = ColorHelper.createColorArr(topHi, topLo, 8);
         bottomColors = ColorHelper.createColorArr(bottomHi, bottomLo, 12);
         WINDOW_TITLE_COLORS = new Color[20];
-        for (int i = 0; i < 8; i++) {
-            WINDOW_TITLE_COLORS[i] = topColors[i];
-        }
-        for (int i = 0; i < 12; i++) {
-            WINDOW_TITLE_COLORS[i + 8] = bottomColors[i];
-        }
+        System.arraycopy(topColors, 0, WINDOW_TITLE_COLORS, 0, 8);
+        System.arraycopy(bottomColors, 0, WINDOW_TITLE_COLORS, 8, 12);
         WINDOW_INACTIVE_TITLE_COLORS = ColorHelper.createColorArr(windowInactiveTitleColorLight, windowInactiveTitleColorDark, 20);
         MENUBAR_COLORS = DEFAULT_COLORS;
         TOOLBAR_COLORS = MENUBAR_COLORS;

@@ -1,24 +1,39 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.aluminium;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonModel;
+import javax.swing.border.Border;
+import javax.swing.plaf.UIResource;
 
 /**
  * @author Michael Hagen
  */
 public class AluminiumBorders extends BaseBorders {
-
-    private static Border buttonBorder = null;
-    private static Border rolloverToolButtonBorder = null;
-    private static Border internalFrameBorder = null;
 
     //------------------------------------------------------------------------------------
     // Lazy access methods
@@ -57,7 +72,7 @@ public class AluminiumBorders extends BaseBorders {
         }
 
         public Insets getBorderInsets(Component c) {
-            if (AluminiumLookAndFeel.getTheme().doDrawSquareButtons()) {
+            if (AbstractLookAndFeel.getTheme().doDrawSquareButtons()) {
                 return new Insets(3, 4, 3, 4);
             } else {
                 return new Insets(2, 12, 2, 12);
@@ -72,8 +87,9 @@ public class AluminiumBorders extends BaseBorders {
             borderInsets.bottom = insets.bottom;
             return borderInsets;
         }
+        
         public boolean isBorderOpaque() {
-            return false;
+            return true;
         }
     } // class ButtonBorder
 
@@ -84,7 +100,7 @@ public class AluminiumBorders extends BaseBorders {
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
             AbstractButton button = (AbstractButton) c;
             ButtonModel model = button.getModel();
-            Color loColor = AluminiumLookAndFeel.getFrameColor();
+            Color loColor = AbstractLookAndFeel.getFrameColor();
             if (model.isEnabled()) {
                 if ((model.isPressed() && model.isArmed()) || model.isSelected()) {
                     Graphics2D g2D = (Graphics2D) g;
@@ -131,9 +147,9 @@ public class AluminiumBorders extends BaseBorders {
 
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
             Graphics2D g2D = (Graphics2D) g;
-            Color titleColor = AluminiumLookAndFeel.getWindowInactiveTitleBackgroundColor();
+            Color titleColor = AbstractLookAndFeel.getWindowInactiveTitleBackgroundColor();
             if (isActive(c)) {
-                titleColor = AluminiumLookAndFeel.getWindowTitleBackgroundColor();
+                titleColor = AbstractLookAndFeel.getWindowTitleBackgroundColor();
             }
             int th = getTitleHeight(c);
 
@@ -142,8 +158,8 @@ public class AluminiumBorders extends BaseBorders {
             g.fillRect(1, h - dw, w, dw - 1);
 
             if (isActive(c)) {
-                JTattooUtilities.fillHorGradient(g, AluminiumLookAndFeel.getTheme().getWindowTitleColors(), 1, dw, dw, th + 1);
-                JTattooUtilities.fillHorGradient(g, AluminiumLookAndFeel.getTheme().getWindowTitleColors(), w - dw, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), 1, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowTitleColors(), w - dw, dw, dw, th + 1);
                 Color c1 = AbstractLookAndFeel.getTheme().getWindowTitleColorDark();
                 Color c2 = AbstractLookAndFeel.getTheme().getWindowTitleColorLight();
                 g2D.setPaint(new GradientPaint(0, dw + th + 1, c1, 0, h - th - (2 * dw), c2));
@@ -151,8 +167,8 @@ public class AluminiumBorders extends BaseBorders {
                 g.fillRect(w - dw, dw + th + 1, dw - 1, h - th - (2 * dw));
                 g2D.setPaint(null);
             } else {
-                JTattooUtilities.fillHorGradient(g, AluminiumLookAndFeel.getTheme().getWindowInactiveTitleColors(), 1, dw, dw, th + 1);
-                JTattooUtilities.fillHorGradient(g, AluminiumLookAndFeel.getTheme().getWindowInactiveTitleColors(), w - dw, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), 1, dw, dw, th + 1);
+                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getWindowInactiveTitleColors(), w - dw, dw, dw, th + 1);
                 Color c1 = AbstractLookAndFeel.getTheme().getWindowInactiveTitleColorDark();
                 Color c2 = AbstractLookAndFeel.getTheme().getWindowInactiveTitleColorLight();
                 g2D.setPaint(new GradientPaint(0, dw + th + 1, c1, 0, h - th - (2 * dw), c2));
@@ -162,9 +178,9 @@ public class AluminiumBorders extends BaseBorders {
             }
 
 
-            Color borderColor = AluminiumLookAndFeel.getWindowInactiveBorderColor();
+            Color borderColor = AbstractLookAndFeel.getWindowInactiveBorderColor();
             if (isActive(c)) {
-                borderColor = AluminiumLookAndFeel.getWindowBorderColor();
+                borderColor = AbstractLookAndFeel.getWindowBorderColor();
             }
             g.setColor(borderColor);
             g.drawRect(0, 0, w - 1, h - 1);

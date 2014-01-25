@@ -1,18 +1,38 @@
 /*
- * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+
 package com.jtattoo.plaf;
 
-import java.beans.PropertyChangeEvent;
 import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
+import javax.swing.event.MouseInputListener;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicRootPaneUI;
 
 /**
  * This source is a modified copy of javax.swing.plaf.metal.MetalRootPaneUI
@@ -113,7 +133,7 @@ public class BaseRootPaneUI extends BasicRootPaneUI {
     private JRootPane root;
 
     private Cursor savedCursor = null;
-
+    
     /**
      * <code>Cursor</code> used to track the cursor set by the user.
      * This is initially <code>Cursor.DEFAULT_CURSOR</code>.
@@ -291,7 +311,8 @@ public class BaseRootPaneUI extends BasicRootPaneUI {
      * and sets this value; the default is null, implying a native operating
      * system window title pane.
      *
-     * @param content the <code>JComponent</code> to use for the window title pane.
+     * @param root the <code>JRootPane</code> where to set the title pane
+     * @param titlePane the <code>BaseTitlePane</code> to use for the window title pane.
      */
     public void setTitlePane(JRootPane root, BaseTitlePane titlePane) {
         JLayeredPane layeredPane = root.getLayeredPane();
@@ -339,7 +360,7 @@ public class BaseRootPaneUI extends BasicRootPaneUI {
             if (style != NONE) {
                 installClientDecorations(root);
             }
-            if (window instanceof Frame) {
+            if (!JTattooUtilities.isMac() && (window instanceof Frame)) {
                 Frame frame = (Frame)window;
                 if (frame != null) {
                     GraphicsConfiguration gc = frame.getGraphicsConfiguration();
@@ -740,54 +761,73 @@ public class BaseRootPaneUI extends BasicRootPaneUI {
             }
         }
 
+        private int getMinScreenY() {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice devices[] = ge.getScreenDevices();
+            GraphicsDevice gd = devices[0];
+            GraphicsConfiguration gc = gd.getDefaultConfiguration();
+            int minScreenY = gc.getBounds().y + Toolkit.getDefaultToolkit().getScreenInsets(gc).top;
+            if (devices.length > 1) {
+                for (int i = 1; i < devices.length; i++) {
+                    gd = devices[i];
+                    gc = gd.getDefaultConfiguration();
+                    minScreenY = Math.min(minScreenY, gc.getBounds().y + Toolkit.getDefaultToolkit().getScreenInsets(gc).top);
+                }
+            }
+            return minScreenY;
+        }
+    
         public void mouseDragged(MouseEvent ev) {
             if (ev.getSource() instanceof Window) {
                 Window w = (Window) ev.getSource();
-                Point pt = ev.getPoint();
-
+                int minScreenY = getMinScreenY();
                 if (isMovingWindow) {
-                    Point windowPt = w.getLocationOnScreen();
-
-                    windowPt.x += pt.x - dragOffsetX;
-                    windowPt.y += pt.y - dragOffsetY;
-                    w.setLocation(windowPt);
+                    Point location = ev.getLocationOnScreen();
+                    location.x = location.x - dragOffsetX;
+                    location.y = Math.max(minScreenY, location.y - dragOffsetY);
+                    w.setLocation(location);        
                 } else if (dragCursor != 0) {
-                    Rectangle r = w.getBounds();
-                    Rectangle startBounds = new Rectangle(r);
+                    Point pt = ev.getPoint();
+                    Rectangle bounds = w.getBounds();
+                    Rectangle startBounds = new Rectangle(bounds);
                     Dimension min = MINIMUM_SIZE;
                     switch (dragCursor) {
                         case Cursor.E_RESIZE_CURSOR:
-                            adjust(r, min, 0, 0, pt.x + (dragWidth - dragOffsetX) - r.width, 0);
+                            adjust(bounds, min, 0, 0, pt.x + (dragWidth - dragOffsetX) - bounds.width, 0);
                             break;
                         case Cursor.S_RESIZE_CURSOR:
-                            adjust(r, min, 0, 0, 0, pt.y + (dragHeight - dragOffsetY) - r.height);
+                            adjust(bounds, min, 0, 0, 0, pt.y + (dragHeight - dragOffsetY) - bounds.height);
                             break;
                         case Cursor.N_RESIZE_CURSOR:
-                            adjust(r, min, 0, pt.y - dragOffsetY, 0, -(pt.y - dragOffsetY));
+                            adjust(bounds, min, 0, pt.y - dragOffsetY, 0, -(pt.y - dragOffsetY));
                             break;
                         case Cursor.W_RESIZE_CURSOR:
-                            adjust(r, min, pt.x - dragOffsetX, 0, -(pt.x - dragOffsetX), 0);
+                            adjust(bounds, min, pt.x - dragOffsetX, 0, -(pt.x - dragOffsetX), 0);
                             break;
                         case Cursor.NE_RESIZE_CURSOR:
-                            adjust(r, min, 0, pt.y - dragOffsetY, pt.x + (dragWidth - dragOffsetX) - r.width, -(pt.y - dragOffsetY));
+                            adjust(bounds, min, 0, pt.y - dragOffsetY, pt.x + (dragWidth - dragOffsetX) - bounds.width, -(pt.y - dragOffsetY));
                             break;
                         case Cursor.SE_RESIZE_CURSOR:
-                            adjust(r, min, 0, 0, pt.x + (dragWidth - dragOffsetX) - r.width, pt.y + (dragHeight - dragOffsetY) - r.height);
+                            adjust(bounds, min, 0, 0, pt.x + (dragWidth - dragOffsetX) - bounds.width, pt.y + (dragHeight - dragOffsetY) - bounds.height);
                             break;
                         case Cursor.NW_RESIZE_CURSOR:
-                            adjust(r, min, pt.x - dragOffsetX, pt.y - dragOffsetY, -(pt.x - dragOffsetX), -(pt.y - dragOffsetY));
+                            adjust(bounds, min, pt.x - dragOffsetX, pt.y - dragOffsetY, -(pt.x - dragOffsetX), -(pt.y - dragOffsetY));
                             break;
                         case Cursor.SW_RESIZE_CURSOR:
-                            adjust(r, min, pt.x - dragOffsetX, 0, -(pt.x - dragOffsetX), pt.y + (dragHeight - dragOffsetY) - r.height);
+                            adjust(bounds, min, pt.x - dragOffsetX, 0, -(pt.x - dragOffsetX), pt.y + (dragHeight - dragOffsetY) - bounds.height);
                             break;
                         default:
                             break;
                     }
-                    if (!r.equals(startBounds)) {
-                        w.setLocation(r.x, r.y);
-                        w.setSize(r.width, r.height);
+                    if (!bounds.equals(startBounds)) {
+                        if (bounds.y < minScreenY) {
+                            int delta = minScreenY - bounds.y;
+                            bounds.y = minScreenY;
+                            bounds.height -= delta;
+                        }
+                        w.setBounds(bounds);
                         w.validate();
-                        getRootPane().repaint();
+                        //getRootPane().repaint();
                     }
                 }
             }
@@ -816,25 +856,11 @@ public class BaseRootPaneUI extends BasicRootPaneUI {
                 if (getTitlePane() != null && getTitlePane().contains(convertedPoint)) {
                     if ((ev.getClickCount() % 2) == 0 && ((ev.getModifiers() & InputEvent.BUTTON1_MASK) != 0)) {
                         if (frame.isResizable()) {
-                            PropertyChangeListener[] pcl = frame.getPropertyChangeListeners();
                             if ((state & BaseRootPaneUI.MAXIMIZED_BOTH) != 0) {
-                                for (int i = 0; i < pcl.length; i++) {
-                                    pcl[i].propertyChange(new PropertyChangeEvent(window, "windowRestore", Boolean.FALSE, Boolean.FALSE));
-                                }
-                                DecorationHelper.setExtendedState(frame, state & ~BaseRootPaneUI.MAXIMIZED_BOTH);
-                                for (int i = 0; i < pcl.length; i++) {
-                                    pcl[i].propertyChange(new PropertyChangeEvent(window, "windowRestored", Boolean.FALSE, Boolean.FALSE));
-                                }
+                                titlePane.restore();
                             } else {
-                                for (int i = 0; i < pcl.length; i++) {
-                                    pcl[i].propertyChange(new PropertyChangeEvent(window, "windowMaximize", Boolean.FALSE, Boolean.FALSE));
-                                }
-                                DecorationHelper.setExtendedState(frame, state | BaseRootPaneUI.MAXIMIZED_BOTH);
-                                for (int i = 0; i < pcl.length; i++) {
-                                    pcl[i].propertyChange(new PropertyChangeEvent(window, "windowMaximized", Boolean.FALSE, Boolean.FALSE));
-                                }
+                                titlePane.maximize();
                             }
-                            return;
                         }
                     }
                 }

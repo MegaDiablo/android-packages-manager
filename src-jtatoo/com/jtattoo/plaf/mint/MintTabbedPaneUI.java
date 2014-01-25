@@ -1,14 +1,31 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.mint;
 
-import javax.swing.*;
-import javax.swing.plaf.*;
-
-import com.jtattoo.plaf.*;
-import java.awt.Graphics;
+import com.jtattoo.plaf.BaseTabbedPaneUI;
+import javax.swing.JComponent;
+import javax.swing.plaf.ComponentUI;
 
 /**
  * @author Michael Hagen
@@ -22,20 +39,6 @@ public class MintTabbedPaneUI extends BaseTabbedPaneUI {
     public void installDefaults() {
         super.installDefaults();
         tabAreaInsets.bottom = 6;
-    }
-
-    protected void paintContentBorder(Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h) {
-        g.setColor(AbstractLookAndFeel.getTabAreaBackgroundColor());
-        int tabAreaHeight = calculateTabAreaHeight(tabPlacement, runCount, maxTabHeight);
-        int tabAreaWidth = calculateTabAreaWidth(tabPlacement, runCount, maxTabWidth);
-        if (tabPlacement == JTabbedPane.TOP || tabPlacement == JTabbedPane.LEFT) {
-            g.fillRect(x, y, tabAreaWidth, tabAreaHeight);
-        } else if (tabPlacement == JTabbedPane.BOTTOM) {
-            g.fillRect(x, h - tabAreaHeight + 1, w, tabAreaHeight);
-        } else {
-            g.fillRect(w - tabAreaWidth + 1, y, tabAreaWidth, h);
-        }
-        super.paintContentBorder(g, tabPlacement, selectedIndex, x, y, w, h);
     }
 
 }

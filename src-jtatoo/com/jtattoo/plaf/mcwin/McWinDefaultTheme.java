@@ -1,9 +1,32 @@
+/*
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.mcwin;
 
-import java.awt.*;
-import javax.swing.plaf.*;
-
-import com.jtattoo.plaf.*;
+import com.jtattoo.plaf.AbstractTheme;
+import com.jtattoo.plaf.ColorHelper;
+import java.awt.Color;
+import javax.swing.plaf.ColorUIResource;
 
 /**
  * @author Michael Hagen
@@ -47,30 +70,31 @@ public class McWinDefaultTheme extends AbstractTheme {
         controlColorLight = new ColorUIResource(106, 150, 192);
         controlColorDark = lightGray;
 
-//        rolloverColor = new ColorUIResource(212, 224, 243);
-//        rolloverColorLight = new ColorUIResource(106, 192, 150);
-//        rolloverColorDark = lightGray;
         rolloverColor = new ColorUIResource(164, 217, 190);
         rolloverColorLight = new ColorUIResource(182, 224, 203);
         rolloverColorDark = new ColorUIResource(106, 192, 150);
 
+        windowTitleForegroundColor = new ColorUIResource(22, 34, 44);
         windowTitleBackgroundColor = new ColorUIResource(212, 224, 243);
         windowTitleColorLight = new ColorUIResource(231, 235, 248);
         windowTitleColorDark = new ColorUIResource(193, 211, 236);
         windowBorderColor = new ColorUIResource(154, 168, 182);
 
+        windowInactiveTitleForegroundColor = extraDarkGray;
         windowInactiveTitleBackgroundColor = backgroundColor;
         windowInactiveTitleColorLight = white;
         windowInactiveTitleColorDark = new ColorUIResource(236, 236, 236);
         windowInactiveBorderColor = lightGray;
 
-        menuBackgroundColor = white;
+        menuBackgroundColor = backgroundColor;
+        menuColorLight = white;
+        menuColorDark = backgroundColor;
         menuSelectionBackgroundColor = selectionBackgroundColor;
 
-        toolbarBackgroundColor = white;
+        toolbarBackgroundColor = backgroundColor;
 
         tabAreaBackgroundColor = backgroundColor;
-        desktopColor = new ColorUIResource(80, 120, 180);
+        desktopColor = new ColorUIResource(232, 232, 232);
     }
 
     public void setUpColorArrs() {
@@ -104,9 +128,7 @@ public class McWinDefaultTheme extends AbstractTheme {
             Color color1[] = ColorHelper.createColorArr(controlColorLight, controlColorDark, 6);
             color1[0] = controlColorDark;
             Color color2[] = ColorHelper.createColorArr(ColorHelper.brighter(controlColorDark, 10), controlColorLight, 15);
-            for (int i = 0; i < 6; i++) {
-                DEFAULT_COLORS[i] = color1[i];
-            }
+            System.arraycopy(color1, 0, DEFAULT_COLORS, 0, 6);
             for (int i = 5; i < 20; i++) {
                 DEFAULT_COLORS[i] = color2[i - 5];
             }
@@ -138,9 +160,7 @@ public class McWinDefaultTheme extends AbstractTheme {
             Color color1[] = ColorHelper.createColorArr(rolloverColorLight, rolloverColorDark, 6);
             color1[0] = rolloverColorDark;
             Color color2[] = ColorHelper.createColorArr(ColorHelper.brighter(rolloverColorDark, 10), rolloverColorLight, 15);
-            for (int i = 0; i < 6; i++) {
-                ROLLOVER_COLORS[i] = color1[i];
-            }
+            System.arraycopy(color1, 0, ROLLOVER_COLORS, 0, 6);
             for (int i = 5; i < 20; i++) {
                 ROLLOVER_COLORS[i] = color2[i - 5];
             }

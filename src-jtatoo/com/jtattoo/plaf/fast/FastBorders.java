@@ -1,25 +1,38 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.fast;
 
+import com.jtattoo.plaf.*;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-
-import com.jtattoo.plaf.*;
+import javax.swing.border.Border;
+import javax.swing.plaf.UIResource;
 
 /**
  * @author Michael Hagen
  */
 public class FastBorders extends BaseBorders {
-
-    private static Border buttonBorder;
-    private static Border toolButtonBorder;
-    private static Border rolloverToolButtonBorder;
-    private static Border internalFrameBorder;
 
 //------------------------------------------------------------------------------------
 // Lazy access methods
@@ -81,19 +94,19 @@ public class FastBorders extends BaseBorders {
                 }
                 if (c instanceof JButton) {
                     JButton b = (JButton) c;
-                    if (b.equals(b.getRootPane().getDefaultButton())) {
+                    if (b.getRootPane() != null && b.equals(b.getRootPane().getDefaultButton())) {
                         g.setColor(defaultFrameColor);
                         g.drawRect(x, y, w - 1, h - 1);
                     }
                 }
             } else {
-                g.setColor(FastLookAndFeel.getDisabledForegroundColor());
+                g.setColor(AbstractLookAndFeel.getDisabledForegroundColor());
                 g.drawRect(x, y, w - 1, h - 1);
             }
         }
 
         public Insets getBorderInsets(Component c) {
-            return new Insets(insets.top, insets.left, insets.bottom, insets.right);
+            return insets;
         }
 
         public Insets getBorderInsets(Component c, Insets borderInsets) {
@@ -109,7 +122,7 @@ public class FastBorders extends BaseBorders {
         }
     } // class ButtonBorder
 
-//------------------------------------------------------------------------------    
+//------------------------------------------------------------------------------
     public static class ToolButtonBorder implements Border, UIResource {
 
         private static final Insets insets = new Insets(1, 1, 1, 1);
@@ -117,8 +130,8 @@ public class FastBorders extends BaseBorders {
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
             AbstractButton button = (AbstractButton) c;
             ButtonModel model = button.getModel();
-            Color hiColor = ColorHelper.brighter(FastLookAndFeel.getFrameColor(), 90);
-            Color loColor = FastLookAndFeel.getFrameColor();
+            Color hiColor = ColorHelper.brighter(AbstractLookAndFeel.getFrameColor(), 90);
+            Color loColor = AbstractLookAndFeel.getFrameColor();
             if (model.isEnabled()) {
                 if ((model.isPressed() && model.isArmed()) || model.isSelected()) {
                     Graphics2D g2D = (Graphics2D) g;
@@ -153,7 +166,7 @@ public class FastBorders extends BaseBorders {
         }
     } // class ToolButtonBorder
 
-//------------------------------------------------------------------------------    
+//------------------------------------------------------------------------------
     public static class RolloverToolButtonBorder implements Border, UIResource {
 
         private static final Insets insets = new Insets(1, 1, 1, 1);
@@ -161,7 +174,7 @@ public class FastBorders extends BaseBorders {
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
             AbstractButton button = (AbstractButton) c;
             ButtonModel model = button.getModel();
-            Color loColor = FastLookAndFeel.getFrameColor();
+            Color loColor = AbstractLookAndFeel.getFrameColor();
             if (model.isEnabled()) {
                 if ((model.isPressed() && model.isArmed()) || model.isSelected()) {
                     Graphics2D g2D = (Graphics2D) g;
@@ -204,16 +217,16 @@ public class FastBorders extends BaseBorders {
         }
     } // class RolloverToolButtonBorder
 
-//------------------------------------------------------------------------------    
+//------------------------------------------------------------------------------
     public static class InternalFrameBorder extends BaseInternalFrameBorder {
 
         public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
             boolean active = isActive(c);
             boolean resizable = isResizable(c);
-            Color frameColor = FastLookAndFeel.getFrameColor();
-            Color borderColor = FastLookAndFeel.getWindowInactiveBorderColor();
+            Color frameColor = AbstractLookAndFeel.getFrameColor();
+            Color borderColor = AbstractLookAndFeel.getWindowInactiveBorderColor();
             if (active) {
-                borderColor = FastLookAndFeel.getWindowBorderColor();
+                borderColor = AbstractLookAndFeel.getWindowBorderColor();
             }
             Color cHi = ColorHelper.brighter(frameColor, 40);
             Color cLo = frameColor;

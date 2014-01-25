@@ -31,15 +31,24 @@ public class JMenuLookAndFeel extends JMenu {
 		mCore = pCore;
 
 		mGroup = new ButtonGroup();
-		addItem("Aero", EnumPLAF.AERO);
-		addItem("HiFi", EnumPLAF.HIFI);
-		addItem("Acry", EnumPLAF.ACRY);
-		addItem("Aluminium", EnumPLAF.ALUMINIUM);
-		addItem("Fast", EnumPLAF.FAST);
-		addItem("McWin", EnumPLAF.MCWIN);
-		addItem("Mint", EnumPLAF.MINT);
-		addItem("Noire", EnumPLAF.NOIRE);
-		addItem("Smart", EnumPLAF.SMART);
+		EnumPLAF[] themes = EnumPLAF.values();
+
+		String os = "???";
+		
+		String osName = System.getProperty("os.name");
+		osName = osName == null ? "" : osName.toLowerCase();
+		if (osName.startsWith("windows")) {
+			os = "win";
+		} else if (osName.startsWith("linux")) {
+			os = "nix";
+		}
+
+		
+		for (EnumPLAF theme : themes) {
+			if (theme.getPlatform() == null || theme.getPlatform().equals(os)) {
+				addItem(theme.getText(), theme);
+			}
+		}
 	}
 
 	private void addItem(final String pText, final EnumPLAF pEnumPLAF) {

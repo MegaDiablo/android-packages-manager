@@ -1,15 +1,33 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.acryl;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.text.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.plaf.*;
+import javax.swing.text.View;
 
 /**
  * author Michael Hagen
@@ -25,7 +43,7 @@ public class AcrylTabbedPaneUI extends BaseTabbedPaneUI {
         tabAreaInsets.bottom = 5;
     }
 
-    protected Color[] getTabColors(int tabIndex, boolean isSelected) {
+    protected Color[] getTabColors(int tabIndex, boolean isSelected, boolean isRollover) {
         if ((tabIndex >= 0) && (tabIndex < tabPane.getTabCount())) {
             boolean isEnabled = tabPane.isEnabledAt(tabIndex);
             Color backColor = tabPane.getBackgroundAt(tabIndex);
@@ -33,16 +51,16 @@ public class AcrylTabbedPaneUI extends BaseTabbedPaneUI {
             if ((backColor instanceof UIResource)) {
                 if (isSelected) {
                     colorArr = AbstractLookAndFeel.getTheme().getDefaultColors();
-                } else if (tabIndex == rolloverIndex && isEnabled) {
+                } else if (isRollover && isEnabled) {
                     colorArr = AbstractLookAndFeel.getTheme().getRolloverColors();
                 } else {
                     colorArr = AbstractLookAndFeel.getTheme().getTabColors();
                 }
             } else {
                 if (isSelected) {
-                    colorArr = AbstractLookAndFeel.getTheme().getDefaultColors();
-                } else if (tabIndex == rolloverIndex && isEnabled) {
-                    colorArr = AbstractLookAndFeel.getTheme().getRolloverColors();
+                    colorArr = ColorHelper.createColorArr(ColorHelper.brighter(backColor, 60), backColor, 20);
+                } else if (isRollover && isEnabled) {
+                    colorArr = ColorHelper.createColorArr(ColorHelper.brighter(backColor, 80), ColorHelper.brighter(backColor, 20), 20);
                 } else {
                     colorArr = ColorHelper.createColorArr(ColorHelper.brighter(backColor, 40), ColorHelper.darker(backColor, 10), 20);
                 }
@@ -54,11 +72,12 @@ public class AcrylTabbedPaneUI extends BaseTabbedPaneUI {
 
     protected Color[] getContentBorderColors(int tabPlacement) {
         Color SEP_COLORS[] = {
-            ColorHelper.brighter(AcrylLookAndFeel.getControlColorLight(), 20),
-            AcrylLookAndFeel.getControlColorLight(),
-            ColorHelper.brighter(AcrylLookAndFeel.getControlColorDark(), 20),
-            AcrylLookAndFeel.getControlColorDark(),
-            ColorHelper.darker(AcrylLookAndFeel.getControlColorDark(), 20)};
+            ColorHelper.brighter(AbstractLookAndFeel.getControlColorLight(), 20),
+            AbstractLookAndFeel.getControlColorLight(),
+            ColorHelper.brighter(AbstractLookAndFeel.getControlColorDark(), 20),
+            AbstractLookAndFeel.getControlColorDark(),
+            ColorHelper.darker(AbstractLookAndFeel.getControlColorDark(), 20)
+        };
         return SEP_COLORS;
     }
 
@@ -66,30 +85,13 @@ public class AcrylTabbedPaneUI extends BaseTabbedPaneUI {
         return ColorHelper.brighter(AbstractLookAndFeel.getTheme().getFrameColor(), 50);
     }
 
-    protected Color getSelectedBorderColor(int tabIndex) {
-        return AbstractLookAndFeel.getFrameColor();
-    }
-
     protected Color getLoBorderColor(int tabIndex) {
-        return ColorHelper.brighter(AbstractLookAndFeel.getFrameColor(), 50);
-    }
-
-    protected Color getHiBorderColor(int tabIndex) {
-        if (tabIndex == tabPane.getSelectedIndex()) {
-            return ColorHelper.darker(super.getHiBorderColor(tabIndex), 50);
-        } else {
-            return super.getHiBorderColor(tabIndex);
+        if (tabIndex == tabPane.getSelectedIndex() && tabPane.getBackgroundAt(tabIndex) instanceof ColorUIResource) {
+            return ColorHelper.brighter(AbstractLookAndFeel.getFrameColor(), 10);
         }
+        return super.getLoBorderColor(tabIndex);
     }
-
-    protected Color getGapColor(int tabIndex) {
-        if (tabIndex == tabPane.getSelectedIndex()) {
-            Color colors[] = AbstractLookAndFeel.getTheme().getDefaultColors();
-            return colors[colors.length - 1];
-        }
-        return super.getGapColor(tabIndex);
-    }
-
+    
     protected Font getTabFont(boolean isSelected) {
         if (isSelected) {
             return super.getTabFont(isSelected).deriveFont(Font.BOLD);
@@ -98,21 +100,12 @@ public class AcrylTabbedPaneUI extends BaseTabbedPaneUI {
         }
     }
 
-    protected void paintContentBorder(Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h) {
-        g.setColor(AbstractLookAndFeel.getTabAreaBackgroundColor());
-        int tabAreaHeight = calculateTabAreaHeight(tabPlacement, runCount, maxTabHeight);
-        int tabAreaWidth = calculateTabAreaWidth(tabPlacement, runCount, maxTabWidth);
-        if (tabPlacement == JTabbedPane.TOP || tabPlacement == JTabbedPane.LEFT) {
-            g.fillRect(x, y, tabAreaWidth, tabAreaHeight);
-        } else if (tabPlacement == JTabbedPane.BOTTOM) {
-            g.fillRect(x, h - tabAreaHeight + 1, w, tabAreaHeight);
-        } else {
-            g.fillRect(w - tabAreaWidth + 1, y, tabAreaWidth, h);
-        }
-        super.paintContentBorder(g, tabPlacement, selectedIndex, x, y, w, h);
-    }
-
     protected void paintText(Graphics g, int tabPlacement, Font font, FontMetrics metrics, int tabIndex, String title, Rectangle textRect, boolean isSelected) {
+        Color backColor = tabPane.getBackgroundAt(tabIndex);
+        if (!(backColor instanceof UIResource)) {
+            super.paintText(g, tabPlacement, font, metrics, tabIndex, title, textRect, isSelected);
+            return;
+        }
         g.setFont(font);
         View v = getTextViewForTab(tabIndex);
         if (v != null) {
@@ -136,13 +129,13 @@ public class AcrylTabbedPaneUI extends BaseTabbedPaneUI {
 
             if (tabPane.isEnabled() && tabPane.isEnabledAt(tabIndex)) {
                 if (isSelected) {
-                    Color shadowColor = ColorHelper.darker(AcrylLookAndFeel.getWindowTitleColorDark(), 30);
+                    Color shadowColor = ColorHelper.darker(AbstractLookAndFeel.getWindowTitleColorDark(), 30);
                     g.setColor(shadowColor);
                     JTattooUtilities.drawStringUnderlineCharAt(tabPane, g, title, mnemIndex, textRect.x - 1, textRect.y - 1 + metrics.getAscent());
                     JTattooUtilities.drawStringUnderlineCharAt(tabPane, g, title, mnemIndex, textRect.x - 1, textRect.y + 1 + metrics.getAscent());
                     JTattooUtilities.drawStringUnderlineCharAt(tabPane, g, title, mnemIndex, textRect.x + 1, textRect.y - 1 + metrics.getAscent());
                     JTattooUtilities.drawStringUnderlineCharAt(tabPane, g, title, mnemIndex, textRect.x + 1, textRect.y + 1 + metrics.getAscent());
-                    g.setColor(AbstractLookAndFeel.getTheme().getWindowTitleForegroundColor());
+                    g.setColor(AbstractLookAndFeel.getTheme().getTabSelectionForegroundColor());
                 } else {
                     g.setColor(tabPane.getForegroundAt(tabIndex));
                 }

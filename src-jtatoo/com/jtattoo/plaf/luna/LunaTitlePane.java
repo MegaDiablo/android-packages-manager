@@ -1,13 +1,31 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.luna;
 
-import java.awt.*;
-import javax.swing.*;
-
 import com.jtattoo.plaf.*;
+import java.awt.*;
+import javax.swing.JRootPane;
 
 /**
  * @author  Michael Hagen
@@ -26,12 +44,6 @@ public class LunaTitlePane extends BaseTitlePane {
         return 5;
     }
 
-    public void createButtons() {
-        iconifyButton = new BaseTitleButton(iconifyAction, ICONIFY, iconifyIcon, 1.0f);
-        maxButton = new BaseTitleButton(restoreAction, MAXIMIZE, maximizeIcon, 1.0f);
-        closeButton = new BaseTitleButton(closeAction, CLOSE, closeIcon, 1.0f);
-    }
-
     public void paintBorder(Graphics g) {
         if (isActive()) {
             g.setColor(AbstractLookAndFeel.getTheme().getFrameColor());
@@ -41,50 +53,18 @@ public class LunaTitlePane extends BaseTitlePane {
         g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
     }
 
-    public void paintComponent(Graphics g) {
-        if (getFrame() != null) {
-            setState(DecorationHelper.getExtendedState(getFrame()));
+    public void paintText(Graphics g, int x, int y, String title) {
+        x += paintIcon(g, x, y);
+        if (isActive()) {
+            g.setColor(ColorHelper.brighter(AbstractLookAndFeel.getTheme().getWindowBorderColor(), 10));
+            JTattooUtilities.drawString(rootPane, g, title, x - 1, y - 2);
+            g.setColor(ColorHelper.darker(AbstractLookAndFeel.getTheme().getWindowBorderColor(), 25));
+            JTattooUtilities.drawString(rootPane, g, title, x + 1, y);
+            g.setColor(AbstractLookAndFeel.getWindowTitleForegroundColor());
+        } else {
+            g.setColor(AbstractLookAndFeel.getWindowInactiveTitleForegroundColor());
         }
-
-        paintBackground(g);
-
-        boolean leftToRight = isLeftToRight();
-        boolean isSelected = (window == null) ? true : JTattooUtilities.isWindowActive(window);
-
-        Color foreground = AbstractLookAndFeel.getWindowInactiveTitleForegroundColor();
-        if (isSelected) {
-            foreground = AbstractLookAndFeel.getWindowTitleForegroundColor();
-        }
-
-        int width = getWidth();
-        int height = getHeight();
-        int titleWidth = width - buttonsWidth - 4;
-        int xOffset = leftToRight ? 2 : width - 2;
-        if (getWindowDecorationStyle() == BaseRootPaneUI.FRAME) {
-            int mw = menuBar.getWidth() + 2;
-            xOffset += leftToRight ? mw : -mw;
-            titleWidth -= height;
-        }
-
-        g.setFont(getFont());
-        FontMetrics fm = g.getFontMetrics();
-        String frameTitle = JTattooUtilities.getClippedText(getTitle(), fm, titleWidth);
-        if (frameTitle != null) {
-            int titleLength = fm.stringWidth(frameTitle);
-            int yOffset = ((height - fm.getHeight()) / 2) + fm.getAscent() - 1;
-            if (!leftToRight) {
-                xOffset -= titleLength;
-            }
-
-            if (isSelected) {
-                g.setColor(LunaLookAndFeel.getTheme().getWindowBorderColor());
-                JTattooUtilities.drawString(rootPane, g, frameTitle, xOffset - 1, yOffset - 1);
-                JTattooUtilities.drawString(rootPane, g, frameTitle, xOffset + 1, yOffset + 1);
-            }
-
-            g.setColor(foreground);
-            JTattooUtilities.drawString(rootPane, g, frameTitle, xOffset, yOffset);
-            paintText(g, xOffset, yOffset, frameTitle);
-        }
+        JTattooUtilities.drawString(rootPane, g, title, x, y - 1);
     }
+
 }

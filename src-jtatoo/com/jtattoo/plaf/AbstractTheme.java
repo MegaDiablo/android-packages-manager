@@ -1,13 +1,36 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+
 package com.jtattoo.plaf;
 
-import java.io.*;
-import java.util.*;
-import java.awt.*;
-import javax.swing.plaf.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.RenderingHints;
+import java.io.FileInputStream;
+import java.util.Properties;
+import javax.swing.Icon;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.metal.MetalTheme;
 
 public abstract class AbstractTheme extends MetalTheme {
@@ -39,6 +62,10 @@ public abstract class AbstractTheme extends MetalTheme {
 
     protected static String internalName = "Default";
     protected static boolean windowDecoration = false;
+    protected static boolean macStyleWindowDecoration = false;
+    protected static boolean centerWindowTitle = false;
+    protected static boolean linuxStyleScrollBar = false;
+    protected static boolean macStyleScrollBar = false;
     protected static boolean dynamicLayout = false;
     protected static boolean textShadow = false;
     protected static boolean textAntiAliasing = false;
@@ -47,6 +74,7 @@ public abstract class AbstractTheme extends MetalTheme {
     protected static boolean brightMode = false;
     protected static boolean showFocusFrame = false;
     protected static boolean drawSquareButtons = false;
+    protected static boolean toolbarDecorated = true;
 
     protected static boolean menuOpaque = true;
     protected static float menuAlpha = 0.9f;
@@ -70,9 +98,11 @@ public abstract class AbstractTheme extends MetalTheme {
     protected static ColorUIResource selectionBackgroundColorLight = null;
     protected static ColorUIResource selectionBackgroundColorDark = null;
     protected static ColorUIResource selectionBackgroundColor = null;
+    protected static ColorUIResource rolloverForegroundColor = null;
     protected static ColorUIResource rolloverColor = null;
     protected static ColorUIResource rolloverColorLight = null;
     protected static ColorUIResource rolloverColorDark = null;
+    protected static ColorUIResource pressedForegroundColor = null;
     protected static ColorUIResource focusColor = null;
     protected static ColorUIResource focusCellColor = null;
     protected static ColorUIResource focusFrameColor = null;
@@ -80,6 +110,7 @@ public abstract class AbstractTheme extends MetalTheme {
     protected static ColorUIResource focusForegroundColor = null;
     protected static ColorUIResource frameColor = null;
     protected static ColorUIResource gridColor = null;
+    protected static ColorUIResource shadowColor = null;
     protected static ColorUIResource buttonForegroundColor = null;
     protected static ColorUIResource buttonBackgroundColor = null;
     protected static ColorUIResource buttonColorLight = null;
@@ -122,6 +153,10 @@ public abstract class AbstractTheme extends MetalTheme {
     protected static ColorUIResource desktopColor = null;
     protected static ColorUIResource tooltipForegroundColor = null;
     protected static ColorUIResource tooltipBackgroundColor = null;
+    protected static int tooltipBorderSize = 6;
+    protected static int tooltipShadowSize = 6;
+    protected static boolean tooltipCastShadow = false;
+
     protected static Color DEFAULT_COLORS[] = null;
     protected static Color HIDEFAULT_COLORS[] = null;
     protected static Color ACTIVE_COLORS[] = null;
@@ -146,6 +181,17 @@ public abstract class AbstractTheme extends MetalTheme {
     protected static Color SLIDER_COLORS[] = null;
     protected static Color PROGRESSBAR_COLORS[] = null;
 
+    protected static String textureSet = "Default";
+    protected static boolean darkTexture = true;
+    protected static Icon windowTexture = null;
+    protected static Icon backgroundTexture = null;
+    protected static Icon alterBackgroundTexture = null;
+    protected static Icon selectedTexture = null;
+    protected static Icon rolloverTexture = null;
+    protected static Icon pressedTexture = null;
+    protected static Icon disabledTexture = null;
+    protected static Icon menubarTexture = null;
+
     public AbstractTheme() {
         super();
     }
@@ -168,6 +214,10 @@ public abstract class AbstractTheme extends MetalTheme {
 
     public void setUpColor() {
         windowDecoration = true;
+        macStyleWindowDecoration = JTattooUtilities.isMac();
+        centerWindowTitle = JTattooUtilities.isWindows() && JTattooUtilities.getOSVersion() >= 6.2;
+        linuxStyleScrollBar = !JTattooUtilities.isWindows();
+        macStyleScrollBar = JTattooUtilities.isMac();
         dynamicLayout = true;
         textShadow = false;
         textAntiAliasing = false;
@@ -176,6 +226,7 @@ public abstract class AbstractTheme extends MetalTheme {
         brightMode = false;
         showFocusFrame = false;
         drawSquareButtons = false;
+        toolbarDecorated = true;
         menuOpaque = true;
         menuAlpha = 0.9f;
         logoString = "JTattoo";
@@ -207,10 +258,14 @@ public abstract class AbstractTheme extends MetalTheme {
         focusForegroundColor = black;
         frameColor = darkGray;
         gridColor = gray;
+        shadowColor = new ColorUIResource(0, 24, 0);
 
+        rolloverForegroundColor = black;
         rolloverColor = extraLightGray;
         rolloverColorLight = white;
         rolloverColorDark = extraLightGray;
+
+        pressedForegroundColor = black;
 
         buttonForegroundColor = black;
         buttonBackgroundColor = lightGray;
@@ -259,6 +314,12 @@ public abstract class AbstractTheme extends MetalTheme {
         desktopColor = darkBlue;
         tooltipForegroundColor = black;
         tooltipBackgroundColor = yellow;
+        tooltipBorderSize = 6;
+        tooltipShadowSize = 6;
+        tooltipCastShadow = false;
+
+        textureSet = "Default";
+        darkTexture = true;
     }
 
     public void setUpColorArrs() {
@@ -291,6 +352,18 @@ public abstract class AbstractTheme extends MetalTheme {
         if (props != null) {
             if (props.getProperty("windowDecoration") != null) {
                 windowDecoration = props.getProperty("windowDecoration").trim().equalsIgnoreCase("on");
+            }
+            if (props.getProperty("macStyleWindowDecoration") != null) {
+                macStyleWindowDecoration = props.getProperty("macStyleWindowDecoration").trim().equalsIgnoreCase("on");
+            }
+            if (props.getProperty("centerWindowTitle") != null) {
+                centerWindowTitle = props.getProperty("centerWindowTitle").trim().equalsIgnoreCase("on");
+            }
+            if (props.getProperty("linuxStyleScrollBar") != null) {
+                linuxStyleScrollBar = props.getProperty("linuxStyleScrollBar").trim().equalsIgnoreCase("on");
+            }
+            if (props.getProperty("macStyleScrollBar") != null) {
+                macStyleScrollBar = props.getProperty("macStyleScrollBar").trim().equalsIgnoreCase("on");
             }
             if (props.getProperty("dynamicLayout") != null) {
                 dynamicLayout = props.getProperty("dynamicLayout").trim().equalsIgnoreCase("on");
@@ -333,6 +406,9 @@ public abstract class AbstractTheme extends MetalTheme {
             }
             if (props.getProperty("drawSquareButtons") != null) {
                 drawSquareButtons = props.getProperty("drawSquareButtons").trim().equalsIgnoreCase("on");
+            }
+            if (props.getProperty("toolbarDecorated") != null) {
+                toolbarDecorated = props.getProperty("toolbarDecorated").trim().equalsIgnoreCase("on");
             }
             if (props.getProperty("menuOpaque") != null) {
                 menuOpaque = props.getProperty("menuOpaque").trim().equalsIgnoreCase("on");
@@ -404,6 +480,9 @@ public abstract class AbstractTheme extends MetalTheme {
             if (props.getProperty("gridColor") != null) {
                 gridColor = createColor(props.getProperty("gridColor"), gridColor);
             }
+            if (props.getProperty("shadowColor") != null) {
+                shadowColor = createColor(props.getProperty("shadowColor"), shadowColor);
+            }
             if (props.getProperty("focusColor") != null) {
                 focusColor = createColor(props.getProperty("focusColor"), focusColor);
             }
@@ -420,6 +499,9 @@ public abstract class AbstractTheme extends MetalTheme {
                 focusForegroundColor = createColor(props.getProperty("focusForegroundColor"), focusForegroundColor);
             }
 
+            if (props.getProperty("rolloverForegroundColor") != null) {
+                rolloverForegroundColor = createColor(props.getProperty("rolloverForegroundColor"), rolloverForegroundColor);
+            }
             if (props.getProperty("rolloverColor") != null) {
                 rolloverColor = createColor(props.getProperty("rolloverColor"), rolloverColor);
             }
@@ -428,6 +510,9 @@ public abstract class AbstractTheme extends MetalTheme {
             }
             if (props.getProperty("rolloverColorDark") != null) {
                 rolloverColorDark = createColor(props.getProperty("rolloverColorDark"), rolloverColorDark);
+            }
+            if (props.getProperty("pressedForegroundColor") != null) {
+                pressedForegroundColor = createColor(props.getProperty("pressedForegroundColor"), pressedForegroundColor);
             }
 
             if (props.getProperty("buttonForegroundColor") != null) {
@@ -454,6 +539,12 @@ public abstract class AbstractTheme extends MetalTheme {
             }
             if (props.getProperty("controlColorDark") != null) {
                 controlColorDark = createColor(props.getProperty("controlColorDark"), controlColorDark);
+            }
+            if (props.getProperty("controlHighlightColor") != null) {
+                controlHighlightColor = createColor(props.getProperty("controlHighlightColor"), controlHighlightColor);
+            }
+            if (props.getProperty("controlShadowColor") != null) {
+                controlShadowColor = createColor(props.getProperty("controlShadowColor"), controlShadowColor);
             }
             if (props.getProperty("controlDarkShadowColor") != null) {
                 controlDarkShadowColor = createColor(props.getProperty("controlDarkShadowColor"), controlDarkShadowColor);
@@ -543,6 +634,10 @@ public abstract class AbstractTheme extends MetalTheme {
             } else {
                 tabAreaBackgroundColor = backgroundColor;
             }
+            if (props.getProperty("tabSelectionForegroundColor") != null) {
+                tabSelectionForegroundColor = createColor(props.getProperty("tabSelectionForegroundColor"), tabSelectionForegroundColor);
+            }
+
             if (props.getProperty("desktopColor") != null) {
                 desktopColor = createColor(props.getProperty("desktopColor"), desktopColor);
             }
@@ -551,6 +646,70 @@ public abstract class AbstractTheme extends MetalTheme {
             }
             if (props.getProperty("tooltipBackgroundColor") != null) {
                 tooltipBackgroundColor = createColor(props.getProperty("tooltipBackgroundColor"), tooltipBackgroundColor);
+            }
+            if (props.getProperty("tooltipBorderSize") != null) {
+                tooltipBorderSize = createInt(props.getProperty("tooltipBorderSize"), tooltipBorderSize);
+            }
+            if (props.getProperty("tooltipShadowSize") != null) {
+                tooltipShadowSize = createInt(props.getProperty("tooltipShadowSize"), tooltipShadowSize);
+            }
+            if (props.getProperty("tooltipCastShadow") != null) {
+                tooltipCastShadow = props.getProperty("tooltipCastShadow").trim().equalsIgnoreCase("on");
+            }
+
+            if (props.getProperty("textureSet") != null) {
+                textureSet = props.getProperty("textureSet");
+            }
+            if (props.getProperty("darkTexture") != null) {
+                darkTexture = props.getProperty("darkTexture").trim().equalsIgnoreCase("on");
+            }
+            if (props.get("windowTexture") != null) {
+                Object texture = props.get("windowTexture");
+                if (texture instanceof Icon) {
+                    windowTexture = (Icon)texture;
+                }
+            }
+            if (props.get("backgroundTexture") != null) {
+                Object texture = props.get("backgroundTexture");
+                if (texture instanceof Icon) {
+                    backgroundTexture = (Icon)texture;
+                }
+            }
+            if (props.get("alterBackgroundTexture") != null) {
+                Object texture = props.get("alterBackgroundTexture");
+                if (texture instanceof Icon) {
+                    alterBackgroundTexture = (Icon)texture;
+                }
+            }
+            if (props.get("selectedTexture") != null) {
+                Object texture = props.get("selectedTexture");
+                if (texture instanceof Icon) {
+                    selectedTexture = (Icon)texture;
+                }
+            }
+            if (props.get("rolloverTexture") != null) {
+                Object texture = props.get("rolloverTexture");
+                if (texture instanceof Icon) {
+                    rolloverTexture = (Icon)texture;
+                }
+            }
+            if (props.get("pressedTexture") != null) {
+                Object texture = props.get("pressedTexture");
+                if (texture instanceof Icon) {
+                    pressedTexture = (Icon)texture;
+                }
+            }
+            if (props.get("disabledTexture") != null) {
+                Object texture = props.get("disabledTexture");
+                if (texture instanceof Icon) {
+                    disabledTexture = (Icon)texture;
+                }
+            }
+            if (props.get("menubarTexture") != null) {
+                Object texture = props.get("menubarTexture");
+                if (texture instanceof Icon) {
+                    menubarTexture = (Icon)texture;
+                }
             }
         }
     }
@@ -607,6 +766,16 @@ public abstract class AbstractTheme extends MetalTheme {
         return color;
     }
 
+    protected static int createInt(String intProp, int defaultValue) {
+        int val = defaultValue;
+        try {
+            val = Integer.parseInt(intProp);
+        } catch (Exception ex) {
+            System.out.println("Exception while parsing color: " + intProp);
+        }
+        return val;
+    }
+    
     public FontUIResource getControlTextFont() {
         if (controlFont == null) {
             if (JTattooUtilities.isLinux() && JTattooUtilities.isHiresScreen()) {
@@ -722,20 +891,6 @@ public abstract class AbstractTheme extends MetalTheme {
         return controlShadowColor;
     }
 
-    /*
-    public ColorUIResource getControl()
-    { return red; }
-    public ColorUIResource getControlShadow()
-    { return blue; }
-    public ColorUIResource getControlDarkShadow()
-    { return green; }
-    public ColorUIResource getControlInfo()
-    { return yellow; }
-    public ColorUIResource getControlHighlight()
-    { return orange; }
-    public ColorUIResource getControlDisabled()
-    { return cyan;}
-     */
     public ColorUIResource getPrimaryControl() {
         return extraLightGray;
     }
@@ -777,6 +932,22 @@ public abstract class AbstractTheme extends MetalTheme {
         return windowDecoration;
     }
 
+    public boolean isCenterWindowTitleOn() {
+        return centerWindowTitle;
+    }
+    
+    public boolean isMacStyleWindowDecorationOn() {
+        return macStyleWindowDecoration;
+    }
+
+    public boolean isLinuxStyleScrollBarOn() {
+        return linuxStyleScrollBar;
+    }
+    
+    public boolean isMacStyleScrollBarOn() {
+        return macStyleScrollBar;
+    }
+    
     public boolean isDynamicLayout() {
         return dynamicLayout;
     }
@@ -784,7 +955,7 @@ public abstract class AbstractTheme extends MetalTheme {
     public boolean isTextShadowOn() {
         return textShadow;
     }
-    
+
     public boolean isTextAntiAliasingOn() {
         if (JTattooUtilities.getJavaVersion() < 1.4) {
             return false;
@@ -833,6 +1004,10 @@ public abstract class AbstractTheme extends MetalTheme {
 
     public boolean doDrawSquareButtons() {
         return drawSquareButtons;
+    }
+
+    public boolean isToolbarDecorated() {
+        return toolbarDecorated;
     }
 
     public boolean isMenuOpaque() {
@@ -903,6 +1078,10 @@ public abstract class AbstractTheme extends MetalTheme {
         return gridColor;
     }
 
+    public ColorUIResource getShadowColor() {
+        return shadowColor;
+    }
+
     public ColorUIResource getFocusColor() {
         return focusColor;
     }
@@ -923,6 +1102,10 @@ public abstract class AbstractTheme extends MetalTheme {
         return focusForegroundColor;
     }
 
+    public ColorUIResource getRolloverForegroundColor() {
+        return rolloverForegroundColor;
+    }
+
     public ColorUIResource getRolloverColor() {
         return rolloverColor;
     }
@@ -933,6 +1116,10 @@ public abstract class AbstractTheme extends MetalTheme {
 
     public ColorUIResource getRolloverColorDark() {
         return rolloverColorDark;
+    }
+
+    public ColorUIResource getPressedForegroundColor() {
+        return pressedForegroundColor;
     }
 
     public ColorUIResource getButtonForegroundColor() {
@@ -1099,6 +1286,18 @@ public abstract class AbstractTheme extends MetalTheme {
         return tooltipBackgroundColor;
     }
 
+    public int getTooltipBorderSize() {
+        return Math.max(0, Math.min(8, tooltipBorderSize));
+    }
+    
+    public int getTooltipShadowSize() {
+        return Math.max(0, Math.min(8, tooltipShadowSize));
+    }
+
+    public boolean isTooltipCastShadow() {
+        return tooltipCastShadow;
+    }
+    
     public Color[] getDefaultColors() {
         return DEFAULT_COLORS;
     }
@@ -1134,7 +1333,7 @@ public abstract class AbstractTheme extends MetalTheme {
     public Color[] getMenuSelectionColors() {
         return MENU_SELECTION_COLORS;
     }
-    
+
     public Color[] getPressedColors() {
         return PRESSED_COLORS;
     }
@@ -1189,5 +1388,45 @@ public abstract class AbstractTheme extends MetalTheme {
 
     public Color[] getProgressBarColors() {
         return PROGRESSBAR_COLORS;
+    }
+
+    public String getTextureSet() {
+        return textureSet;
+    }
+
+    public boolean isDarkTexture() {
+        return darkTexture;
+    }
+
+    public Icon getWindowTexture() {
+        return windowTexture;
+    }
+
+    public Icon getBackgroundTexture() {
+        return backgroundTexture;
+    }
+
+    public Icon getAlterBackgroundTexture() {
+        return alterBackgroundTexture;
+    }
+
+    public Icon getSelectedTexture() {
+        return selectedTexture;
+    }
+
+    public Icon getRolloverTexture() {
+        return rolloverTexture;
+    }
+
+    public Icon getPressedTexture() {
+        return pressedTexture;
+    }
+
+    public Icon getDisabledTexture() {
+        return disabledTexture;
+    }
+
+    public Icon getMenubarTexture() {
+        return menubarTexture;
     }
 }

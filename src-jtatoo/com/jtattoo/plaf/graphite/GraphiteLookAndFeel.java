@@ -1,14 +1,31 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
-
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.graphite;
 
-import java.util.*;
-import javax.swing.*;
-
 import com.jtattoo.plaf.*;
+import java.util.*;
+import javax.swing.UIDefaults;
 
 /**
  * @author Michael Hagen
@@ -29,7 +46,7 @@ public class GraphiteLookAndFeel extends AbstractLookAndFeel {
     private static final Properties blueSmallFontProps = new Properties();
     private static final Properties blueMediumFontProps = new Properties();
     private static final Properties blueLargeFontProps = new Properties();
-    
+
     static {
         smallFontProps.setProperty("controlTextFont", "Dialog 12");
         smallFontProps.setProperty("systemTextFont", "Dialog 12");
@@ -51,7 +68,7 @@ public class GraphiteLookAndFeel extends AbstractLookAndFeel {
         largeFontProps.setProperty("menuTextFont", "Dialog 16");
         largeFontProps.setProperty("windowTitleFont", "Dialog bold 16");
         largeFontProps.setProperty("subTextFont", "Dialog 14");
-        
+
         greenProps.setProperty("windowTitleForegroundColor", "255 255 255");
         greenProps.setProperty("windowTitleBackgroundColor", "0 96 52");
         greenProps.setProperty("windowTitleColorLight", "0 136 57");
@@ -118,8 +135,8 @@ public class GraphiteLookAndFeel extends AbstractLookAndFeel {
         blueProps.setProperty("toolbarColorLight", "228 235 243");
         blueProps.setProperty("toolbarColorDark", "188 204 226");
 
-        String key = null;
-        String value = null;
+        String key;
+        String value;
         Iterator iter = smallFontProps.keySet().iterator();
         while (iter.hasNext()) {
             key = (String)iter.next();
@@ -135,7 +152,7 @@ public class GraphiteLookAndFeel extends AbstractLookAndFeel {
             greenMediumFontProps.setProperty(key, value);
             blueMediumFontProps.setProperty(key, value);
         }
-        
+
         iter = largeFontProps.keySet().iterator();
         while (iter.hasNext()) {
             key = (String)iter.next();
@@ -161,17 +178,17 @@ public class GraphiteLookAndFeel extends AbstractLookAndFeel {
             blueMediumFontProps.setProperty(key, value);
             blueLargeFontProps.setProperty(key, value);
         }
-        
+
         themesList.add("Default");
         themesList.add("Small-Font");
         themesList.add("Medium-Font");
         themesList.add("Large-Font");
-        
+
         themesList.add("Green");
         themesList.add("Green-Small-Font");
         themesList.add("Green-Medium-Font");
         themesList.add("Green-Large-Font");
-        
+
         themesList.add("Blue");
         themesList.add("Blue-Small-Font");
         themesList.add("Blue-Medium-Font");
@@ -186,39 +203,45 @@ public class GraphiteLookAndFeel extends AbstractLookAndFeel {
         themesMap.put("Green-Small-Font", greenSmallFontProps);
         themesMap.put("Green-Medium-Font", greenMediumFontProps);
         themesMap.put("Green-Large-Font", greenLargeFontProps);
-        
+
         themesMap.put("Blue", blueProps);
         themesMap.put("Blue-Small-Font", blueSmallFontProps);
         themesMap.put("Blue-Medium-Font", blueMediumFontProps);
         themesMap.put("Blue-Large-Font", blueLargeFontProps);
     }
-    
-    public static java.util.List getThemes() { 
+
+    public static java.util.List getThemes() {
         return themesList;
     }
-    
+
     public static Properties getThemeProperties(String name) {
         return ((Properties)themesMap.get(name));
     }
-    
+
     public static void setTheme(String name) {
-        if (myTheme != null)
-            myTheme.setInternalName(name);
         setTheme((Properties)themesMap.get(name));
+        if (myTheme != null) {
+            AbstractTheme.setInternalName(name);
+        }
     }
-    
+
     public static void setTheme(String name, String licenseKey, String logoString) {
         Properties props = (Properties)themesMap.get(name);
-        props.put("licenseKey", licenseKey);
-        props.put("logoString", logoString); 
-        if (myTheme != null)
-            myTheme.setInternalName(name);
-        setTheme(props);
+        if (props != null) {
+            props.put("licenseKey", licenseKey);
+            props.put("logoString", logoString);
+            setTheme(props);
+            if (myTheme != null) {
+                AbstractTheme.setInternalName(name);
+            }
+        }
     }
-    
+
     public static void setTheme(Properties themesProps) {
-        if (myTheme == null)
+        currentThemeName = "graphiteTheme";
+        if (myTheme == null) {
            myTheme = new GraphiteDefaultTheme();
+        }
         if ((myTheme != null) && (themesProps != null)) {
             myTheme.setUpColor();
             myTheme.setProperties(themesProps);
@@ -226,40 +249,43 @@ public class GraphiteLookAndFeel extends AbstractLookAndFeel {
             AbstractLookAndFeel.setTheme(myTheme);
         }
     }
-    
+
     public static void setCurrentTheme(Properties themesProps) {
         setTheme(themesProps);
     }
-    
+
     public String getName()
     { return "Graphite"; }
-    
+
     public String getID()
     { return "Graphite"; }
-    
+
     public String getDescription()
     { return "The Graphite Look and Feel"; }
-    
+
     public boolean isNativeLookAndFeel()
     { return false; }
-    
+
     public boolean isSupportedLookAndFeel()
     { return true; }
-    
+
     public AbstractBorderFactory getBorderFactory()
     { return GraphiteBorderFactory.getInstance(); }
-    
+
     public AbstractIconFactory getIconFactory()
     { return GraphiteIconFactory.getInstance(); }
-    
+
     protected void createDefaultTheme() {
         if (myTheme == null) {
             myTheme = new GraphiteDefaultTheme();
         }
         setTheme(myTheme);
     }
-    
+
     protected void initClassDefaults(UIDefaults table) {
+        if (!"graphiteTheme".equals(currentThemeName)) {
+            setTheme("Default");
+        }
         super.initClassDefaults(table);
         Object[] uiDefaults = {
             // BaseLookAndFeel classes
@@ -286,7 +312,8 @@ public class GraphiteLookAndFeel extends AbstractLookAndFeel {
             "MenuBarUI", BaseMenuBarUI.class.getName(),
             "PopupMenuUI", BasePopupMenuUI.class.getName(),
             "PopupMenuSeparatorUI", BaseSeparatorUI.class.getName(),
-            
+            "DesktopPaneUI", BaseDesktopPaneUI.class.getName(),
+
             // GraphiteLookAndFeel classes
             "RadioButtonUI", GraphiteRadioButtonUI.class.getName(),
             "CheckBoxUI", GraphiteCheckBoxUI.class.getName(),
@@ -306,5 +333,5 @@ public class GraphiteLookAndFeel extends AbstractLookAndFeel {
             table.put("SpinnerUI", BaseSpinnerUI.class.getName());
         }
     }
-    
+
 }

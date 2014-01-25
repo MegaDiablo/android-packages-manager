@@ -1,13 +1,33 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+
 package com.jtattoo.plaf;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicMenuItemUI;
 
 /**
  * @author Michael Hagen
@@ -42,31 +62,40 @@ public class BaseMenuItemUI extends BasicMenuItemUI {
     }
 
     protected void paintBackground(Graphics g, JComponent c, int x, int y, int w, int h) {
-        JMenuItem b = (JMenuItem) c;
-        ButtonModel model = b.getModel();
+        JMenuItem mi = (JMenuItem) c;
+        Color backColor = mi.getBackground();
+        if (backColor instanceof UIResource) {
+            backColor = AbstractLookAndFeel.getMenuBackgroundColor();
+        }
+        
+        ButtonModel model = mi.getModel();
         if (model.isArmed() || (c instanceof JMenu && model.isSelected())) {
             g.setColor(AbstractLookAndFeel.getMenuSelectionBackgroundColor());
             g.fillRect(x, y, w, h);
+            g.setColor(AbstractLookAndFeel.getMenuSelectionForegroundColor());
         } else if (!AbstractLookAndFeel.getTheme().isMenuOpaque()) {
             Graphics2D g2D = (Graphics2D) g;
-            Composite composite = g2D.getComposite();
+            Composite savedComposite = g2D.getComposite();
             AlphaComposite alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, AbstractLookAndFeel.getTheme().getMenuAlpha());
             g2D.setComposite(alpha);
-            g.setColor(AbstractLookAndFeel.getMenuBackgroundColor());
-            g.fillRect(x, y, w, h);
-            g2D.setComposite(composite);
+            g2D.setColor(backColor);
+            g2D.fillRect(x, y, w, h);
+            g.setColor(AbstractLookAndFeel.getMenuForegroundColor());
+            g2D.setComposite(savedComposite);
         } else {
-            g.setColor(AbstractLookAndFeel.getMenuBackgroundColor());
+            g.setColor(backColor);
             g.fillRect(x, y, w, h);
-        }
-        if (menuItem.isSelected() && menuItem.isArmed()) {
-            g.setColor(AbstractLookAndFeel.getMenuSelectionForegroundColor());
-        } else {
             g.setColor(AbstractLookAndFeel.getMenuForegroundColor());
         }
     }
 
     protected void paintText(Graphics g, JMenuItem menuItem, Rectangle textRect, String text) {
+        Color foreColor = menuItem.getForeground();
+        if (menuItem.isSelected() && menuItem.isArmed()) {
+            foreColor = AbstractLookAndFeel.getMenuSelectionForegroundColor();
+        } else if (foreColor instanceof UIResource) {
+            foreColor = AbstractLookAndFeel.getMenuForegroundColor();
+        }
         Graphics2D g2D = (Graphics2D) g;
         Object savedRenderingHint = null;
         if (AbstractLookAndFeel.getTheme().isTextAntiAliasingOn()) {
@@ -74,9 +103,9 @@ public class BaseMenuItemUI extends BasicMenuItemUI {
             g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, AbstractLookAndFeel.getTheme().getTextAntiAliasingHint());
         }
         if (menuItem.isSelected() && menuItem.isArmed()) {
-            g.setColor(AbstractLookAndFeel.getMenuSelectionForegroundColor());
+            g2D.setColor(foreColor);
         } else {
-            g.setColor(AbstractLookAndFeel.getMenuForegroundColor());
+            g2D.setColor(foreColor);
         }
         super.paintText(g, menuItem, textRect, text);
         if (AbstractLookAndFeel.getTheme().isTextAntiAliasingOn()) {

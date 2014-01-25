@@ -1,27 +1,38 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.bernstein;
 
-import java.awt.*;
+import com.jtattoo.plaf.*;
+import java.awt.Component;
+import java.awt.Graphics;
 import javax.swing.*;
 import javax.swing.plaf.UIResource;
-import com.jtattoo.plaf.*;
 
 /**
  * @author Michael Hagen
  */
 public class BernsteinIcons extends BaseIcons {
-
-    private static Icon radioButtonIcon;
-    private static Icon checkBoxIcon;
-    private static Icon thumbIcon = null;
-    private static Icon thumbIconRollover = null;
-    private static Icon splitterUpArrowIcon = null;
-    private static Icon splitterDownArrowIcon = null;
-    private static Icon splitterLeftArrowIcon = null;
-    private static Icon splitterRightArrowIcon = null;
 
     public static Icon getRadioButtonIcon() {
         if (radioButtonIcon == null) {
@@ -38,31 +49,31 @@ public class BernsteinIcons extends BaseIcons {
     }
 
     public static Icon getThumbHorIcon() {
-        if (thumbIcon == null) {
-            thumbIcon = new LazyImageIcon("bernstein/icons/radio.gif");
+        if (thumbHorIcon == null) {
+            thumbHorIcon = new LazyImageIcon("bernstein/icons/radio.gif");
         }
-        return thumbIcon;
+        return thumbHorIcon;
     }
 
     public static Icon getThumbVerIcon() {
-        if (thumbIcon == null) {
-            thumbIcon = new LazyImageIcon("bernstein/icons/radio.gif");
+        if (thumbVerIcon == null) {
+            thumbVerIcon = new LazyImageIcon("bernstein/icons/radio.gif");
         }
-        return thumbIcon;
+        return thumbVerIcon;
     }
 
     public static Icon getThumbHorIconRollover() {
-        if (thumbIconRollover == null) {
-            thumbIconRollover = new LazyImageIcon("bernstein/icons/radio_rollover.gif");
+        if (thumbHorIconRollover == null) {
+            thumbHorIconRollover = new LazyImageIcon("bernstein/icons/radio_rollover.gif");
         }
-        return thumbIconRollover;
+        return thumbHorIconRollover;
     }
 
     public static Icon getThumbVerIconRollover() {
-        if (thumbIconRollover == null) {
-            thumbIconRollover = new LazyImageIcon("bernstein/icons/radio_rollover.gif");
+        if (thumbVerIconRollover == null) {
+            thumbVerIconRollover = new LazyImageIcon("bernstein/icons/radio_rollover.gif");
         }
-        return thumbIconRollover;
+        return thumbVerIconRollover;
     }
 
     public static Icon getSplitterUpArrowIcon() {
@@ -118,19 +129,19 @@ public class BernsteinIcons extends BaseIcons {
             if (!JTattooUtilities.isLeftToRight(c)) {
                 x += 2;
             }
-            JCheckBox cb = (JCheckBox) c;
-            ButtonModel model = cb.getModel();
-            if (cb.isEnabled()) {
+            AbstractButton button = (AbstractButton) c;
+            ButtonModel model = button.getModel();
+            if (button.isEnabled()) {
                 if (model.isPressed() && model.isArmed()) {
                     checkPressedIcon.paintIcon(c, g, x, y);
                 } else if (model.isSelected()) {
-                    if (cb.isRolloverEnabled() && model.isRollover() && !model.isArmed()) {
+                    if (button.isRolloverEnabled() && model.isRollover() && !model.isArmed()) {
                         checkRolloverSelectedIcon.paintIcon(c, g, x, y);
                     } else {
                         checkSelectedIcon.paintIcon(c, g, x, y);
                     }
                 } else {
-                    if (cb.isRolloverEnabled() && model.isRollover() && !model.isArmed()) {
+                    if (button.isRolloverEnabled() && model.isRollover() && !model.isArmed()) {
                         checkRolloverIcon.paintIcon(c, g, x, y);
                     } else {
                         checkIcon.paintIcon(c, g, x, y);
@@ -178,17 +189,17 @@ public class BernsteinIcons extends BaseIcons {
             if (!JTattooUtilities.isLeftToRight(c)) {
                 x += 2;
             }
-            JRadioButton rb = (JRadioButton) c;
-            ButtonModel model = rb.getModel();
-            if (rb.isEnabled()) {
+            AbstractButton button = (AbstractButton) c;
+            ButtonModel model = button.getModel();
+            if (button.isEnabled()) {
                 if (model.isSelected()) {
-                    if (rb.isRolloverEnabled() && model.isRollover()) {
+                    if (button.isRolloverEnabled() && model.isRollover()) {
                         radioRolloverSelectedIcon.paintIcon(c, g, x, y);
                     } else {
                         radioSelectedIcon.paintIcon(c, g, x, y);
                     }
                 } else {
-                    if (rb.isRolloverEnabled() && model.isRollover()) {
+                    if (button.isRolloverEnabled() && model.isRollover()) {
                         radioRolloverIcon.paintIcon(c, g, x, y);
                     } else {
                         radioIcon.paintIcon(c, g, x, y);

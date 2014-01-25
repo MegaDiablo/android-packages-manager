@@ -1,64 +1,86 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.acryl;
 
+import com.jtattoo.plaf.*;
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
-
-import com.jtattoo.plaf.*;
 
 /**
  * @author Michael Hagen
  */
 public class AcrylIcons extends BaseIcons {
 
-    private static Icon iconIcon = null;
-    private static Icon maxIcon = null;
-    private static Icon minIcon = null;
-    private static Icon closeIcon = null;
-    private static Icon treeOpenIcon = null;
-    private static Icon treeClosedIcon = null;
-    private static Icon radioButtonIcon = null;
-    private static Icon checkBoxIcon = null;
-    private static Icon thumbHorIcon = null;
-    private static Icon thumbHorIconRollover = null;
-    private static Icon thumbVerIcon = null;
-    private static Icon thumbVerIconRollover = null;
-
     public static Icon getIconIcon() {
         if (iconIcon == null) {
-            iconIcon = new TitleButtonIcon(TitleButtonIcon.ICON_ICON_TYP);
+            if (AbstractLookAndFeel.getTheme().isMacStyleWindowDecorationOn()) {
+                iconIcon = new MacIconIcon();
+            } else {
+                iconIcon = new TitleButtonIcon(TitleButtonIcon.ICON_ICON_TYP);
+            }
         }
         return iconIcon;
     }
 
     public static Icon getMinIcon() {
         if (minIcon == null) {
-            minIcon = new TitleButtonIcon(TitleButtonIcon.MIN_ICON_TYP);
+            if (AbstractLookAndFeel.getTheme().isMacStyleWindowDecorationOn()) {
+                minIcon = new MacMinIcon();
+            } else {
+                minIcon = new TitleButtonIcon(TitleButtonIcon.MIN_ICON_TYP);
+            }
         }
         return minIcon;
     }
 
     public static Icon getMaxIcon() {
         if (maxIcon == null) {
-            maxIcon = new TitleButtonIcon(TitleButtonIcon.MAX_ICON_TYP);
+            if (AbstractLookAndFeel.getTheme().isMacStyleWindowDecorationOn()) {
+                maxIcon = new MacMaxIcon();
+            } else {
+                maxIcon = new TitleButtonIcon(TitleButtonIcon.MAX_ICON_TYP);
+            }
         }
         return maxIcon;
     }
 
     public static Icon getCloseIcon() {
         if (closeIcon == null) {
-            closeIcon = new TitleButtonIcon(TitleButtonIcon.CLOSE_ICON_TYP);
+            if (AbstractLookAndFeel.getTheme().isMacStyleWindowDecorationOn()) {
+                closeIcon = new MacCloseIcon();
+            } else {
+                closeIcon = new TitleButtonIcon(TitleButtonIcon.CLOSE_ICON_TYP);
+            }
         }
         return closeIcon;
     }
 
     public static Icon getTreeControlIcon(boolean isCollapsed) {
-        if (!AcrylLookAndFeel.getControlColorLight().equals(new ColorUIResource(96, 98, 100))) {
+        if (!AbstractLookAndFeel.getControlColorLight().equals(new ColorUIResource(96, 98, 100))) {
             return BaseIcons.getTreeControlIcon(isCollapsed);
         }
 
@@ -90,7 +112,7 @@ public class AcrylIcons extends BaseIcons {
     }
 
     public static Icon getThumbHorIcon() {
-        if (!AcrylLookAndFeel.getControlColorLight().equals(new ColorUIResource(96, 98, 100))) {
+        if (!AbstractLookAndFeel.getControlColorLight().equals(new ColorUIResource(96, 98, 100))) {
             return BaseIcons.getThumbHorIcon();
         }
 
@@ -101,7 +123,7 @@ public class AcrylIcons extends BaseIcons {
     }
 
     public static Icon getThumbVerIcon() {
-        if (!AcrylLookAndFeel.getControlColorLight().equals(new ColorUIResource(96, 98, 100))) {
+        if (!AbstractLookAndFeel.getControlColorLight().equals(new ColorUIResource(96, 98, 100))) {
             return BaseIcons.getThumbVerIcon();
         }
 
@@ -112,7 +134,7 @@ public class AcrylIcons extends BaseIcons {
     }
 
     public static Icon getThumbHorIconRollover() {
-        if (!AcrylLookAndFeel.getControlColorLight().equals(new ColorUIResource(96, 98, 100))) {
+        if (!AbstractLookAndFeel.getControlColorLight().equals(new ColorUIResource(96, 98, 100))) {
             return BaseIcons.getThumbHorIconRollover();
         }
 
@@ -123,7 +145,7 @@ public class AcrylIcons extends BaseIcons {
     }
 
     public static Icon getThumbVerIconRollover() {
-        if (!AcrylLookAndFeel.getControlColorLight().equals(new ColorUIResource(96, 98, 100))) {
+        if (!AbstractLookAndFeel.getControlColorLight().equals(new ColorUIResource(96, 98, 100))) {
             return BaseIcons.getThumbVerIconRollover();
         }
 
@@ -317,10 +339,9 @@ public class AcrylIcons extends BaseIcons {
             g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2D.setColor(AbstractLookAndFeel.getTheme().getControlShadowColor());
             g2D.drawOval(x + 1, y + 1, WIDTH - 1, HEIGHT - 1);
-            Area clipArea = new Area(savedClip);
-            Area ellipseArea = new Area(new Ellipse2D.Double(x, y, WIDTH, HEIGHT));
-            ellipseArea.intersect(clipArea);
-            g2D.setClip(ellipseArea);
+            Area clipArea = new Area(new Ellipse2D.Double(x, y, WIDTH, HEIGHT));
+            clipArea.intersect(new Area(savedClip));
+            g2D.setClip(clipArea);
             if (b.isEnabled()) {
                 if (b.isRolloverEnabled() && model.isRollover()) {
                     JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getRolloverColors(), x + 1, y + 1, WIDTH - 2, HEIGHT - 2);

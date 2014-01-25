@@ -1,19 +1,38 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
-package com.jtattoo.plaf;
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
+package com.jtattoo.plaf;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
-import javax.swing.border.*;
+import javax.swing.border.Border;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 
 public class BaseComboBoxUI extends BasicComboBoxUI {
 
@@ -62,7 +81,9 @@ public class BaseComboBoxUI extends BasicComboBoxUI {
 
                 public void focusLost(FocusEvent e) {
                     if (comboBox != null) {
-                        comboBox.setBorder(orgBorder);
+                        if (orgBorder instanceof UIResource) {
+                            comboBox.setBorder(orgBorder);
+                        }
                         comboBox.setBackground(orgBackgroundColor);
                     }
                 }
@@ -81,6 +102,10 @@ public class BaseComboBoxUI extends BasicComboBoxUI {
 
     public Dimension getPreferredSize(JComponent c) {
         Dimension size = super.getPreferredSize(c);
+        if (comboBox.getGraphics() != null) {
+            FontMetrics fm = comboBox.getGraphics().getFontMetrics();
+            size.height = Math.max(BaseIcons.getComboBoxIcon().getIconHeight() + 2, fm.getHeight() + 2);
+        }
         return new Dimension(size.width + 2, size.height + 2);
     }
 
@@ -121,26 +146,37 @@ public class BaseComboBoxUI extends BasicComboBoxUI {
 
         public void paint(Graphics g) {
             Dimension size = getSize();
+            Color colors[] = null;
             if (isEnabled()) {
                 if (getModel().isArmed() && getModel().isPressed()) {
-                    JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getPressedColors(), 0, 0, size.width, size.height);
+                    colors = AbstractLookAndFeel.getTheme().getPressedColors();
                 } else if (getModel().isRollover()) {
-                    JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getRolloverColors(), 0, 0, size.width, size.height);
+                    colors = AbstractLookAndFeel.getTheme().getRolloverColors();
                 } else {
-                    JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getButtonColors(), 0, 0, size.width, size.height);
+                    colors = AbstractLookAndFeel.getTheme().getButtonColors();
                 }
             } else {
-                JTattooUtilities.fillHorGradient(g, AbstractLookAndFeel.getTheme().getDisabledColors(), 0, 0, size.width, size.height);
+                colors = AbstractLookAndFeel.getTheme().getDisabledColors();
             }
-            Icon icon = BaseIcons.getComboBoxIcon();
+            JTattooUtilities.fillHorGradient(g, colors, 0, 0, size.width, size.height);
+            
+            boolean inverse = ColorHelper.getGrayValue(colors) < 128;
+            
+            Icon icon = inverse ? BaseIcons.getComboBoxInverseIcon() : BaseIcons.getComboBoxIcon();
             int x = (size.width - icon.getIconWidth()) / 2;
             int y = (size.height - icon.getIconHeight()) / 2;
+            
+            Graphics2D g2D = (Graphics2D) g;
+            Composite savedComposite = g2D.getComposite();
+            g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
             if (getModel().isPressed() && getModel().isArmed()) {
                 icon.paintIcon(this, g, x + 2, y + 1);
             } else {
                 icon.paintIcon(this, g, x + 1, y);
             }
-            paintBorder(g);
+            g2D.setComposite(savedComposite);
+            paintBorder(g2D);
+            
         }
     }
 }

@@ -7,12 +7,12 @@ import javax.swing.LookAndFeel;
  * */
 public enum EnumPLAF {
 
-	AERO {
+	AERO("Aero", null) {
 		private final LookAndFeel LOOK_AND_FEEL =
 				new com.jtattoo.plaf.aero.AeroLookAndFeel();
 
 		@Override
-		protected LookAndFeel getPLookAndFeel() {
+		public LookAndFeel getPLookAndFeel() {
 			return LOOK_AND_FEEL;
 		}
 
@@ -20,18 +20,13 @@ public enum EnumPLAF {
 		public void setThemeDefault() {
 			com.jtattoo.plaf.aero.AeroLookAndFeel.setTheme(DEFAULT);
 		}
-
-		@Override
-		public String getName() {
-			return toString();
-		}
 	},
-	HIFI {
+	HIFI("HiFi", null) {
 		private final LookAndFeel LOOK_AND_FEEL =
 				new com.jtattoo.plaf.hifi.HiFiLookAndFeel();
 
 		@Override
-		protected LookAndFeel getPLookAndFeel() {
+		public LookAndFeel getPLookAndFeel() {
 			return LOOK_AND_FEEL;
 		}
 
@@ -39,18 +34,13 @@ public enum EnumPLAF {
 		public void setThemeDefault() {
 			com.jtattoo.plaf.hifi.HiFiLookAndFeel.setTheme(DEFAULT);
 		}
-
-		@Override
-		public String getName() {
-			return toString();
-		}
 	},
-	ALUMINIUM {
+	ALUMINIUM("Aluminium", null) {
 		private final LookAndFeel LOOK_AND_FEEL =
 				new com.jtattoo.plaf.aluminium.AluminiumLookAndFeel();
 
 		@Override
-		protected LookAndFeel getPLookAndFeel() {
+		public LookAndFeel getPLookAndFeel() {
 			return LOOK_AND_FEEL;
 		}
 
@@ -58,18 +48,13 @@ public enum EnumPLAF {
 		public void setThemeDefault() {
 			com.jtattoo.plaf.aluminium.AluminiumLookAndFeel.setTheme(DEFAULT);
 		}
-
-		@Override
-		public String getName() {
-			return toString();
-		}
 	},
-	FAST {
+	FAST("Fast", null) {
 		private final LookAndFeel LOOK_AND_FEEL =
 				new com.jtattoo.plaf.fast.FastLookAndFeel();
 
 		@Override
-		protected LookAndFeel getPLookAndFeel() {
+		public LookAndFeel getPLookAndFeel() {
 			return LOOK_AND_FEEL;
 		}
 
@@ -77,18 +62,13 @@ public enum EnumPLAF {
 		public void setThemeDefault() {
 			com.jtattoo.plaf.fast.FastLookAndFeel.setTheme(DEFAULT);
 		}
-
-		@Override
-		public String getName() {
-			return toString();
-		}
 	},
-	MCWIN {
+	MCWIN("McWin", null) {
 		private final LookAndFeel LOOK_AND_FEEL =
 				new com.jtattoo.plaf.mcwin.McWinLookAndFeel();
 
 		@Override
-		protected LookAndFeel getPLookAndFeel() {
+		public LookAndFeel getPLookAndFeel() {
 			return LOOK_AND_FEEL;
 		}
 
@@ -96,18 +76,13 @@ public enum EnumPLAF {
 		public void setThemeDefault() {
 			com.jtattoo.plaf.mcwin.McWinLookAndFeel.setTheme(DEFAULT);
 		}
-
-		@Override
-		public String getName() {
-			return toString();
-		}
 	},
-	MINT {
+	MINT("Mint", null) {
 		private final LookAndFeel LOOK_AND_FEEL =
 				new com.jtattoo.plaf.mint.MintLookAndFeel();
 
 		@Override
-		protected LookAndFeel getPLookAndFeel() {
+		public LookAndFeel getPLookAndFeel() {
 			return LOOK_AND_FEEL;
 		}
 
@@ -115,18 +90,13 @@ public enum EnumPLAF {
 		public void setThemeDefault() {
 			com.jtattoo.plaf.mint.MintLookAndFeel.setTheme(DEFAULT);
 		}
-
-		@Override
-		public String getName() {
-			return toString();
-		}
 	},
-	NOIRE {
+	NOIRE("Noire", null) {
 		private final LookAndFeel LOOK_AND_FEEL =
 				new com.jtattoo.plaf.noire.NoireLookAndFeel();
 
 		@Override
-		protected LookAndFeel getPLookAndFeel() {
+		public LookAndFeel getPLookAndFeel() {
 			return LOOK_AND_FEEL;
 		}
 
@@ -134,18 +104,13 @@ public enum EnumPLAF {
 		public void setThemeDefault() {
 			com.jtattoo.plaf.noire.NoireLookAndFeel.setTheme(DEFAULT);
 		}
-
-		@Override
-		public String getName() {
-			return toString();
-		}
 	},
-	SMART {
+	SMART("Smart", null) {
 		private final LookAndFeel LOOK_AND_FEEL =
 				new com.jtattoo.plaf.smart.SmartLookAndFeel();
 
 		@Override
-		protected LookAndFeel getPLookAndFeel() {
+		public LookAndFeel getPLookAndFeel() {
 			return LOOK_AND_FEEL;
 		}
 
@@ -153,18 +118,13 @@ public enum EnumPLAF {
 		public void setThemeDefault() {
 			com.jtattoo.plaf.smart.SmartLookAndFeel.setTheme(DEFAULT);
 		}
-
-		@Override
-		public String getName() {
-			return toString();
-		}
 	},
-	ACRY {
+	ACRY("Acry", null) {
 		private final LookAndFeel LOOK_AND_FEEL =
 				new com.jtattoo.plaf.acryl.AcrylLookAndFeel();
 
 		@Override
-		protected LookAndFeel getPLookAndFeel() {
+		public LookAndFeel getPLookAndFeel() {
 			return LOOK_AND_FEEL;
 		}
 
@@ -172,25 +132,83 @@ public enum EnumPLAF {
 		public void setThemeDefault() {
 			com.jtattoo.plaf.acryl.AcrylLookAndFeel.setTheme(DEFAULT);
 		}
+	},
+	METAL("Metal", null) {
+		private final LookAndFeel LOOK_AND_FEEL =
+				new javax.swing.plaf.metal.MetalLookAndFeel();
 
 		@Override
-		public String getName() {
-			return toString();
+		public LookAndFeel getPLookAndFeel() {
+			return LOOK_AND_FEEL;
+		}
+	},
+	MOTIF("Motif", null) {
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.sun.java.swing.plaf.motif.MotifLookAndFeel();
+
+		@Override
+		public LookAndFeel getPLookAndFeel() {
+			return LOOK_AND_FEEL;
+		}
+	},
+	NIMBUS("Nimbus", null) {
+		private final LookAndFeel LOOK_AND_FEEL =
+				new com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel();
+
+		@Override
+		public LookAndFeel getPLookAndFeel() {
+			return LOOK_AND_FEEL;
+		}
+	},
+	WINDOWS("Windows", "win") {
+		private final LookAndFeel LOOK_AND_FEEL = 
+				new com.sun.java.swing.plaf.windows.WindowsLookAndFeel();
+
+		@Override
+		public LookAndFeel getPLookAndFeel() {
+			return LOOK_AND_FEEL;
+		}
+	},
+	GTK("GTK", "nix") {
+		private final LookAndFeel LOOK_AND_FEEL = 
+				new com.sun.java.swing.plaf.gtk.GTKLookAndFeel();
+
+		@Override
+		public LookAndFeel getPLookAndFeel() {
+			return LOOK_AND_FEEL;
 		}
 	};
 
-	protected abstract LookAndFeel getPLookAndFeel();
+	private String mText;
+	private String mPlatform;
 
+	public abstract LookAndFeel getPLookAndFeel();
 	protected static final String DEFAULT = "Default";
 
-	public abstract String getName();
-
-	public LookAndFeel getLookAndFeel() {
-		return getPLookAndFeel();
+	public String getName() {
+		return toString();
+	}
+	
+	public void setThemeDefault(){
 	}
 
-	public abstract void setThemeDefault();
+	private EnumPLAF() {
+		this.mText = getName();
+	}
 
+	private EnumPLAF(final String pText, final String pPlatform) {
+		this.mText = pText;
+		this.mPlatform = pPlatform;
+	}
+
+	public String getText() {
+		return this.mText;
+	}
+	
+	public String getPlatform() {
+		return this.mPlatform;
+	}
+	
 	public static EnumPLAF findByName(final String pName) {
 		if (pName == null) {
 			return null;

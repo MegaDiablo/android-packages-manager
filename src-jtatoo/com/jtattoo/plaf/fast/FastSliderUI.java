@@ -1,14 +1,32 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.fast;
 
+import com.jtattoo.plaf.*;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.plaf.*;
-
-import com.jtattoo.plaf.*;
+import javax.swing.plaf.ComponentUI;
 
 /**
  * @author Michael Hagen
@@ -92,7 +110,7 @@ public class FastSliderUI extends BaseSliderUI {
                 fillRight = trackRight - 2;
             }
 //            if (slider.isEnabled()) {
-                g.setColor(FastLookAndFeel.getControlBackgroundColor());
+                g.setColor(AbstractLookAndFeel.getControlBackgroundColor());
                 g.fillRect(fillLeft, fillTop, fillRight - fillLeft, fillBottom - fillTop + 1);
 //            } else {
 //                g.setColor(slider.getBackground());
@@ -112,7 +130,7 @@ public class FastSliderUI extends BaseSliderUI {
                 fillBottom = middleOfThumb;
             }
 //            if (slider.isEnabled()) {
-                g.setColor(FastLookAndFeel.getControlBackgroundColor());
+                g.setColor(AbstractLookAndFeel.getControlBackgroundColor());
                 g.fillRect(fillLeft, fillTop, fillRight - fillLeft + 1, fillBottom - fillTop + 1);
 //            } else {
 //                g.setColor(slider.getBackground());
@@ -132,8 +150,8 @@ public class FastSliderUI extends BaseSliderUI {
             int w = WIDTH - 1;
             int h = HEIGHT - 1;
             int dw = WIDTH / 2;
-            Color backColor = FastLookAndFeel.getControlBackgroundColor();
-            Color loColor = FastLookAndFeel.getFrameColor();
+            Color backColor = AbstractLookAndFeel.getControlBackgroundColor();
+            Color loColor = AbstractLookAndFeel.getFrameColor();
             Color hiColor = ColorHelper.brighter(backColor, 40);
             Polygon poly = new Polygon();
             poly.addPoint(x, y);
@@ -168,8 +186,8 @@ public class FastSliderUI extends BaseSliderUI {
             int w = WIDTH - 1;
             int h = HEIGHT - 1;
             int dh = HEIGHT / 2;
-            Color backColor = FastLookAndFeel.getControlBackgroundColor();
-            Color loColor = FastLookAndFeel.getFrameColor();
+            Color backColor = AbstractLookAndFeel.getControlBackgroundColor();
+            Color loColor = AbstractLookAndFeel.getFrameColor();
             Color hiColor = ColorHelper.brighter(backColor, 40);
             Polygon poly = new Polygon();
             poly.addPoint(x, y);

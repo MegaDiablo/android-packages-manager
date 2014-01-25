@@ -1,14 +1,34 @@
 /*
- * Copyright 2005 MH-Software-Entwicklung. All rights reserved.
- * Use is subject to license terms.
- */
+* Copyright (c) 2002 and later by MH Software-Entwicklung. All Rights Reserved.
+*  
+* JTattoo is multiple licensed. If your are an open source developer you can use
+* it under the terms and conditions of the GNU General Public License version 2.0
+* or later as published by the Free Software Foundation.
+*  
+* see: gpl-2.0.txt
+* 
+* If you pay for a license you will become a registered user who could use the
+* software under the terms and conditions of the GNU Lesser General Public License
+* version 2.0 or later with classpath exception as published by the Free Software
+* Foundation.
+* 
+* see: lgpl-2.0.txt
+* see: classpath-exception.txt
+* 
+* Registered users could also use JTattoo under the terms and conditions of the 
+* Apache License, Version 2.0 as published by the Apache Software Foundation.
+*  
+* see: APACHE-LICENSE-2.0.txt
+*/
+ 
 package com.jtattoo.plaf.luna;
 
+import com.jtattoo.plaf.AbstractLookAndFeel;
+import com.jtattoo.plaf.BaseTabbedPaneUI;
 import java.awt.*;
-import javax.swing.*;
-import javax.swing.plaf.*;
-
-import com.jtattoo.plaf.*;
+import javax.swing.JComponent;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 
 /**
  * author Michael Hagen
@@ -26,7 +46,7 @@ public class LunaTabbedPaneUI extends BaseTabbedPaneUI {
         super.installDefaults();
         selectedTabColors = new Color[]{AbstractLookAndFeel.getBackgroundColor()};
         tabAreaInsets = new Insets(2, 6, 2, 6);
-        contentBorderInsets = new Insets(1, 1, 0, 0);
+        contentBorderInsets = new Insets(0, 0, 0, 0);
     }
 
     protected void installComponents() {
@@ -42,18 +62,11 @@ public class LunaTabbedPaneUI extends BaseTabbedPaneUI {
         }
     }
 
-    protected Color getGapColor(int tabIndex) {
-        if (tabIndex == tabPane.getSelectedIndex() && (tabPane.getBackgroundAt(tabIndex) instanceof UIResource)) {
-             return AbstractLookAndFeel.getTheme().getBackgroundColor();
-        }
-        return super.getGapColor(tabIndex);
-    }
-
-    protected Color[] getTabColors(int tabIndex, boolean isSelected) {
+    protected Color[] getTabColors(int tabIndex, boolean isSelected, boolean isRollover) {
         if (isSelected && (tabPane.getBackgroundAt(tabIndex) instanceof UIResource)) {
             return selectedTabColors;
         } else {
-            return super.getTabColors(tabIndex, isSelected);
+            return super.getTabColors(tabIndex, isSelected, isRollover);
         }
     }
 
@@ -61,128 +74,13 @@ public class LunaTabbedPaneUI extends BaseTabbedPaneUI {
         return sepColors;
     }
 
-    protected void paintContentBorder(Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h) {
-        g.setColor(tabAreaBackground);
-        int tabAreaHeight = calculateTabAreaHeight(tabPlacement, runCount, maxTabHeight);
-        int tabAreaWidth = calculateTabAreaWidth(tabPlacement, runCount, maxTabWidth);
-        if (tabPlacement == JTabbedPane.TOP || tabPlacement == JTabbedPane.LEFT) {
-            g.fillRect(x, y, tabAreaWidth, tabAreaHeight);
-        } else if (tabPlacement == JTabbedPane.BOTTOM) {
-            g.fillRect(x, h - tabAreaHeight + 1, w, tabAreaHeight);
-        } else {
-            g.fillRect(w - tabAreaWidth + 1, y, tabAreaWidth, h);
-        }
-        Color loColor = AbstractLookAndFeel.getControlDarkShadow();
-        Color hiColor = AbstractLookAndFeel.getControlHighlight();
-        g.setColor(loColor);
-        switch (tabPlacement) {
-            case TOP: {
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + 1, y + tabAreaHeight - 2, w - 2, y + tabAreaHeight - 2);
-                } else {
-                    g.drawRect(x, y + tabAreaHeight - 1, x + w - 1, h - tabAreaHeight);
-                    g.setColor(hiColor);
-                    g.drawLine(x + 1, y + tabAreaHeight, w - 2, y + tabAreaHeight);
-                    g.drawLine(x + 1, y + tabAreaHeight, x + 1, h - 2);
-                }
-                break;
-            }
-            case LEFT: {
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + tabAreaWidth - 2, y + 1, x + tabAreaWidth - 2, y + h - 2);
-                } else {
-                    g.drawRect(x + tabAreaWidth - 1, y, w - tabAreaWidth, y + h - 1);
-                    g.setColor(hiColor);
-                    g.drawLine(x + tabAreaWidth, y + 1, x + tabAreaWidth, h - 2);
-                    g.drawLine(x + tabAreaWidth, y + 1, w - 2, y + 1);
-                }
-                break;
-            }
-            case BOTTOM: {
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + 1, y + h - tabAreaHeight + 1, w - 2, y + h - tabAreaHeight + 1);
-                } else {
-                    g.drawRect(x, y, x + w - 1, h - tabAreaHeight);
-                    g.setColor(hiColor);
-                    g.drawLine(x + 1, y + 1, w - 2, y + 1);
-                    g.drawLine(x + 1, y + 1, x + 1, h - tabAreaHeight - 1);
-                }
-                break;
-            }
-            case RIGHT: {
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + w - tabAreaWidth + 2, y + 1, x + w - tabAreaWidth + 2, y + h - 2);
-                } else {
-                    g.drawRect(x, y, w - tabAreaWidth, y + h - 1);
-                    g.setColor(hiColor);
-                    g.drawLine(x + 1, y + 1, x + 1, h - 2);
-                    g.drawLine(x + 1, y + 1, w - tabAreaWidth - 1, y + 1);
-                }
-                break;
-            }
-        }
-    }
-
-    protected void paintScrollContentBorder(Graphics g, int tabPlacement, int selectedIndex, int x, int y, int w, int h) {
-        Insets bi = new Insets(0, 0, 0, 0);
-        if (tabPane.getBorder() != null) {
-            bi = tabPane.getBorder().getBorderInsets(tabPane);
-        }
-        g.setColor(AbstractLookAndFeel.getTabAreaBackgroundColor());
-        int tabAreaHeight = calculateTabAreaHeight(tabPlacement, runCount, maxTabHeight);
-        int tabAreaWidth = calculateTabAreaWidth(tabPlacement, runCount, maxTabWidth);
-        if (tabPlacement == JTabbedPane.TOP || tabPlacement == JTabbedPane.LEFT) {
-            g.fillRect(x, y, tabAreaWidth, tabAreaHeight);
-        } else if (tabPlacement == JTabbedPane.BOTTOM) {
-            g.fillRect(x, h - tabAreaHeight + 1, w, tabAreaHeight);
-        } else {
-            g.fillRect(w - tabAreaWidth + 1, y, tabAreaWidth, h);
-        }
-        Color loColor = AbstractLookAndFeel.getControlDarkShadow();
-        Color hiColor = AbstractLookAndFeel.getControlHighlight();
-        g.setColor(loColor);
-        switch (tabPlacement) {
-            case TOP: {
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x, y + tabAreaHeight - 2, w, y + tabAreaHeight - 2);
-                } else {
-                    g.drawLine(x, y + tabAreaHeight - 1 - bi.top, w, y + tabAreaHeight - 1 - bi.top);
-                    g.setColor(hiColor);
-                    g.drawLine(x, y + tabAreaHeight - bi.top, w - 1, y + tabAreaHeight - bi.top);
-                }
-                break;
-            }
-            case LEFT: {
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + tabAreaWidth - 2, y + 1, x + tabAreaWidth - 2, y + h - 2);
-                } else {
-                    g.drawLine(x + tabAreaWidth - 1 - bi.left, y, x + tabAreaWidth - 1 - bi.left, h);
-                    g.setColor(hiColor);
-                    g.drawLine(x + tabAreaWidth - bi.left, y, x + tabAreaWidth - bi.left, h);
-                }
-                break;
-            }
-            case BOTTOM: {
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + 1, y + h - tabAreaHeight + 1, w - 2, y + h - tabAreaHeight + 1);
-                } else {
-                    g.drawLine(x, h - tabAreaHeight + bi.bottom, w, h - tabAreaHeight + bi.bottom);
-                }
-                break;
-            }
-            case RIGHT: {
-                if (tabPane.getBorder() == null) {
-                    g.drawLine(x + w - tabAreaWidth + 2, y + 1, x + w - tabAreaWidth + 2, y + h - 2);
-                } else {
-                    g.drawLine(w - tabAreaWidth + bi.right, y, w - tabAreaWidth + bi.right, h);
-                }
-                break;
-            }
-        }
+    protected boolean hasInnerBorder() {
+        return true;
     }
 
     protected void paintTabBackground(Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h, boolean isSelected) {
-        if (isSelected) {
+        Color backColor = tabPane.getBackgroundAt(tabIndex);
+        if (isSelected && (backColor instanceof UIResource)) {
             if (tabPane.getBackgroundAt(tabIndex) instanceof UIResource) {
                 g.setColor(AbstractLookAndFeel.getBackgroundColor());
             } else {
@@ -199,34 +97,16 @@ public class LunaTabbedPaneUI extends BaseTabbedPaneUI {
             }
         } else {
             super.paintTabBackground(g, tabPlacement, tabIndex, x, y, w, h, isSelected);
-            switch (tabPlacement) {
-                case TOP: {
-                    if (tabIndex == rolloverIndex) {
-                        g.setColor(AbstractLookAndFeel.getFocusColor());
-                        g.fillRect(x + 2, y + 1, w - 3, 2);
-                    }
-                    break;
-                }
-                case LEFT: {
-                    if (tabIndex == rolloverIndex) {
-                        g.setColor(AbstractLookAndFeel.getFocusColor());
-                        g.fillRect(x, y + 2, w - 1, 2);
-                    }
-                    break;
-                }
-                case RIGHT: {
-                    if (tabIndex == rolloverIndex) {
-                        g.setColor(AbstractLookAndFeel.getFocusColor());
-                        g.fillRect(x, y + 2, w - 1, 2);
-                    }
-                    break;
-                }
-                case BOTTOM: {
-                    if (tabIndex == rolloverIndex) {
-                        g.setColor(AbstractLookAndFeel.getFocusColor());
-                        g.fillRect(x + 2, y + h - 3, w - 3, 2);
-                    }
-                    break;
+            if (!isSelected && tabIndex == rolloverIndex && tabPane.isEnabledAt(tabIndex)) {
+                g.setColor(AbstractLookAndFeel.getFocusColor());
+                if (tabPlacement == TOP) {
+                    g.fillRect(x + 2, y + 1, w - 3, 2);
+                } else if (tabPlacement == LEFT) {
+                    g.fillRect(x, y + 1, w - 1, 2);
+                } else if (tabPlacement == BOTTOM) {
+                    g.fillRect(x + 2, y + h - 3, w - 3, 2);
+                } else {
+                    g.fillRect(x, y + 1, w - 1, 2);
                 }
             }
         }

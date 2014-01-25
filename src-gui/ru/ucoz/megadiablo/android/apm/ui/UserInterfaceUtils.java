@@ -31,7 +31,7 @@ public final class UserInterfaceUtils {
 			plaf.setThemeDefault();
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			try {
-				UIManager.setLookAndFeel(plaf.getLookAndFeel());
+				UIManager.setLookAndFeel(plaf.getPLookAndFeel());
 			} catch (UnsupportedLookAndFeelException e) {
 				e.printStackTrace();
 			}

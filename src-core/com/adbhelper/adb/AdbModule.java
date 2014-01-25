@@ -240,6 +240,7 @@ public class AdbModule implements AdbConsts {
 
 	public void loadListActivities(final File file) throws IOException {
 		if (!file.exists()) {
+			file.getParentFile().mkdirs();
 			file.createNewFile();
 		}
 		fileActivities = file;

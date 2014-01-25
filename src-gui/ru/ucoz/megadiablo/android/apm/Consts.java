@@ -46,9 +46,9 @@ public final class Consts {
 		public static final String SETTINGS_ADB_CONSOLE_CHARSET =
 				"settings.adb.console.charset";
 
-		public static final String FILE_PROP = "apm.prop";
-		public static final String FILE_PROP_APP = "app.prop";
-		public static final String FILE_PROP_FILTER = "filter.prop";
+		public static final String FILE_PROP = "properties/apm.prop";
+		public static final String FILE_PROP_APP = "properties/app.prop";
+		public static final String FILE_PROP_FILTER = "properties/filter.prop";
 
 		private Settings() {
 		}

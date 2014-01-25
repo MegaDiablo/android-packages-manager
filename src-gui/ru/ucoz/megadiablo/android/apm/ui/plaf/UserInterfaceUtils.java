@@ -1,8 +1,6 @@
 package ru.ucoz.megadiablo.android.apm.ui.plaf;
 
-import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 
 /**
  * @author MegaDiablo
@@ -19,10 +17,14 @@ public final class UserInterfaceUtils {
 //			plaf.setThemeDefault();
 			JFrame.setDefaultLookAndFeelDecorated(true);
 			try {
-				UIManager.setLookAndFeel(pTheme.getParent().getLookAndFeel());
+				LookAndFeel laf = pTheme.getParent().getLookAndFeel();
+				if (laf != null) {
+					UIManager.setLookAndFeel(laf);
+				} else {
+					setSystemTheme();
+				}
 			} catch (UnsupportedLookAndFeelException e) {
 				e.printStackTrace();
-
 				setSystemTheme();
 			}
 		}

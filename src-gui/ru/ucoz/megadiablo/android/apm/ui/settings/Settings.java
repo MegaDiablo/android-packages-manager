@@ -367,9 +367,11 @@ public final class Settings {
 		try {
 			File parent = new File(pPath);
 			File[] files = parent.listFiles();
-			for (File file : files) {
-				if (file.getName().endsWith(".thm")) {
-					mSettings.mThemeManager.load(file);
+			if (files != null) {
+				for (File file : files) {
+					if (file.getName().endsWith(".thm")) {
+						mSettings.mThemeManager.load(file);
+					}
 				}
 			}
 		} catch (Exception e) {

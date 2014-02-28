@@ -20,6 +20,7 @@
 	<property name="name.file.icon" value="apm64.png"/>
 	<property name="name.platform-tools" value="platform-tools"/>
 	<property name="name.themes" value="themes"/>
+	<property name="name.documentation" value="doc"/>
 
 	<property name="app.name.short" value="apm"/>
 	<property name="app.name.version" value="${app.name.short}-${version.apm}"/>
@@ -28,6 +29,7 @@
 	<property name="app.resources" value="${basedir}/resources"/>
 	<property name="app.resources.properties" value="${app.resources}/${name.properties}"/>
 	<property name="app.resources.themes" value="${app.resources}/${name.themes}"/>
+	<property name="app.resources.documentation" value="${app.resources}/${name.documentation}"/>
 
 	<property name="app.resources.platform-tools" value="${app.resources}/platform-tools"/>
 	<property name="app.resources.platform-tools.nix" value="${app.resources.platform-tools}/nix"/>
@@ -44,6 +46,7 @@
 	<property name="app.src-gui" value="${app.base}/${name.src}-gui"/>
 	<property name="app.src-core" value="${app.base}/${name.src}-core"/>
 	<property name="app.src-data" value="${app.base}/${name.src}-data"/>
+	<property name="app.src-markdown" value="${app.base}/${name.src}-markdown"/>
 	<property name="app.license.file" value="${app.base}/LICENSE"/>
 
 	<property name="app.build" value="${app.base}/${name.bin}/${name.build}"/>
@@ -74,6 +77,10 @@
 	<property name="app.build.nix.themes" value="${app.build.nix}/${name.themes}"/>
 	<property name="app.build.win.themes" value="${app.build.win}/${name.themes}"/>
 	<property name="app.build.mac.themes" value="${app.build.mac}/${name.themes}"/>
+	
+	<property name="app.build.nix.documentation" value="${app.build.nix}/${name.documentation}"/>
+	<property name="app.build.win.documentation" value="${app.build.win}/${name.documentation}"/>
+	<property name="app.build.mac.documentation" value="${app.build.mac}/${name.documentation}"/>
 
 	<property name="app.build.nix.platform-tools" value="${app.build.nix}/${name.platform-tools}"/>
 	<property name="app.build.win.platform-tools" value="${app.build.win}/${name.platform-tools}"/>
@@ -113,6 +120,10 @@
 		<mkdir dir="${app.build.nix.themes}"/>
 		<mkdir dir="${app.build.win.themes}"/>
 		<mkdir dir="${app.build.mac.themes}"/>
+		
+		<mkdir dir="${app.build.nix.documentation}"/>
+		<mkdir dir="${app.build.win.documentation}"/>
+		<mkdir dir="${app.build.mac.documentation}"/>
 
 		<mkdir dir="${app.build.nix.platform-tools}"/>
 		<mkdir dir="${app.build.win.platform-tools}"/>
@@ -124,6 +135,7 @@
 			<fileset dir="${app.src-gui}" includes="**/*"/>
 			<fileset dir="${app.src-core}" includes="**/*"/>
 			<fileset dir="${app.src-data}" includes="**/*"/>
+			<fileset dir="${app.src-markdown}" includes="**/*"/>
 		</copy>
 	</target>
 
@@ -186,6 +198,16 @@
 		</copy>
 		<copy todir="${app.build.mac.themes}" overwrite="true">
 			<fileset dir="${app.resources.themes}" includes="**/*"/>
+		</copy>
+
+		<copy todir="${app.build.nix.documentation}" overwrite="true">
+			<fileset dir="${app.resources.documentation}" includes="**/*"/>
+		</copy>
+		<copy todir="${app.build.win.documentation}" overwrite="true">
+			<fileset dir="${app.resources.documentation}" includes="**/*"/>
+		</copy>
+		<copy todir="${app.build.mac.documentation}" overwrite="true">
+			<fileset dir="${app.resources.documentation}" includes="**/*"/>
 		</copy>
 
 		<copy todir="${app.build.nix.platform-tools}" overwrite="true">

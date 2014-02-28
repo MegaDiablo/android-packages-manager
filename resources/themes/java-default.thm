@@ -1,35 +1,42 @@
 [
-	{ 
-		"name": "Metal", 
+	{
+		"name": "Metal",
 		"class": "javax.swing.plaf.metal.MetalLookAndFeel",
 		"themes": [
 			{ "name": null, "method":null, "value":"Default"}
 		]
 	},
-	{ 
-		"name": "Motif", 
+	{
+		"name": "Motif",
 		"class": "com.sun.java.swing.plaf.motif.MotifLookAndFeel",
 		"themes": [
 			{ "name": null, "method":null, "value":"Default"}
 		]
 	},
-	{ 
-		"name": "Nimbus", 
+	{
+		"name": "Nimbus",
 		"class": "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel",
 		"themes": [
 			{ "name": null, "method":null, "value":"Default"}
 		]
 	},
-	{ 
-		"name": "GTK", 
+	{
+		"name": "GTK",
 		"class": "com.sun.java.swing.plaf.gtk.GTKLookAndFeel",
 		"themes": [
 			{ "name": null, "method":null, "value":"Default"}
 		]
 	},
-	{ 
-		"name": "Windows", 
+	{
+		"name": "Windows",
 		"class": "com.sun.java.swing.plaf.windows.WindowsLookAndFeel",
+		"themes": [
+			{ "name": null, "method":null, "value":"Default"}
+		]
+	},
+	{
+		"name": "Windows Classic",
+		"class": "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel",
 		"themes": [
 			{ "name": null, "method":null, "value":"Default"}
 		]

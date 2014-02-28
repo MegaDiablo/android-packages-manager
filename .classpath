@@ -3,6 +3,7 @@
 	<classpathentry kind="src" path="src-data"/>
 	<classpathentry kind="src" path="src-gui"/>
 	<classpathentry kind="src" path="src-core"/>
+	<classpathentry kind="src" path="src-markdown"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lib"/>
 	<classpathentry kind="output" path="bin"/>

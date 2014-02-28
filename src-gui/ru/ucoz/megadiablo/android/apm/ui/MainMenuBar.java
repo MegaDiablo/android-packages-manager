@@ -326,8 +326,17 @@ public class MainMenuBar extends JMenuBar {
 		});
 		mMenuSettings.add(mMenuItemSettingsAdvanced);
 
-		JMenu mMenuHelp = new JMenu("Помощь");
+		JMenu mMenuHelp = new JMenu("Справка");
 		add(mMenuHelp);
+
+		JMenuItem mMenuItemDocumentation = new JMenuItem("Руководство пользователя");
+		mMenuItemDocumentation.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				(new HelpDialog(null)).setVisible(true);
+			}
+		});
+		mMenuHelp.add(mMenuItemDocumentation);
 
 		JMenuItem mMenuItemAbout = new JMenuItem("О программе...");
 		mMenuItemAbout.addActionListener(new ActionListener() {

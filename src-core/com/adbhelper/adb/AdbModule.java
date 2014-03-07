@@ -33,6 +33,7 @@ import com.adbhelper.adb.shell.AdbShell;
 
 public class AdbModule implements AdbConsts {
 
+
 	public static final String VERSION_ADB_HELPER = "%%VERSION_CORE%%";
 	private static final String NAME_RESOURCE_LABELS_PERMISSIONS = "com.adbhelper.adb.permissions";
 	private static final long CONSOLE_TIMEOUT = 5000;
@@ -137,6 +138,7 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_DEBUG = "Start debug %app%";
 	private static final String LOG_CLEAR_DATA = "Delete all data associated with %app%";
 	private static final String LOG_START_SHELL = "Start shell";
+	private static final String LOG_DEVICE_NOT_AVAILABLE = "Device not available";
 
 	private final LogAdb logAdb=new LogAdb();
 
@@ -282,6 +284,9 @@ public class AdbModule implements AdbConsts {
 	public String runAdbDevice(final String device, final String[] cmd, final FormatLog formatLog) throws DeviceNotAvailableException {
 		if (device != null) {
 			if (!checkDeviceAvailable(device)) {
+				if (formatLog != null) {
+					formatLog.error(LOG_DEVICE_NOT_AVAILABLE);
+				}
 				throw new DeviceNotAvailableException();
 			}
 		}

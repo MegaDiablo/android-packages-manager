@@ -7,8 +7,8 @@ import java.util.Properties;
 import com.adbhelper.adb.AdbDevice;
 import com.adbhelper.adb.AdbModule;
 import com.adbhelper.adb.AdbPackage;
+import com.adbhelper.adb.exceptions.DeviceNotAvailableException;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
-import com.adbhelper.adb.log.LogAdb;
 
 public class TestMain {
 
@@ -21,7 +21,7 @@ public class TestMain {
      * @throws IOException
      */
 
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
 	//testing git
 
     // FileSystemView.getFileSystemView().getSystemIcon(f)
@@ -93,6 +93,9 @@ System.out.println("endddd");
 
 			} catch (NotAccessPackageManager e) {
 			    e.printStackTrace();
+			} catch (DeviceNotAvailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			System.out.println("endThread");
 		}

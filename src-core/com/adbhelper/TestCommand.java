@@ -9,6 +9,7 @@ import com.adbhelper.adb.AdbDevice;
 import com.adbhelper.adb.AdbModule;
 import com.adbhelper.adb.AdbPackage;
 import com.adbhelper.adb.Permission;
+import com.adbhelper.adb.exceptions.DeviceNotAvailableException;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
 
 public class TestCommand {
@@ -41,6 +42,9 @@ public class TestCommand {
 			} catch (NotAccessPackageManager e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (DeviceNotAvailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			adb.devices().get(0).clearTemp();
 
@@ -71,6 +75,10 @@ public class TestCommand {
 			e.printStackTrace();
 		}
 		//propfile.deleteOnExit();
+ catch (DeviceNotAvailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	/*
 	 * [29.12.2011 12:24:36] : badging Print the label and icon for the app

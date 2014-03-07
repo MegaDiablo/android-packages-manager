@@ -237,7 +237,10 @@ public class AdbDevice {
 
 			}
 		}
-		return name + "-" + type;
+		if ((name == null) || name.matches("\\?*")) {
+			return "Error (" + type + ")";
+		}
+		return name + "(" + type + ")";
 	}
 
 	public void updatePackages(final boolean withSystem) throws NotAccessPackageManager, DeviceNotAvailableException{

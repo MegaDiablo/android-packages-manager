@@ -22,11 +22,16 @@ public class AdbDevice {
 	private List<AdbPackage> listPackges;
 	private Map<String, String> properties;
 
+
 	public AdbDevice(final String name, final String type, final AdbModule adb) {
 		super();
 		this.setName(name);
 		this.setType(type);
 		this.adb = adb;
+	}
+
+	public boolean isAvailable() {
+		return TypeDevice.TYPE_DEVICE.equalsIgnoreCase(type);
 	}
 
 	/**

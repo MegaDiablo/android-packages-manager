@@ -195,7 +195,7 @@ public class ListPackages extends JPanel {
 				}
 			});
 			mMenuItemMonkey
-					.setToolTipText("Позволяет запустить консоль с правами приложения");
+					.setToolTipText("Генерирует случайные события клавиатуры и экрана для приложения");
 			popupMenu.add(mMenuItemMonkey);
 		}
 		{

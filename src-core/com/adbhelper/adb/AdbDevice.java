@@ -200,12 +200,15 @@ public class AdbDevice {
 		String manufacturer = getManufacturer();
 		String model = getModel();
 		String version = getVersionName();
-		if (isEmulator()){
-			manufacturer=name;
+		if (isEmulator()) {
+			manufacturer = name;
+		}
+		if ((model != null)
+				&& (model.toLowerCase().startsWith(manufacturer.toLowerCase()))) {
+			manufacturer = null;
 		}
 		String result = "";
 		boolean hasInfo = false;
-
 		if (manufacturer != null) {
 			result += manufacturer;
 			hasInfo = true;
@@ -226,7 +229,7 @@ public class AdbDevice {
 			if (hasInfo) {
 				result += " ";
 			}
-			result += "("+version+")";
+			result += "(" + version + ")";
 			hasInfo = true;
 		}
 		return result;

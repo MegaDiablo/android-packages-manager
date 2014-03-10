@@ -14,6 +14,7 @@ public class AdbDevice {
 	private static final boolean DEFAULT_OPTIONS_WITH_SYSTEM = false;
 	private static final String PROPERTY_MANUFACTURER = "ro.product.manufacturer";
 	private static final String PROPERTY_MODEL = "ro.product.model";
+	private static final String PROPERTY_SONY_MODEL = "ro.semc.product.name";
 	private static final String PROPERTY_VERSION_API = "ro.build.version.sdk";
 	private static final String PROPERTY_VERSION_NAME = "ro.build.version.release";
 	private String name;
@@ -176,7 +177,12 @@ public class AdbDevice {
 	}
 
 	public String getModel() {
-		return getProperty(PROPERTY_MODEL);
+		String androidModel = getProperty(PROPERTY_MODEL);
+		String model = getProperty(PROPERTY_SONY_MODEL);
+		if (model != null) {
+			return String.format("%s [%s]", model, androidModel);
+		}
+		return androidModel;
 
 	}
 

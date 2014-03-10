@@ -1,7 +1,7 @@
 package com.adbhelper;
 
 import com.adbhelper.adb.AdbModule;
-import com.adbhelper.adb.exceptions.install.InstallException;
+import com.adbhelper.adb.exceptions.AdbException;
 
 public class Main {
 
@@ -69,7 +69,7 @@ public class Main {
 	default:
 	    break;
 	}
-    } catch (InstallException e) {
+    } catch (AdbException e) {
     	e.printStackTrace();
 	}
 

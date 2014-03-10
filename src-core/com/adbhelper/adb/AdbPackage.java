@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.adbhelper.adb.exceptions.DeviceNotAvailableException;
 import com.adbhelper.adb.exceptions.NotFoundActivityException;
 import com.adbhelper.adb.exceptions.install.InstallException;
 import com.adbhelper.adb.shell.AdbShell;
@@ -108,50 +109,50 @@ public class AdbPackage {
 		return adb.formatInfoPackage(this);
 	}
 
-	public void uninstall() {
+	public void uninstall() throws DeviceNotAvailableException {
 		adb.uninstall(device, name);
 	}
-	public void clearData() {
+	public void clearData() throws DeviceNotAvailableException {
 		adb.clearData(device, name);
 	}
 
 	@Deprecated
 	public void reinstall(final String activity, final String pathApp)
-			throws InstallException {
+			throws InstallException, DeviceNotAvailableException {
 		adb.reinstall(device, name, activity, pathApp);
 	}
 
-	public void reinstall(final String pathApp) throws InstallException {
+	public void reinstall(final String pathApp) throws InstallException, DeviceNotAvailableException {
 		adb.reinstall(device, pathApp);
 	}
 
-	public void start(final String activity) {
+	public void start(final String activity) throws DeviceNotAvailableException {
 		adb.startActivity(device, name, activity);
 	}
 
-	public void start() throws NotFoundActivityException {
+	public void start() throws NotFoundActivityException, DeviceNotAvailableException {
 		if (defaultActivity == null) {
 			throw new NotFoundActivityException();
 		}
 		adb.startActivity(device, name, defaultActivity);
 	}
 
-	public void debug(final String activity) {
+	public void debug(final String activity) throws DeviceNotAvailableException {
 		adb.debugActivity(device, name, activity);
 	}
 
-	public void debug() throws NotFoundActivityException {
+	public void debug() throws NotFoundActivityException, DeviceNotAvailableException {
 		if (defaultActivity == null) {
 			throw new NotFoundActivityException();
 		}
 		adb.debugActivity(device, name, defaultActivity);
 	}
 
-	public void download(final String toPath) {
+	public void download(final String toPath) throws DeviceNotAvailableException {
 		adb.downloadFile(device, fileName, toPath);
 	}
 
-	public void download() {
+	public void download() throws DeviceNotAvailableException {
 		download(null);
 
 	}
@@ -161,8 +162,9 @@ public class AdbPackage {
 	 *
 	 * @param count
 	 *            - count events
+	 * @throws DeviceNotAvailableException
 	 */
-	public void monkey(final int count) {
+	public void monkey(final int count) throws DeviceNotAvailableException {
 		adb.monkey(device, name, count);
 	}
 
@@ -200,7 +202,7 @@ public class AdbPackage {
 		return permissions;
 	}
 
-	public void update(){
+	public void update() throws DeviceNotAvailableException{
 		adb.updatePackage(this);
 	}
 

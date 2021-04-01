@@ -63,6 +63,7 @@ public class ListPackages extends JPanel {
 	private JMenuItem mMenuItemClearData;
 	private JMenuItem mMenuItemMonkey;
 	private Settings mSettings;
+	private JMenuItem mMenuItemInfo;
 
 	public ListPackages(final Core pCore) {
 		mCore = pCore;
@@ -160,16 +161,16 @@ public class ListPackages extends JPanel {
 		}
 
 		{
-			mMenuItemRun = new JMenuItem("Информация");
-			mMenuItemRun.addActionListener(new ActionListener() {
+			mMenuItemInfo = new JMenuItem("Информация");
+			mMenuItemInfo.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
 					updateInformationPackages();
 				}
 			});
-			mMenuItemRun
+			mMenuItemInfo
 					.setToolTipText("Позволяет обновить информацию о приложении");
-			popupMenu.add(mMenuItemRun);
+			popupMenu.add(mMenuItemInfo);
 		}
 
 		{
@@ -194,7 +195,7 @@ public class ListPackages extends JPanel {
 				}
 			});
 			mMenuItemMonkey
-					.setToolTipText("Позволяет запустить консоль с правами приложения");
+					.setToolTipText("Генерирует случайные события клавиатуры и экрана для приложения");
 			popupMenu.add(mMenuItemMonkey);
 		}
 		{
@@ -339,13 +340,18 @@ public class ListPackages extends JPanel {
 
 	private void checkButtonEnabled() {
 		int sel = table.getSelectedRowCount();
-		boolean enabled = (sel > 0);
+		boolean deviceAvailable = mCore.getSelectDevice().isAvailable();
+		boolean enabled = deviceAvailable && (sel > 0);
 
 		mMenuItemRun.setEnabled(enabled);
+		mMenuItemInfo.setEnabled(enabled);
 		mMenuItemDelete.setEnabled(enabled);
 		mMenuItemDownload.setEnabled(enabled);
 		mMenuItemShellRunAs.setEnabled(enabled);
 		mMenuItemMonkey.setEnabled(enabled);
+		mMenuItemClearData.setEnabled(enabled);
+		mMenuItemRefresh.setEnabled(deviceAvailable);
+
 	}
 
 	static class FilterByText extends RowFilter<TableModel, Integer> {

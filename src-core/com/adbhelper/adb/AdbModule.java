@@ -15,8 +15,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.adbhelper.adb.exceptions.AdbError;
+import com.adbhelper.adb.exceptions.DeviceNotAvailableException;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
 import com.adbhelper.adb.exceptions.NotFoundActivityException;
 import com.adbhelper.adb.exceptions.install.InstallException;
@@ -31,6 +34,7 @@ import com.adbhelper.adb.log.StartFormatLog;
 import com.adbhelper.adb.shell.AdbShell;
 
 public class AdbModule implements AdbConsts {
+
 
 	public static final String VERSION_ADB_HELPER = "%%VERSION_CORE%%";
 	private static final String NAME_RESOURCE_LABELS_PERMISSIONS = "com.adbhelper.adb.permissions";
@@ -136,6 +140,9 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_DEBUG = "Start debug %app%";
 	private static final String LOG_CLEAR_DATA = "Delete all data associated with %app%";
 	private static final String LOG_START_SHELL = "Start shell";
+	private static final String LOG_DEVICE_NOT_AVAILABLE = "Device not available";
+
+	private static final Pattern ADB_PACKAGE_REGEXP = Pattern.compile("^(.*:)?(.*)=(.+)$");
 
 	private final LogAdb logAdb=new LogAdb();
 
@@ -192,12 +199,12 @@ public class AdbModule implements AdbConsts {
 		return runCmd(path, device, cmd, null);
 	}
 
-	public String runAdb(final String device, final String string) {
-		return runAdb(device, string.split(" "), new DefaultFormatLog(logAdb));
+	public String runAdbDevice(final String device, final String string) throws DeviceNotAvailableException {
+		return runAdbDevice(device, string.split(" "), new DefaultFormatLog(logAdb));
 	}
 
-	public String runAdb(final String device, final String[] string) {
-		return runAdb(device, string, new DefaultFormatLog(logAdb));
+	public String runAdbDevice(final String device, final String[] string) throws DeviceNotAvailableException {
+		return runAdbDevice(device, string, new DefaultFormatLog(logAdb));
 	}
 
 	public String runCmd(final String pathAdb, final String device, final String[] cmd,
@@ -240,6 +247,7 @@ public class AdbModule implements AdbConsts {
 
 	public void loadListActivities(final File file) throws IOException {
 		if (!file.exists()) {
+			file.getParentFile().mkdirs();
 			file.createNewFile();
 		}
 		fileActivities = file;
@@ -264,7 +272,28 @@ public class AdbModule implements AdbConsts {
 		this(DEFAULT_PATH_ABD);
 	}
 
-	public String runAdb(final String device, final String[] cmd, final FormatLog formatLog) {
+	public String runAdb(final String[] cmd, final FormatLog formatLog){
+		return runCmd(fileAdb, null, cmd, formatLog);
+	}
+
+	public String runAdb(final String string){
+		return runAdb(string.split(" "), new DefaultFormatLog(logAdb));
+	}
+
+	public String runAdb(final String device, final String[] string){
+		return runAdb(string, new DefaultFormatLog(logAdb));
+	}
+
+
+	public String runAdbDevice(final String device, final String[] cmd, final FormatLog formatLog) throws DeviceNotAvailableException {
+		if (device != null) {
+			if (!checkDeviceAvailable(device)) {
+				if (formatLog != null) {
+					formatLog.error(LOG_DEVICE_NOT_AVAILABLE);
+				}
+				throw new DeviceNotAvailableException();
+			}
+		}
 		return runCmd(fileAdb, device, cmd, formatLog);
 	}
 
@@ -283,20 +312,22 @@ public class AdbModule implements AdbConsts {
 	/**
 	 *
 	 * @return SUCCESS
+	 * @throws DeviceNotAvailableException
 	 */
-	public int uninstall(final String device, final String app) {
+	public int uninstall(final String device, final String app) throws DeviceNotAvailableException{
 		logAdb.info(LOG_UNINSTALL.replace(MASK_APP, app));
-		runAdb(device, CMD_UNINSTALL + app);
+		runAdbDevice(device, CMD_UNINSTALL + app);
 		return AdbConsts.SUCCESS;
 	}
 
 	/**
 	 *
 	 * @return SUCCESS
+	 * @throws DeviceNotAvailableException
 	 */
-	public int clearData(final String device, final String app) {
+	public int clearData(final String device, final String app) throws DeviceNotAvailableException{
 		logAdb.info(LOG_CLEAR_DATA.replace(MASK_APP, app));
-		runAdb(device, CMD_CLEAR_DATA.replace(MASK_APP, app));
+		runAdbDevice(device, CMD_CLEAR_DATA.replace(MASK_APP, app));
 		return AdbConsts.SUCCESS;
 	}
 
@@ -304,8 +335,9 @@ public class AdbModule implements AdbConsts {
 	/**
 	 *
 	 * @return SUCCESS
+	 * @throws DeviceNotAvailableException
 	 */
-	public int downloadFile(final String device, final String fromPath, String toPath) {
+	public int downloadFile(final String device, final String fromPath, String toPath) throws DeviceNotAvailableException {
 		logAdb.info(LOG_DOWNLOAD_FILE + fromPath);
 
 		if (toPath == null) {
@@ -316,18 +348,18 @@ public class AdbModule implements AdbConsts {
 			cmds[i] = cmds[i].replace(MASK_FROM, fromPath).replace(MASK_TO,
 					toPath);
 		}
-		runAdb(device, cmds);
+		runAdbDevice(device, cmds);
 		logAdb.info(LOG_END_DOWNLOAD_FILE + toPath);
 		return AdbConsts.SUCCESS;
 	}
 
-	public String reinstall(final String device, final String pathApp)
-			throws InstallException {
+	public String reinstall(final String device, final String pathApp) throws DeviceNotAvailableException, InstallException
+			 {
 		return reinstall(device, pathApp, DEFAULT_AUTOSTART_AFTER_INSTALL);
 	}
 
-	public String reinstall(final String device, final String pathApp, final boolean autoStart)
-			throws InstallException {
+	public String reinstall(final String device, final String pathApp, final boolean autoStart) throws DeviceNotAvailableException, InstallException
+			 {
 		return install(CMD_REINSTALL, device, pathApp, autoStart);
 	}
 
@@ -340,10 +372,12 @@ public class AdbModule implements AdbConsts {
 	 * @param pathApp
 	 *            - path of file
 	 * @return Name of installed package
+	 * @throws InstallException
+	 * @throws DeviceNotAvailableException
 	 */
 	@Deprecated
-	public String install(final String device, final String pathApp)
-			throws InstallException {
+	public String install(final String device, final String pathApp) throws DeviceNotAvailableException, InstallException
+			 {
 		return install(device, pathApp, DEFAULT_AUTOSTART_AFTER_INSTALL);
 	}
 
@@ -357,14 +391,16 @@ public class AdbModule implements AdbConsts {
 	 * @param autoStart
 	 *            - start package after install
 	 * @return Name of installed package
+	 * @throws InstallException
+	 * @throws DeviceNotAvailableException
 	 */
-	public String install(final String device, final String pathApp, final boolean autoStart)
-			throws InstallException {
+	public String install(final String device, final String pathApp, final boolean autoStart) throws DeviceNotAvailableException, InstallException
+			 {
 		return install(CMD_INSTALL, device, pathApp, autoStart);
 	}
 
 	protected String install(final String cmd, final String device, final String pathApp,
-			final boolean autoStart) throws InstallException {
+			final boolean autoStart) throws DeviceNotAvailableException, InstallException{
 		logAdb.info(LOG_INSTALL.replace(MASK_FILE, pathApp));
 		logAdb.info(LOG_UPLOAD.replace(MASK_FILE, pathApp));
 		String[] cmds = cmd.split(" ");
@@ -373,7 +409,7 @@ public class AdbModule implements AdbConsts {
 		}
 		String[] res = null;
 		try {
-			res = runAdb(device, cmds, new InstallFormatLog(logAdb)).split("\\n");
+			res = runAdbDevice(device, cmds, new InstallFormatLog(logAdb)).split("\\n");
 		} catch (AdbError e) {
 			logAdb.error(LOG_INSTALL_FAIL.replace(MASK_FILE, pathApp));
 			throw InstallException.createInstallException(e);
@@ -409,26 +445,28 @@ public class AdbModule implements AdbConsts {
 
 	/**
 	 * Use {@link AdbModule#reinstall(String, String, boolean)}
+	 * @throws DeviceNotAvailableException
+	 * @throws InstallException
 	 */
 	@Deprecated
 	public void reinstall(final String device, final String app, final String activity,
-			final String pathApp) throws InstallException {
+			final String pathApp) throws DeviceNotAvailableException, InstallException{
 		uninstall(device, app);
 		install(device, pathApp);
 		startActivity(device, app, activity);
 	}
 
-	public void startActivity(final String device, final String app, final String activity) {
+	public void startActivity(final String device, final String app, final String activity) throws DeviceNotAvailableException{
 		logAdb.info(LOG_START.replace(MASK_APP, app));
-		runAdb(device,
+		runAdbDevice(device,
 				CMD_START.replace(MASK_APP, app)
 						.replace(MASK_ACTIVITY, activity).split(" "),
 				new StartFormatLog(logAdb));
 	}
 
-	public void debugActivity(final String device, final String app, final String activity) {
+	public void debugActivity(final String device, final String app, final String activity) throws DeviceNotAvailableException{
 		logAdb.info(LOG_DEBUG.replace(MASK_APP, app));
-		runAdb(device,
+		runAdbDevice(device,
 				CMD_DEBUG.replace(MASK_APP, app)
 						.replace(MASK_ACTIVITY, activity).split(" "),
 				new StartFormatLog(logAdb));
@@ -440,9 +478,9 @@ public class AdbModule implements AdbConsts {
 		logAdb.info(LOG_END_WAIT);
 	}
 
-	public List<AdbDevice> devices() {
+	public List<AdbDevice> devices()  {
 		logAdb.info(LOG_GET_DEVICES);
-		String ss[] = runAdb(null, CMD_DEVICES).split("\\n");
+		String ss[] = runAdb(CMD_DEVICES).split("\\n");
 		List<AdbDevice> devices = new ArrayList<AdbDevice>();
 		for (int i = 1; i < ss.length; i++) {
 			String[] tmp = ss[i].split("\\t");
@@ -456,24 +494,24 @@ public class AdbModule implements AdbConsts {
 	}
 
 	public List<AdbPackage> getPackages(final String device)
-			throws NotAccessPackageManager {
+			throws NotAccessPackageManager, DeviceNotAvailableException {
 
 		return getPackages(device, false);
 	}
 
 	public List<AdbPackage> getPackagesWithSystem(final String device)
-			throws NotAccessPackageManager {
+			throws NotAccessPackageManager, DeviceNotAvailableException {
 
 		return getPackages(device, null);
 	}
 
 	public List<AdbPackage> getPackagesNonSystem(final String device)
-			throws NotAccessPackageManager {
+			throws NotAccessPackageManager, DeviceNotAvailableException {
 		return getPackages(device, SYSTEM_FILTER);
 	}
 
 	public List<AdbPackage> getPackages(final String device, final boolean withSystem)
-			throws NotAccessPackageManager {
+			throws NotAccessPackageManager, DeviceNotAvailableException {
 		if (withSystem) {
 			return getPackagesWithSystem(device);
 		} else {
@@ -482,10 +520,10 @@ public class AdbModule implements AdbConsts {
 	}
 
 	public List<AdbPackage> getPackages(final String device, final String fileIgnoreFilter)
-			throws NotAccessPackageManager {
+			throws NotAccessPackageManager, DeviceNotAvailableException {
 		// logAdb.info(LOG_LIST_PACKAGES);
 		logAdb.info(LOG_START_GET_PACKAGES);
-		String result[] = runAdb(device, CMD_LIST_PACKAGES.split(" "),
+		String result[] = runAdbDevice(device, CMD_LIST_PACKAGES.split(" "),
 				new PackagesFormatLog(logAdb,fileIgnoreFilter)).split("\\n");
 		if (result.length > 0) {
 			if (result[result.length - 1]
@@ -498,35 +536,35 @@ public class AdbModule implements AdbConsts {
 			if (result[i].equals("")) {
 				continue;
 			}
-			String[] tmp = result[i].replaceAll(".*:", "").split("=");
-			if (tmp.length < 2) {
+			Matcher tmp = ADB_PACKAGE_REGEXP.matcher(result[i]);
+			if (!tmp.matches()) {
 				continue;
 			}
 			if ((fileIgnoreFilter == null)
-					|| (!tmp[0].matches(fileIgnoreFilter)))
-				packages.add(new AdbPackage(this, tmp[1], tmp[0], device));
+					|| (!tmp.group(2).matches(fileIgnoreFilter)))
+				packages.add(new AdbPackage(this, tmp.group(3), tmp.group(2), device));
 		}
 		logAdb.info(LOG_COUNT_PACKAGES, packages.size());
 		// logAdb.info(LOG_END_LIST_PACKAGES);
 		return packages;
 	}
 
-	public void reboot(final String device) {
+	public void reboot(final String device) throws DeviceNotAvailableException {
 		logAdb.info(LOG_REBOOT);
-		runAdb(device, CMD_REBOOT.split(" "));
+		runAdbDevice(device, CMD_REBOOT.split(" "));
 	}
 
-	public void reboot(final AdbDevice device) {
+	public void reboot(final AdbDevice device) throws DeviceNotAvailableException {
 		reboot(device.getName());
 	}
 
-	public void sendKeyCode(final String device, final int keyCode) {
+	public void sendKeyCode(final String device, final int keyCode) throws DeviceNotAvailableException {
 		logAdb.info(LOG_SEND_KEYCODE + keyCode);
-		runAdb(device, CMD_SEND_KEYCODE + keyCode);
+		runAdbDevice(device, CMD_SEND_KEYCODE + keyCode);
 		logAdb.info(LOG_COMPLITE_SEND_KEYCODE);
 	}
 
-	public void sendKeyCode(final AdbDevice device, final int keyCode) {
+	public void sendKeyCode(final AdbDevice device, final int keyCode) throws DeviceNotAvailableException {
 		sendKeyCode(device.getName(), keyCode);
 	}
 
@@ -535,7 +573,7 @@ public class AdbModule implements AdbConsts {
 			stopCurrentProcess();
 		}
 		logAdb.info(LOG_STOP_ADB);
-		runAdb(null, CMD_STOP_ADB);
+		runAdb(CMD_STOP_ADB);
 	}
 
 	public int connet(String address) {
@@ -543,7 +581,7 @@ public class AdbModule implements AdbConsts {
 		if (!address.matches(VALID_ADRESS)) {
 			address += ":" + DEFAULT_PORT;
 		}
-		String[] res = runAdb(null, CMD_CONNECT.replace(MASK_TO, address))
+		String[] res = runAdb(CMD_CONNECT.replace(MASK_TO, address))
 				.split("\\n");
 		;
 		if (res[res.length - 1].matches(STR_CONNECT_COMPLITE)) {
@@ -558,13 +596,13 @@ public class AdbModule implements AdbConsts {
 
 	public void disconnet(final String address) {
 		logAdb.info(LOG_START_DISCONNECT.replace(MASK_FROM, address));
-		runAdb(null, CMD_DISCONNECT.replace(MASK_FROM, address));
+		runAdb(CMD_DISCONNECT.replace(MASK_FROM, address));
 		logAdb.info(LOG_END_DISCONNECT.replace(MASK_FROM, address));
 	}
 
 	public void start() {
 		logAdb.info(LOG_START_ADB);
-		runAdb(null, CMD_START_ADB);
+		runAdb(CMD_START_ADB);
 		logAdb.info(LOG_END_START_ADB);
 	}
 
@@ -583,29 +621,30 @@ public class AdbModule implements AdbConsts {
 	 *            - package name
 	 * @param count
 	 *            - count events
+	 * @throws DeviceNotAvailableException
 	 */
-	public void monkey(final String device, final String app, final int count) {
+	public void monkey(final String device, final String app, final int count) throws DeviceNotAvailableException {
 		logAdb.info(LOG_MONKEY.replace(MASK_APP, app));
 		String cmd = CMD_MONKEY.replace(MASK_APP, app);
 		cmd = cmd.replace(MASK_COUNT, String.valueOf(count));
-		runAdb(device, cmd);
+		runAdbDevice(device, cmd);
 
 	}
 
-	public void clearTemp(final String device) {
+	public void clearTemp(final String device) throws DeviceNotAvailableException {
 		logAdb.info(LOG_CLEAR_TMP_START);
-		runAdb(device, CMD_CLEAR_TMP.split(" "));
+		runAdbDevice(device, CMD_CLEAR_TMP.split(" "));
 		logAdb.info(LOG_CLEAR_TMP_END);
 	}
 
-	public void clearTemp(final AdbDevice device) {
+	public void clearTemp(final AdbDevice device) throws DeviceNotAvailableException {
 		clearTemp(device.getName());
 	}
 
-	public synchronized Map<String, String> getPropertiesDevice(final String device) {
+	public synchronized Map<String, String> getPropertiesDevice(final String device) throws DeviceNotAvailableException {
 
 		logAdb.info(String.format(LOG_GET_PROPERTIES_START, device));
-		String[] res = runAdb(device, CMD_GET_PROP.split(" "),
+		String[] res = runAdbDevice(device, CMD_GET_PROP.split(" "),
 				new GetPropertiesDeviceFormatLog(logAdb)).split("\\n");
 		Map<String, String> map = new HashMap<String, String>();
 		for (String string : res) {
@@ -623,11 +662,11 @@ public class AdbModule implements AdbConsts {
 
 	}
 
-	public Map<String, String> getPropertiesDevice(final AdbDevice device) {
+	public Map<String, String> getPropertiesDevice(final AdbDevice device) throws DeviceNotAvailableException {
 		return getPropertiesDevice(device.getName());
 	}
 
-	public AdbPackage getInfoPackage(final AdbPackage adbPackage) {
+	public AdbPackage getInfoPackage(final AdbPackage adbPackage) throws DeviceNotAvailableException {
 		AdbPackage info = null;
 
 		File tmpFile = AdbUtils.generateTempFile("apm_package", ".apk");
@@ -641,22 +680,22 @@ public class AdbModule implements AdbConsts {
 		return info;
 	}
 
-	public void updatePackages(final List<AdbPackage> adbPackages) {
+	public void updatePackages(final List<AdbPackage> adbPackages) throws DeviceNotAvailableException {
 		updatePackages(adbPackages, false);
 	}
 
 	public void updatePackages(final List<AdbPackage> adbPackages,
-			final boolean alwaysUpdate) {
+			final boolean alwaysUpdate) throws DeviceNotAvailableException {
 		for (AdbPackage adbPackage : adbPackages) {
 			updatePackage(adbPackage, alwaysUpdate);
 		}
 	}
 
-	public void updatePackage(final AdbPackage adbPackage) {
+	public void updatePackage(final AdbPackage adbPackage) throws DeviceNotAvailableException {
 		updatePackage(adbPackage, true);
 	}
 
-	public void updatePackage(final AdbPackage adbPackage, final boolean alwaysUpdate) {
+	public void updatePackage(final AdbPackage adbPackage, final boolean alwaysUpdate) throws DeviceNotAvailableException {
 		if (alwaysUpdate || (adbPackage.getLabel() == null)
 				|| (adbPackage.getDefaultActivity() == null)) {
 			try {
@@ -743,7 +782,7 @@ public class AdbModule implements AdbConsts {
 			// logAdb.info("Exec " + cmd);
 			// logAdb.info("start process");
 			currentProcess = run.exec(cmds);
-			AdbConsoleThread consoleThread = 
+			AdbConsoleThread consoleThread =
 				new AdbConsoleThread(currentProcess, formatLog, this.charset);
 
 			consoleThread.start();
@@ -981,6 +1020,8 @@ public class AdbModule implements AdbConsts {
 		logAdb.setLogListener(pLogListener);
 	}
 
-
+	protected boolean checkDeviceAvailable(final String device){
+		return (!device.matches("\\?*"));
+	}
 
 }

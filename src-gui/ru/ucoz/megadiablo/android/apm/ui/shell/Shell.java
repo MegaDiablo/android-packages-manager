@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 
 import com.adbhelper.adb.shell.AdbShell;
+import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 
 public class Shell extends JDialog implements Runnable {
 
@@ -34,6 +35,7 @@ public class Shell extends JDialog implements Runnable {
 	 */
 	public Shell(final AdbShell pAdbShell) {
 		mAdbShell = pAdbShell;
+		setIconImage(Settings.getInstance().getDefaultApplicationIcon());
 		setLocation(100, 100);
 		setMinimumSize(new Dimension(320, 240));
 		setSize(new Dimension(640, 480));

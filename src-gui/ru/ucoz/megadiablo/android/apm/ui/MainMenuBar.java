@@ -25,6 +25,7 @@ import ru.ucoz.megadiablo.android.apm.MainFrame;
 import ru.ucoz.megadiablo.android.apm.Runner;
 import ru.ucoz.megadiablo.android.apm.ui.keyboard.KeyBoard;
 import ru.ucoz.megadiablo.android.apm.ui.log.LogDialog;
+import ru.ucoz.megadiablo.android.apm.ui.plaf.JMenuLookAndFeel;
 import ru.ucoz.megadiablo.android.apm.ui.settings.Settings;
 import ru.ucoz.megadiablo.android.apm.ui.settings.SettingsChangedListener;
 import ru.ucoz.megadiablo.android.apm.ui.settings.SettingsUI;
@@ -325,8 +326,17 @@ public class MainMenuBar extends JMenuBar {
 		});
 		mMenuSettings.add(mMenuItemSettingsAdvanced);
 
-		JMenu mMenuHelp = new JMenu("Помощь");
+		JMenu mMenuHelp = new JMenu("Справка");
 		add(mMenuHelp);
+
+		JMenuItem mMenuItemDocumentation = new JMenuItem("Руководство пользователя");
+		mMenuItemDocumentation.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				(new HelpDialog(null)).setVisible(true);
+			}
+		});
+		mMenuHelp.add(mMenuItemDocumentation);
 
 		JMenuItem mMenuItemAbout = new JMenuItem("О программе...");
 		mMenuItemAbout.addActionListener(new ActionListener() {

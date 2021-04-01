@@ -20,6 +20,7 @@ public class SettingsUI extends JDialog {
 	public SettingsUI() {
 		setTitle("Настройки");
 		setModalityType(ModalityType.DOCUMENT_MODAL);
+		setIconImage(Settings.getInstance().getDefaultApplicationIcon());
 		setModal(true);
 
 		setMinimumSize(new Dimension(530, 320));

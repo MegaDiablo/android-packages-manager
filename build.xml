@@ -3,9 +3,9 @@
 	<property file="build.properties"/>
 	<property name="version.core" value="${app.build.verision}.${app.build.number}"/>
 
-	<property name="version" value="0.8.0dev3"/>
+	<property name="version" value="0.8.0"/>
 	<property name="version.apm" value="${version}"/>
-	<property name="year" value="2011-2013"/>
+	<property name="year" value="2011-2021"/>
 
 	<property name="name.src" value="src"/>
 	<property name="name.dest" value="dest"/>

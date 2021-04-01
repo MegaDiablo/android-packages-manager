@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.adbhelper.adb.exceptions.AdbError;
 import com.adbhelper.adb.exceptions.NotAccessPackageManager;
@@ -136,6 +138,8 @@ public class AdbModule implements AdbConsts {
 	private static final String LOG_DEBUG = "Start debug %app%";
 	private static final String LOG_CLEAR_DATA = "Delete all data associated with %app%";
 	private static final String LOG_START_SHELL = "Start shell";
+
+	private static final Pattern ADB_PACKAGE_REGEXP = Pattern.compile("^(.*:)?(.*)=(.+)$");
 
 	private final LogAdb logAdb=new LogAdb();
 
@@ -498,13 +502,13 @@ public class AdbModule implements AdbConsts {
 			if (result[i].equals("")) {
 				continue;
 			}
-			String[] tmp = result[i].replaceAll(".*:", "").split("=");
-			if (tmp.length < 2) {
+			Matcher tmp = ADB_PACKAGE_REGEXP.matcher(result[i]);
+			if (!tmp.matches()) {
 				continue;
 			}
 			if ((fileIgnoreFilter == null)
-					|| (!tmp[0].matches(fileIgnoreFilter)))
-				packages.add(new AdbPackage(this, tmp[1], tmp[0], device));
+					|| (!tmp.group(2).matches(fileIgnoreFilter)))
+				packages.add(new AdbPackage(this, tmp.group(3), tmp.group(2), device));
 		}
 		logAdb.info(LOG_COUNT_PACKAGES, packages.size());
 		// logAdb.info(LOG_END_LIST_PACKAGES);

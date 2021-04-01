@@ -4,9 +4,9 @@
 	<property name="version.core"  value="${app.build.verision}.${app.build.number}"/>
 	<property name="app.short-name" value="apm" />
 	
-	<property name="version" value="0.7.1" />
+	<property name="version" value="0.7.2" />
 	<property name="version.apm" value="${version}" />
-	<property name="year" value="2011-2013" />
+	<property name="year" value="2011-2021" />
 	
 	<property name="name.src" value="src" />
 	<property name="name.dest" value="dest" />

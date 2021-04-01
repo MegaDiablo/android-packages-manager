@@ -5,7 +5,7 @@
 
 	<property name="version" value="0.8.0dev3"/>
 	<property name="version.apm" value="${version}"/>
-	<property name="year" value="2011-2013"/>
+	<property name="year" value="2011-2021"/>
 
 	<property name="name.src" value="src"/>
 	<property name="name.dest" value="dest"/>
@@ -77,7 +77,7 @@
 	<property name="app.build.nix.themes" value="${app.build.nix}/${name.themes}"/>
 	<property name="app.build.win.themes" value="${app.build.win}/${name.themes}"/>
 	<property name="app.build.mac.themes" value="${app.build.mac}/${name.themes}"/>
-	
+
 	<property name="app.build.nix.documentation" value="${app.build.nix}/${name.documentation}"/>
 	<property name="app.build.win.documentation" value="${app.build.win}/${name.documentation}"/>
 	<property name="app.build.mac.documentation" value="${app.build.mac}/${name.documentation}"/>
@@ -120,7 +120,7 @@
 		<mkdir dir="${app.build.nix.themes}"/>
 		<mkdir dir="${app.build.win.themes}"/>
 		<mkdir dir="${app.build.mac.themes}"/>
-		
+
 		<mkdir dir="${app.build.nix.documentation}"/>
 		<mkdir dir="${app.build.win.documentation}"/>
 		<mkdir dir="${app.build.mac.documentation}"/>

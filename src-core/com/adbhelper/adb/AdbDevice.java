@@ -155,6 +155,18 @@ public class AdbDevice {
 		adb.sendKeyCode(this, keyCode);
 	}
 
+	public void sendTap(final int x, final int y) {
+		adb.sendTap(this, x, y);
+	}
+
+	public void sendSwipe(final int fromX, final int fromY,final int toX, final int toY) {
+		adb.sendSwipe(this, fromX, fromY, toX, toY);
+	}
+
+	public void takeScreenshot(String path) {
+		adb.takeScreenshot(this, path);
+	}
+
 	public void clearTemp() {
 		adb.clearTemp(this);
 	}
